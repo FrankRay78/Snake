@@ -79,6 +79,7 @@
   <ItemGroup>
     <Folder Include="Properties\" />
     <Folder Include="scripts\" />
+    <Folder Include="styles\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
