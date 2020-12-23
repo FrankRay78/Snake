@@ -265,7 +265,19 @@ FakesAssemblies/
 
 # Node.js Tools for Visual Studio
 .ntvs_analysis.dat
-node_modules/
+
+# FRANK COMMENT 
+# - for now, make sure we can include the node modules so I can reference scripts etc directly in my pages
+# - going forward, a build action to copy over the appropriate files is probably a good idea
+# ref: https://stackoverflow.com/questions/27464168/how-to-include-scripts-located-inside-the-node-modules-folder
+#node_modules/
+
+#EXCLUDE THE NON_DISTRIBUTABLE BOOTSTRAP FILES
+/node_modules/bootstrap/scss
+/node_modules/bootstrap/README.md
+/node_modules/bootstrap/package.json
+/node_modules/bootstrap/LICENSE
+/node_modules/bootstrap/js
 
 # Visual Studio 6 build log
 *.plg
