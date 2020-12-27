@@ -1,126 +1,75 @@
-﻿class Greeter {
-    element: HTMLElement;
-    span: HTMLElement;
-    timerToken: number;
-
-    constructor(element: HTMLElement) {
-        this.element = element;
-        this.element.innerHTML += "The time is: ";
-        this.span = document.createElement('span');
-        this.element.appendChild(this.span);
-        this.span.innerText = new Date().toUTCString();
-    }
-
-    start() {
-        this.timerToken = setInterval(() => this.span.innerHTML = new Date().toUTCString(), 500);
-    }
-
-    stop() {
-        clearTimeout(this.timerToken);
-    }
-
-}
-
+﻿
 class Snake {
 
-    private readonly context: CanvasRenderingContext2D;
-
-    constructor(public canvas: HTMLCanvasElement, public cellX: number, public cellY: number) {
-
-        if (canvas.getContext) {
-            this.context = canvas.getContext('2d');
-
-            window.requestAnimationFrame(() => this.Draw());
-        }
+    constructor(public startingX = 5, public startingY = 5) {
     }
 
-    private GetCanvasDimenions() {
-        return { width: this.canvas.offsetWidth, height: this.canvas.offsetHeight };
-    }
+    Draw(canvas: HTMLCanvasElement): void {
+        const context = canvas.getContext('2d');
 
-    Draw(): void {
-        const dimensions = this.GetCanvasDimenions();
-
-        //this.context.fillStyle = 'orange';
-        //this.context.fillRect(0, 0, dimensions.width, dimensions.height);
-
-        this.context.strokeStyle = 'black';
-        this.context.lineWidth = 2;
-        this.context.strokeRect(0, 0, dimensions.width, dimensions.height);
+        context.strokeStyle = 'green';
+        context.fillRect(canvas.offsetWidth / 2, canvas.offsetHeight / 2, 20, 20);
     }
 };
 
 class Board {
 
-    private readonly context: CanvasRenderingContext2D;
-
-    constructor(public canvas: HTMLCanvasElement, public cellCountX: number, public cellCountY: number) {
-
-        if (canvas.getContext) {
-            this.context = canvas.getContext('2d');
-
-            window.requestAnimationFrame(() => this.Draw());
-        }
+    constructor(public cellCountX = 10, public cellCountY = 10) {
     }
 
-    private GetCanvasDimenions() {
-        return { width: this.canvas.offsetWidth, height: this.canvas.offsetHeight };
-    }
+    Draw(canvas: HTMLCanvasElement): void {
+        const context = canvas.getContext('2d');
 
-    Draw(): void {
-        const dimensions = this.GetCanvasDimenions();
-
-        //this.context.fillStyle = 'orange';
-        //this.context.fillRect(0, 0, dimensions.width, dimensions.height);
-
-        this.context.strokeStyle = 'black';
-        this.context.lineWidth = 2;
-        this.context.strokeRect(0, 0, dimensions.width, dimensions.height);
+        context.strokeStyle = 'black';
+        context.lineWidth = 2;
+        context.strokeRect(0, 0, canvas.offsetWidth, canvas.offsetHeight);
     }
 };
 
 class Game {
 
-    private readonly context: CanvasRenderingContext2D;
+    //private readonly context: CanvasRenderingContext2D;
     private readonly board: Board;
     private readonly snake: Snake;
-    timerToken: number;
+    //timerToken: number;
 
-    constructor(public canvas: HTMLCanvasElement, public cellCountX: number, public cellCountY: number) {
+    constructor(public canvas: HTMLCanvasElement) {
 
-        this.board = new Board(canvas, 10, 10);
-        this.snake = new Snake(canvas, 5, 5);
+        this.board = new Board();
+        this.snake = new Snake();
 
         if (canvas.getContext) {
-            this.context = canvas.getContext('2d');
-
             window.requestAnimationFrame(() => this.Draw());
         }
     }
 
     Draw(): void {
-        this.board.Draw(context);
-        this.snake.Draw(context);
+        //nb. Draw will only get called if the canvas has a context
+
+        this.board.Draw(this.canvas);
+        this.snake.Draw(this.canvas);
+
+        window.requestAnimationFrame(() => this.Draw());
     }
 
-    start() {
-        this.timerToken = setInterval(() => this.Draw(), 500);
-    }
+    //start() {
+    //    this.timerToken = setInterval(() => this.Draw(), 500);
+    //}
 
-    stop() {
-        clearTimeout(this.timerToken);
-    }
+    //stop() {
+    //    clearTimeout(this.timerToken);
+    //}
 };
 
 
 
 //window.onload = function() {
 window.onload = () => {
-    //var el = document.getElementById('content');
-    //var greeter = new Greeter(el);
-    //greeter.start();
 
     const canvas = document.getElementById('board') as HTMLCanvasElement;
 
     const game = new Game(canvas);
+
+    //canvas.click(() => alert('hello'));
+    canvas.addEventListener("click", (e: Event) => alert('hello'));
 };

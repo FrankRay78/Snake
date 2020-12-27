@@ -1,51 +1,60 @@
-var Greeter = /** @class */ (function () {
-    function Greeter(element) {
-        this.element = element;
-        this.element.innerHTML += "The time is: ";
-        this.span = document.createElement('span');
-        this.element.appendChild(this.span);
-        this.span.innerText = new Date().toUTCString();
+var Snake = /** @class */ (function () {
+    function Snake(startingX, startingY) {
+        if (startingX === void 0) { startingX = 5; }
+        if (startingY === void 0) { startingY = 5; }
+        this.startingX = startingX;
+        this.startingY = startingY;
     }
-    Greeter.prototype.start = function () {
-        var _this = this;
-        this.timerToken = setInterval(function () { return _this.span.innerHTML = new Date().toUTCString(); }, 500);
+    Snake.prototype.Draw = function (canvas) {
+        var context = canvas.getContext('2d');
+        context.strokeStyle = 'green';
+        context.fillRect(canvas.offsetWidth / 2, canvas.offsetHeight / 2, 20, 20);
     };
-    Greeter.prototype.stop = function () {
-        clearTimeout(this.timerToken);
-    };
-    return Greeter;
+    return Snake;
 }());
+;
 var Board = /** @class */ (function () {
-    function Board(canvas, cellCountX, cellCountY) {
-        var _this = this;
-        this.canvas = canvas;
+    function Board(cellCountX, cellCountY) {
+        if (cellCountX === void 0) { cellCountX = 10; }
+        if (cellCountY === void 0) { cellCountY = 10; }
         this.cellCountX = cellCountX;
         this.cellCountY = cellCountY;
-        if (canvas.getContext) {
-            this.context = canvas.getContext('2d');
-            window.requestAnimationFrame(function () { return _this.Draw(); });
-        }
     }
-    Board.prototype.GetCanvasDimenions = function () {
-        return { width: this.canvas.offsetWidth, height: this.canvas.offsetHeight };
-    };
-    Board.prototype.Draw = function () {
-        var dimensions = this.GetCanvasDimenions();
-        //this.context.fillStyle = 'orange';
-        //this.context.fillRect(0, 0, dimensions.width, dimensions.height);
-        this.context.strokeStyle = 'black';
-        this.context.lineWidth = 2;
-        this.context.strokeRect(0, 0, dimensions.width, dimensions.height);
+    Board.prototype.Draw = function (canvas) {
+        var context = canvas.getContext('2d');
+        context.strokeStyle = 'black';
+        context.lineWidth = 2;
+        context.strokeRect(0, 0, canvas.offsetWidth, canvas.offsetHeight);
     };
     return Board;
 }());
 ;
+var Game = /** @class */ (function () {
+    //timerToken: number;
+    function Game(canvas) {
+        var _this = this;
+        this.canvas = canvas;
+        this.board = new Board();
+        this.snake = new Snake();
+        if (canvas.getContext) {
+            window.requestAnimationFrame(function () { return _this.Draw(); });
+        }
+    }
+    Game.prototype.Draw = function () {
+        //nb. Draw will only get called if the canvas has a context
+        var _this = this;
+        this.board.Draw(this.canvas);
+        this.snake.Draw(this.canvas);
+        window.requestAnimationFrame(function () { return _this.Draw(); });
+    };
+    return Game;
+}());
+;
 //window.onload = function() {
 window.onload = function () {
-    //var el = document.getElementById('content');
-    //var greeter = new Greeter(el);
-    //greeter.start();
     var canvas = document.getElementById('board');
-    var board = new Board(canvas, 10, 10);
+    var game = new Game(canvas);
+    //canvas.click(() => alert('hello'));
+    canvas.addEventListener("click", function (e) { return alert('hello'); });
 };
 //# sourceMappingURL=app.js.map
