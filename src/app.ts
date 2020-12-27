@@ -5,6 +5,9 @@ class Snake {
     }
 
     Draw(canvas: HTMLCanvasElement): void {
+
+        return; //DO NOTHING FOR NOW
+
         const context = canvas.getContext('2d');
 
         context.strokeStyle = 'green';
@@ -14,15 +17,48 @@ class Snake {
 
 class Board {
 
-    constructor(public cellCountX = 10, public cellCountY = 10) {
+    private matrix;
+
+    constructor(public cellDimension = 10, public cellCountX = 10, public cellCountY = 10) {
+
+        //Initialse the underlying matrix
+        //ref: https://stackoverflow.com/questions/8301400/how-do-you-easily-create-empty-matrices-javascript
+        this.matrix = [];
+        for (let y = 0; y < this.cellCountY; y++) {
+            this.matrix[y] = [];
+            for (let x = 0; x < this.cellCountX; x++) {
+                this.matrix[y][x] = 0;
+            }
+        }
+
+        this.matrix[4][4] = 1;
     }
 
     Draw(canvas: HTMLCanvasElement): void {
+
         const context = canvas.getContext('2d');
 
-        context.strokeStyle = 'black';
-        context.lineWidth = 2;
-        context.strokeRect(0, 0, canvas.offsetWidth, canvas.offsetHeight);
+        const cellWidth = canvas.offsetWidth / this.cellCountX;
+        const cellHeight = canvas.offsetHeight / this.cellCountY;
+
+        for (let y = 0; y < this.cellCountY; y++) {
+            for (let x = 0; x < this.cellCountX; x++) {
+
+                if (this.matrix[y][x] === 0) {
+
+                    //Empty cell
+                    context.strokeStyle = 'DarkGrey';
+                    context.lineWidth = 1;
+                    context.strokeRect(x * cellWidth, y * cellHeight, cellWidth, cellHeight);
+                }
+                else {
+
+                    //Non-empty cell
+                    context.fillStyle = 'purple';
+                    context.fillRect(x * cellWidth, y * cellHeight, cellWidth, cellHeight);
+                }
+            }
+        }
     }
 };
 
@@ -31,16 +67,16 @@ class Game {
     //private readonly context: CanvasRenderingContext2D;
     private readonly board: Board;
     private readonly snake: Snake;
-    //timerToken: number;
+    timerToken: number;
 
     constructor(public canvas: HTMLCanvasElement) {
 
         this.board = new Board();
         this.snake = new Snake();
 
-        if (canvas.getContext) {
-            window.requestAnimationFrame(() => this.Draw());
-        }
+        //if (canvas.getContext) {
+        //    window.requestAnimationFrame(() => this.Draw());
+        //}
     }
 
     Draw(): void {
@@ -49,16 +85,16 @@ class Game {
         this.board.Draw(this.canvas);
         this.snake.Draw(this.canvas);
 
-        window.requestAnimationFrame(() => this.Draw());
+        //window.requestAnimationFrame(() => this.Draw());
     }
 
-    //start() {
-    //    this.timerToken = setInterval(() => this.Draw(), 500);
-    //}
+    Start() {
+        this.timerToken = setInterval(() => this.Draw(), 500);
+    }
 
-    //stop() {
-    //    clearTimeout(this.timerToken);
-    //}
+    Stop() {
+        clearTimeout(this.timerToken);
+    }
 };
 
 
@@ -70,6 +106,8 @@ window.onload = () => {
 
     const game = new Game(canvas);
 
+    game.Start();
+
     //canvas.click(() => alert('hello'));
-    canvas.addEventListener("click", (e: Event) => alert('hello'));
+    canvas.addEventListener("click", (e: Event) => alert('TODO: start the snake moving'));
 };

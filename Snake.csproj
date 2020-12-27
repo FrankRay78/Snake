@@ -165,6 +165,6 @@
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup>
-    <PostBuildEvent>xcopy "$(SolutionDir)node_modules\bootstrap\dist" "$(SolutionDir)dist\bootstrap\" /E /R /K /Y</PostBuildEvent>
+    <PostBuildEvent>xcopy "$(SolutionDir)node_modules\bootstrap\dist" "$(SolutionDir)dist\bootstrap\" /D /E /R /K /Y</PostBuildEvent>
   </PropertyGroup>
 </Project>
