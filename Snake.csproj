@@ -78,6 +78,15 @@
     <Content Include="dist\bootstrap\js\bootstrap.esm.min.js" />
     <Content Include="dist\bootstrap\js\bootstrap.js" />
     <Content Include="dist\bootstrap\js\bootstrap.min.js" />
+    <Content Include="favico\android-chrome-192x192.png" />
+    <Content Include="favico\android-chrome-512x512.png" />
+    <Content Include="favico\apple-touch-icon.png" />
+    <Content Include="favico\browserconfig.xml" />
+    <Content Include="favico\favicon-16x16.png" />
+    <Content Include="favico\favicon-32x32.png" />
+    <Content Include="favico\favicon.ico" />
+    <Content Include="favico\mstile-150x150.png" />
+    <Content Include="favico\safari-pinned-tab.svg" />
     <Content Include="README.md" />
     <Content Include="package.json" />
     <Content Include="dist\bootstrap\js\bootstrap.bundle.js.map" />
@@ -102,6 +111,11 @@
     <Content Include="dist\bootstrap\css\bootstrap.min.css.map" />
     <Content Include="dist\bootstrap\css\bootstrap.rtl.css.map" />
     <Content Include="dist\bootstrap\css\bootstrap.rtl.min.css.map" />
+    <Content Include="scripts\app.js" />
+    <Content Include="tsconfig.json" />
+    <Content Include="scripts\app.js.map" />
+    <Content Include="favico\favicon_package_v0.16.zip" />
+    <Content Include="favico\site.webmanifest" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -110,21 +124,19 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="app.css" />
+    <Content Include="styles\app.css" />
     <Content Include="images\snake_logo.png" />
     <Content Include="index.html" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Include="app.ts" />
+    <TypeScriptCompile Include="src\app.ts" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
-    <Folder Include="scripts\" />
-    <Folder Include="styles\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

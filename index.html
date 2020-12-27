@@ -6,8 +6,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Snake</title>
     <link rel="stylesheet" href="dist/bootstrap/css/bootstrap.min.css" />
-    <!--<link rel="stylesheet" href="app.css" type="text/css" />
-    <script src="app.js"></script>-->
+    <link rel="stylesheet" href="styles/app.css" type="text/css" />
+
+    <!-- https://realfavicongenerator.net/ -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/favico/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favico/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favico/favicon-16x16.png">
+    <link rel="manifest" href="/favico/site.webmanifest">
+    <link rel="mask-icon" href="/favico/safari-pinned-tab.svg" color="#5bbad5">
+    <link rel="shortcut icon" href="/favico/favicon.ico">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="msapplication-config" content="/favico/browserconfig.xml">
+    <meta name="theme-color" content="#ffffff">
 </head>
 <body style="margin: 150px;">
     <div class="container">
@@ -16,16 +26,17 @@
 
             <h1>Snake the game</h1>
 
-            <p>Coming soon...</p>
-
             <br /><br />
 
-            <img src="images/snake_logo.png" style="width: 300px; height: 300px;" />
+            <canvas id="board" width="300" height="300">
+                The board would show here on a HTML5 compliant browser
+            </canvas>
 
             <!-- BODY END -->
         </main>
     </div>
 
     <script src="dist/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="scripts/app.js"></script>
 </body>
 </html>
