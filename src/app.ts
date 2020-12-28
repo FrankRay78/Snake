@@ -11,13 +11,13 @@ class Snake {
 
     constructor(private matrix) {
 
-        //HACK: assume a normalised array (ie. the second dimension is never jagged)
+        //nb. assume a normalised array (ie. the second dimension is never jagged)
         this.cellCountY = matrix.length;
         this.cellCountX = matrix[0].length;
 
-        //HACK: initial starting position for the snake
-        this.currentX = 4;
-        this.currentY = 4;
+        //Initial starting position for the snake
+        this.currentX = Math.round(this.cellCountX / 2) - 1;
+        this.currentY = Math.round(this.cellCountY / 2) - 1;
 
         this.matrix[this.currentY][this.currentX] = 1;
     }
@@ -42,7 +42,7 @@ class Board {
     private matrix;
     private readonly snake: Snake;
 
-    constructor(public cellDimension = 10, public cellCountX = 10, public cellCountY = 10) {
+    constructor(public cellDimension = 10, public cellCountX = 20, public cellCountY = 20) {
 
         //Initialse the underlying matrix
         //ref: https://stackoverflow.com/questions/8301400/how-do-you-easily-create-empty-matrices-javascript
@@ -108,9 +108,12 @@ class Game {
 
     private readonly board: Board;
     private timerToken: number;
+    private isRunning: boolean;
 
 
     constructor(public canvas: HTMLCanvasElement) {
+
+        this.isRunning = false;
 
         this.board = new Board();
 
@@ -119,15 +122,22 @@ class Game {
     }
 
     Start() {
+        if (this.isRunning) return;
+
         this.timerToken = setInterval(() => {
 
             this.board.Update();
             this.board.Draw(this.canvas);
+
         }, 500);
+
+        this.isRunning = true;
     }
 
     Stop() {
         clearTimeout(this.timerToken);
+
+        this.isRunning = false;
     }
 };
 
