@@ -28,7 +28,7 @@ class Snake {
 
         if (this.currentX < this.cellCountX - 1) {
 
-            this.matrix[this.currentY][this.currentX] = 0;
+            this.matrix[this.currentY][this.currentX] = 0; //clear previous position
 
             this.currentX = this.currentX + 1;
 
@@ -59,7 +59,17 @@ class Board {
 
     Update(): void {
 
+        //Reset the matrix before requesting updates
+
+        //for (let y = 0; y < this.cellCountY; y++) {
+        //    for (let x = 0; x < this.cellCountX; x++) {
+        //        this.matrix[y][x] = 0;
+        //    }
+        //}
+
         this.snake.Update();
+
+        console.log(this.matrix);
     }
 
     Draw(canvas: HTMLCanvasElement): void {
@@ -75,6 +85,10 @@ class Board {
                 if (this.matrix[y][x] === 0) {
 
                     //Empty cell
+
+                    context.fillStyle = 'white';
+                    context.fillRect(x * cellWidth, y * cellHeight, cellWidth, cellHeight);
+
                     context.strokeStyle = 'DarkGrey';
                     context.lineWidth = 1;
                     context.strokeRect(x * cellWidth, y * cellHeight, cellWidth, cellHeight);
@@ -93,7 +107,8 @@ class Board {
 class Game {
 
     private readonly board: Board;
-    timerToken: number;
+    private timerToken: number;
+
 
     constructor(public canvas: HTMLCanvasElement) {
 

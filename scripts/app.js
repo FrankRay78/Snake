@@ -40,7 +40,14 @@ var Board = /** @class */ (function () {
         this.snake = new Snake(this.matrix);
     }
     Board.prototype.Update = function () {
+        //Reset the matrix before requesting updates
+        //for (let y = 0; y < this.cellCountY; y++) {
+        //    for (let x = 0; x < this.cellCountX; x++) {
+        //        this.matrix[y][x] = 0;
+        //    }
+        //}
         this.snake.Update();
+        console.log(this.matrix);
     };
     Board.prototype.Draw = function (canvas) {
         var context = canvas.getContext('2d');
@@ -50,6 +57,8 @@ var Board = /** @class */ (function () {
             for (var x = 0; x < this.cellCountX; x++) {
                 if (this.matrix[y][x] === 0) {
                     //Empty cell
+                    context.fillStyle = 'white';
+                    context.fillRect(x * cellWidth, y * cellHeight, cellWidth, cellHeight);
                     context.strokeStyle = 'DarkGrey';
                     context.lineWidth = 1;
                     context.strokeRect(x * cellWidth, y * cellHeight, cellWidth, cellHeight);
