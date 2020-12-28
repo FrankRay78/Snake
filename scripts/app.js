@@ -1,15 +1,21 @@
 var Snake = /** @class */ (function () {
-    function Snake(startingX, startingY) {
-        if (startingX === void 0) { startingX = 5; }
-        if (startingY === void 0) { startingY = 5; }
-        this.startingX = startingX;
-        this.startingY = startingY;
+    function Snake(matrix) {
+        this.matrix = matrix;
+        //HACK: assume a normalised array (ie. the second dimension is never jagged)
+        this.cellCountY = matrix.length;
+        this.cellCountX = matrix[0].length;
+        //HACK: initial starting position for the snake
+        this.currentX = 4;
+        this.currentY = 4;
+        this.matrix[this.currentY][this.currentX] = 1;
     }
-    Snake.prototype.Draw = function (canvas) {
-        return; //DO NOTHING FOR NOW
-        var context = canvas.getContext('2d');
-        context.strokeStyle = 'green';
-        context.fillRect(canvas.offsetWidth / 2, canvas.offsetHeight / 2, 20, 20);
+    Snake.prototype.Update = function () {
+        //Move right initially
+        if (this.currentX < this.cellCountX - 1) {
+            this.matrix[this.currentY][this.currentX] = 0;
+            this.currentX = this.currentX + 1;
+            this.matrix[this.currentY][this.currentX] = 1;
+        }
     };
     return Snake;
 }());
@@ -31,8 +37,11 @@ var Board = /** @class */ (function () {
                 this.matrix[y][x] = 0;
             }
         }
-        this.matrix[4][4] = 1;
+        this.snake = new Snake(this.matrix);
     }
+    Board.prototype.Update = function () {
+        this.snake.Update();
+    };
     Board.prototype.Draw = function (canvas) {
         var context = canvas.getContext('2d');
         var cellWidth = canvas.offsetWidth / this.cellCountX;
@@ -60,20 +69,15 @@ var Game = /** @class */ (function () {
     function Game(canvas) {
         this.canvas = canvas;
         this.board = new Board();
-        this.snake = new Snake();
-        //if (canvas.getContext) {
-        //    window.requestAnimationFrame(() => this.Draw());
-        //}
-    }
-    Game.prototype.Draw = function () {
-        //nb. Draw will only get called if the canvas has a context
+        //Initial draw of the board in its starting state
         this.board.Draw(this.canvas);
-        this.snake.Draw(this.canvas);
-        //window.requestAnimationFrame(() => this.Draw());
-    };
+    }
     Game.prototype.Start = function () {
         var _this = this;
-        this.timerToken = setInterval(function () { return _this.Draw(); }, 500);
+        this.timerToken = setInterval(function () {
+            _this.board.Update();
+            _this.board.Draw(_this.canvas);
+        }, 500);
     };
     Game.prototype.Stop = function () {
         clearTimeout(this.timerToken);
@@ -81,12 +85,9 @@ var Game = /** @class */ (function () {
     return Game;
 }());
 ;
-//window.onload = function() {
 window.onload = function () {
     var canvas = document.getElementById('board');
     var game = new Game(canvas);
-    game.Start();
-    //canvas.click(() => alert('hello'));
-    canvas.addEventListener("click", function (e) { return alert('TODO: start the snake moving'); });
+    canvas.addEventListener("click", function (e) { return game.Start(); });
 };
 //# sourceMappingURL=app.js.map
