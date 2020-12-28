@@ -69,7 +69,7 @@ class Board {
 
         this.snake.Update();
 
-        console.log(this.matrix);
+        //console.log(this.matrix);
     }
 
     Draw(canvas: HTMLCanvasElement): void {
