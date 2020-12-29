@@ -8,7 +8,7 @@ var SnakeDirection;
 var Snake = /** @class */ (function () {
     function Snake(matrix) {
         this.matrix = matrix;
-        this.GameOverMessage = 'Game over - click the board to try again';
+        this.GameOverMessage = '<b style="color: magenta">Game Over</b> - Click the board to try again';
         //nb. assume a normalised array (ie. the second dimension is never jagged)
         this.cellCountY = matrix.length;
         this.cellCountX = matrix[0].length;
@@ -56,11 +56,9 @@ var Snake = /** @class */ (function () {
 }());
 ;
 var Board = /** @class */ (function () {
-    function Board(cellDimension, cellCountX, cellCountY) {
-        if (cellDimension === void 0) { cellDimension = 10; }
+    function Board(cellCountX, cellCountY) {
         if (cellCountX === void 0) { cellCountX = 20; }
         if (cellCountY === void 0) { cellCountY = 20; }
-        this.cellDimension = cellDimension;
         this.cellCountX = cellCountX;
         this.cellCountY = cellCountY;
         //Initialse the underlying matrix
@@ -100,20 +98,37 @@ var Board = /** @class */ (function () {
         for (var y = 0; y < this.cellCountY; y++) {
             for (var x = 0; x < this.cellCountX; x++) {
                 if (this.matrix[y][x] === 0) {
-                    //Empty cell
-                    context.fillStyle = 'white';
+                    //EMPTY CELL
+                    //alternating chequered backgrounds
+                    if (y % 2 === 0) {
+                        if (x % 2 === 0)
+                            context.fillStyle = 'white';
+                        else
+                            context.fillStyle = 'lightgrey';
+                    }
+                    else {
+                        if (x % 2 === 0)
+                            context.fillStyle = 'lightgrey';
+                        else
+                            context.fillStyle = 'white';
+                    }
                     context.fillRect(x * cellWidth, y * cellHeight, cellWidth, cellHeight);
+                    //TODO: lineTo(x, y) ?
                     context.strokeStyle = 'DarkGrey';
                     context.lineWidth = 1;
                     context.strokeRect(x * cellWidth, y * cellHeight, cellWidth, cellHeight);
                 }
                 else {
-                    //Non-empty cell
-                    context.fillStyle = 'purple';
+                    //NON-EMPTY CELL
+                    context.fillStyle = 'green';
                     context.fillRect(x * cellWidth, y * cellHeight, cellWidth, cellHeight);
                 }
             }
         }
+        //DARK BORDER AROUND THE WHOLE BOARD
+        context.strokeStyle = 'DarkGrey';
+        context.lineWidth = 1;
+        context.strokeRect(0, 0, canvas.offsetWidth, canvas.offsetHeight);
     };
     return Board;
 }());
@@ -136,14 +151,17 @@ var Game = /** @class */ (function () {
         this.board.Draw(this.canvas);
         this.timerToken = setInterval(function () {
             try {
+                var instructions = document.getElementById('instructions');
+                instructions.innerText = "Move the snake around the board";
                 _this.board.Update();
                 _this.board.Draw(_this.canvas);
             }
             catch (e) {
                 _this.Stop();
-                alert(e.message);
+                var instructions = document.getElementById('instructions');
+                instructions.innerHTML = e.message;
             }
-        }, 500);
+        }, 200);
         this.isRunning = true;
     };
     Game.prototype.Stop = function () {

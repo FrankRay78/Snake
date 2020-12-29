@@ -8,7 +8,7 @@ enum SnakeDirection {
 
 class Snake {
 
-    private readonly GameOverMessage: string = 'Game over - click the board to try again';
+    private readonly GameOverMessage: string = '<b style="color: magenta">Game Over</b> - Click the board to try again';
 
     //nb. not zero based
     private cellCountX: number;
@@ -98,7 +98,7 @@ class Board {
     private matrix;
     public readonly snake: Snake;
 
-    constructor(public cellDimension = 10, public cellCountX = 20, public cellCountY = 20) {
+    constructor(public cellCountX = 20, public cellCountY = 20) {
 
         //Initialse the underlying matrix
         //ref: https://stackoverflow.com/questions/8301400/how-do-you-easily-create-empty-matrices-javascript
@@ -151,10 +151,26 @@ class Board {
 
                 if (this.matrix[y][x] === 0) {
 
-                    //Empty cell
+                    //EMPTY CELL
 
-                    context.fillStyle = 'white';
+                    //alternating chequered backgrounds
+
+                    if (y % 2 === 0) {
+                        if (x % 2 === 0)
+                            context.fillStyle = 'white';
+                        else
+                            context.fillStyle = 'lightgrey';
+                    }
+                    else {
+                        if (x % 2 === 0)
+                            context.fillStyle = 'lightgrey'
+                        else
+                            context.fillStyle = 'white';
+                    }
+                    
                     context.fillRect(x * cellWidth, y * cellHeight, cellWidth, cellHeight);
+
+                    //TODO: lineTo(x, y) ?
 
                     context.strokeStyle = 'DarkGrey';
                     context.lineWidth = 1;
@@ -162,12 +178,20 @@ class Board {
                 }
                 else {
 
-                    //Non-empty cell
-                    context.fillStyle = 'purple';
+                    //NON-EMPTY CELL
+
+                    context.fillStyle = 'green';
                     context.fillRect(x * cellWidth, y * cellHeight, cellWidth, cellHeight);
                 }
             }
         }
+
+
+        //DARK BORDER AROUND THE WHOLE BOARD
+
+        context.strokeStyle = 'DarkGrey';
+        context.lineWidth = 1;
+        context.strokeRect(0, 0, canvas.offsetWidth, canvas.offsetHeight);
     }
 };
 
@@ -200,6 +224,9 @@ class Game {
 
             try {
 
+                const instructions = document.getElementById('instructions') as HTMLParagraphElement;
+                instructions.innerText = "Move the snake around the board";
+
                 this.board.Update();
 
                 this.board.Draw(this.canvas);
@@ -208,11 +235,12 @@ class Game {
 
                 this.Stop();
 
-                alert(e.message);
+                const instructions = document.getElementById('instructions') as HTMLParagraphElement;
+                instructions.innerHTML = e.message;
             }
 
 
-        }, 500);
+        }, 200);
 
         this.isRunning = true;
     }

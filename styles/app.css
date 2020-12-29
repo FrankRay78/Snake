@@ -1,7 +1,8 @@
-﻿body {
-    font-family: 'Segoe UI', sans-serif;
+﻿
+.instructions
+{
+    font-style: italic;
 }
 
-span {
-    font-style: italic;
+#board {
 }
