@@ -4,12 +4,16 @@ var Snake = /** @class */ (function () {
         //nb. assume a normalised array (ie. the second dimension is never jagged)
         this.cellCountY = matrix.length;
         this.cellCountX = matrix[0].length;
+    }
+    Snake.prototype.Initialise = function () {
         //Initial starting position for the snake
         this.currentX = Math.round(this.cellCountX / 2) - 1;
         this.currentY = Math.round(this.cellCountY / 2) - 1;
         this.matrix[this.currentY][this.currentX] = 1;
-    }
+    };
     Snake.prototype.Update = function () {
+        if (this.currentX + 1 === this.cellCountX)
+            throw new Error('Game over');
         //Move right initially
         if (this.currentX < this.cellCountX - 1) {
             this.matrix[this.currentY][this.currentX] = 0; //clear previous position
@@ -39,13 +43,16 @@ var Board = /** @class */ (function () {
         }
         this.snake = new Snake(this.matrix);
     }
+    Board.prototype.Initialise = function () {
+        //Blank the matrix before initialising
+        for (var y = 0; y < this.cellCountY; y++) {
+            for (var x = 0; x < this.cellCountX; x++) {
+                this.matrix[y][x] = 0;
+            }
+        }
+        this.snake.Initialise();
+    };
     Board.prototype.Update = function () {
-        //Reset the matrix before requesting updates
-        //for (let y = 0; y < this.cellCountY; y++) {
-        //    for (let x = 0; x < this.cellCountX; x++) {
-        //        this.matrix[y][x] = 0;
-        //    }
-        //}
         this.snake.Update();
         //console.log(this.matrix);
     };
@@ -79,16 +86,26 @@ var Game = /** @class */ (function () {
         this.canvas = canvas;
         this.isRunning = false;
         this.board = new Board();
-        //Initial draw of the board in its starting state
+        //Draw the board in its starting state
+        this.board.Initialise();
         this.board.Draw(this.canvas);
     }
     Game.prototype.Start = function () {
         var _this = this;
         if (this.isRunning)
             return;
+        //Draw the board in its starting state
+        this.board.Initialise();
+        this.board.Draw(this.canvas);
         this.timerToken = setInterval(function () {
-            _this.board.Update();
-            _this.board.Draw(_this.canvas);
+            try {
+                _this.board.Update();
+                _this.board.Draw(_this.canvas);
+            }
+            catch (e) {
+                _this.Stop();
+                alert(e.message);
+            }
         }, 500);
         this.isRunning = true;
     };
