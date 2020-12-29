@@ -1,6 +1,14 @@
+var SnakeDirection;
+(function (SnakeDirection) {
+    SnakeDirection[SnakeDirection["Up"] = 1] = "Up";
+    SnakeDirection[SnakeDirection["Down"] = 2] = "Down";
+    SnakeDirection[SnakeDirection["Left"] = 3] = "Left";
+    SnakeDirection[SnakeDirection["Right"] = 4] = "Right";
+})(SnakeDirection || (SnakeDirection = {}));
 var Snake = /** @class */ (function () {
     function Snake(matrix) {
         this.matrix = matrix;
+        this.GameOverMessage = 'Game over - click the board to try again';
         //nb. assume a normalised array (ie. the second dimension is never jagged)
         this.cellCountY = matrix.length;
         this.cellCountX = matrix[0].length;
@@ -9,17 +17,40 @@ var Snake = /** @class */ (function () {
         //Initial starting position for the snake
         this.currentX = Math.round(this.cellCountX / 2) - 1;
         this.currentY = Math.round(this.cellCountY / 2) - 1;
+        //Move right initially
+        this.direction = SnakeDirection.Right;
         this.matrix[this.currentY][this.currentX] = 1;
     };
     Snake.prototype.Update = function () {
-        if (this.currentX + 1 === this.cellCountX)
-            throw new Error('Game over');
-        //Move right initially
-        if (this.currentX < this.cellCountX - 1) {
-            this.matrix[this.currentY][this.currentX] = 0; //clear previous position
-            this.currentX = this.currentX + 1;
-            this.matrix[this.currentY][this.currentX] = 1;
+        switch (this.direction) {
+            case SnakeDirection.Up:
+                if (this.currentY === 0)
+                    throw new Error(this.GameOverMessage);
+                this.currentY = this.currentY - 1;
+                break;
+            case SnakeDirection.Down:
+                if (this.currentY + 1 === this.cellCountY)
+                    throw new Error(this.GameOverMessage);
+                this.currentY = this.currentY + 1;
+                break;
+            case SnakeDirection.Left:
+                if (this.currentX === 0)
+                    throw new Error(this.GameOverMessage);
+                this.currentX = this.currentX - 1;
+                break;
+            case SnakeDirection.Right:
+                if (this.currentX + 1 === this.cellCountX)
+                    throw new Error(this.GameOverMessage);
+                this.currentX = this.currentX + 1;
+                break;
+            default:
+            //should never happen
         }
+        //Update the matrix with the new position of the snake
+        this.matrix[this.currentY][this.currentX] = 1;
+    };
+    Snake.prototype.KeyPress = function (newDirection) {
+        this.direction = newDirection;
     };
     return Snake;
 }());
@@ -53,6 +84,12 @@ var Board = /** @class */ (function () {
         this.snake.Initialise();
     };
     Board.prototype.Update = function () {
+        //Blank the matrix before performing update
+        for (var y = 0; y < this.cellCountY; y++) {
+            for (var x = 0; x < this.cellCountX; x++) {
+                this.matrix[y][x] = 0;
+            }
+        }
         this.snake.Update();
         //console.log(this.matrix);
     };
@@ -113,6 +150,30 @@ var Game = /** @class */ (function () {
         clearTimeout(this.timerToken);
         this.isRunning = false;
     };
+    Game.prototype.KeyPress = function (keyCode) {
+        if (!this.isRunning)
+            return;
+        if (keyCode < 37 || keyCode > 40)
+            return;
+        var newDirection;
+        if (keyCode === 38) {
+            // up arrow
+            newDirection = SnakeDirection.Up;
+        }
+        else if (keyCode === 40) {
+            // down arrow
+            newDirection = SnakeDirection.Down;
+        }
+        else if (keyCode === 37) {
+            // left arrow
+            newDirection = SnakeDirection.Left;
+        }
+        else if (keyCode === 39) {
+            // right arrow
+            newDirection = SnakeDirection.Right;
+        }
+        this.board.snake.KeyPress(newDirection);
+    };
     return Game;
 }());
 ;
@@ -120,5 +181,6 @@ window.onload = function () {
     var canvas = document.getElementById('board');
     var game = new Game(canvas);
     canvas.addEventListener("click", function (e) { return game.Start(); });
+    document.addEventListener("keydown", function (e) { return game.KeyPress(e.keyCode); });
 };
 //# sourceMappingURL=app.js.map

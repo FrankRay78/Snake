@@ -1,5 +1,14 @@
 ﻿
+enum SnakeDirection {
+    Up = 1,
+    Down,
+    Left,
+    Right,
+}
+
 class Snake {
+
+    private readonly GameOverMessage: string = 'Game over - click the board to try again';
 
     //nb. not zero based
     private cellCountX: number;
@@ -8,6 +17,8 @@ class Snake {
     //nb. zero based
     private currentX: number;
     private currentY: number;
+
+    private direction: SnakeDirection;
 
     constructor(private matrix) {
 
@@ -22,32 +33,70 @@ class Snake {
         this.currentX = Math.round(this.cellCountX / 2) - 1;
         this.currentY = Math.round(this.cellCountY / 2) - 1;
 
+        //Move right initially
+        this.direction = SnakeDirection.Right;
+
         this.matrix[this.currentY][this.currentX] = 1;
     }
 
     Update(): void {
 
-        if (this.currentX + 1 === this.cellCountX)
-            throw new Error('Game over');
+        switch (this.direction) {
+            case SnakeDirection.Up:
 
+                if (this.currentY === 0)
+                    throw new Error(this.GameOverMessage);
 
-        //Move right initially
+                this.currentY = this.currentY - 1;
 
-        if (this.currentX < this.cellCountX - 1) {
+                break;
 
-            this.matrix[this.currentY][this.currentX] = 0; //clear previous position
+            case SnakeDirection.Down:
 
-            this.currentX = this.currentX + 1;
+                if (this.currentY + 1 === this.cellCountY)
+                    throw new Error(this.GameOverMessage);
 
-            this.matrix[this.currentY][this.currentX] = 1;
+                this.currentY = this.currentY + 1;
+
+                break;
+
+            case SnakeDirection.Left:
+
+                if (this.currentX === 0)
+                    throw new Error(this.GameOverMessage);
+
+                this.currentX = this.currentX - 1;
+
+                break;
+
+            case SnakeDirection.Right:
+
+                if (this.currentX + 1 === this.cellCountX)
+                    throw new Error(this.GameOverMessage);
+
+                this.currentX = this.currentX + 1;
+
+                break;
+
+            default:
+                //should never happen
         }
+
+
+        //Update the matrix with the new position of the snake
+
+        this.matrix[this.currentY][this.currentX] = 1;
+    }
+
+    KeyPress(newDirection: SnakeDirection): void {
+        this.direction = newDirection;
     }
 };
 
 class Board {
 
     private matrix;
-    private readonly snake: Snake;
+    public readonly snake: Snake;
 
     constructor(public cellDimension = 10, public cellCountX = 20, public cellCountY = 20) {
 
@@ -77,6 +126,13 @@ class Board {
     }
 
     Update(): void {
+
+        //Blank the matrix before performing update
+        for (let y = 0; y < this.cellCountY; y++) {
+            for (let x = 0; x < this.cellCountX; x++) {
+                this.matrix[y][x] = 0;
+            }
+        }
 
         this.snake.Update();
 
@@ -166,6 +222,34 @@ class Game {
 
         this.isRunning = false;
     }
+
+    KeyPress(keyCode: number): void {
+        if (!this.isRunning) return;
+
+        if (keyCode < 37 || keyCode > 40) return;
+
+
+        let newDirection: SnakeDirection;
+
+        if (keyCode === 38) {
+            // up arrow
+            newDirection = SnakeDirection.Up;
+        }
+        else if (keyCode === 40) {
+            // down arrow
+            newDirection = SnakeDirection.Down;
+        }
+        else if (keyCode === 37) {
+            // left arrow
+            newDirection = SnakeDirection.Left;
+        }
+        else if (keyCode === 39) {
+            // right arrow
+            newDirection = SnakeDirection.Right;
+        }
+
+        this.board.snake.KeyPress(newDirection);
+    }
 };
 
 
@@ -177,4 +261,6 @@ window.onload = () => {
     const game = new Game(canvas);
 
     canvas.addEventListener("click", (e: Event) => game.Start());
+
+    document.addEventListener("keydown", (e: KeyboardEvent) => game.KeyPress(e.keyCode));
 };
