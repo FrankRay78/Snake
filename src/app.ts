@@ -166,6 +166,9 @@ class Game {
         //Draw the board in its starting state
         this.board.Initialise();
         this.Draw();
+
+        //Show play arrow
+        this.DrawPlayArrow();
     }
 
     Start() {
@@ -195,6 +198,10 @@ class Game {
                 context.fillStyle = 'magenta';
                 context.font = '48px serif';
                 context.fillText(e.message, this.canvas.offsetWidth * 0.1, this.canvas.offsetHeight * 0.2);
+
+
+                //Show play arrow
+                this.DrawPlayArrow();
             }
 
 
@@ -207,6 +214,22 @@ class Game {
         clearTimeout(this.timerToken);
 
         this.isRunning = false;
+    }
+
+    DrawPlayArrow(): void {
+        const context = this.canvas.getContext('2d');
+
+        const arrowStartX = (this.canvas.offsetWidth / 2) - 25;
+        const arrowStartY = (this.canvas.offsetHeight / 2) - 25;
+
+        context.fillStyle = 'black';
+
+        context.beginPath();
+        context.moveTo(arrowStartX, arrowStartY);
+        context.lineTo(arrowStartX, arrowStartX + 50);
+        context.lineTo(arrowStartX + 50, arrowStartX + 25);
+        context.closePath();
+        context.fill();
     }
 
     Draw(): void {

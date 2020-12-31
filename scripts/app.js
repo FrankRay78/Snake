@@ -123,6 +123,8 @@ var Game = /** @class */ (function () {
         //Draw the board in its starting state
         this.board.Initialise();
         this.Draw();
+        //Show play arrow
+        this.DrawPlayArrow();
     }
     Game.prototype.Start = function () {
         var _this = this;
@@ -143,6 +145,8 @@ var Game = /** @class */ (function () {
                 context.fillStyle = 'magenta';
                 context.font = '48px serif';
                 context.fillText(e.message, _this.canvas.offsetWidth * 0.1, _this.canvas.offsetHeight * 0.2);
+                //Show play arrow
+                _this.DrawPlayArrow();
             }
         }, 200);
         this.isRunning = true;
@@ -150,6 +154,18 @@ var Game = /** @class */ (function () {
     Game.prototype.Stop = function () {
         clearTimeout(this.timerToken);
         this.isRunning = false;
+    };
+    Game.prototype.DrawPlayArrow = function () {
+        var context = this.canvas.getContext('2d');
+        var arrowStartX = (this.canvas.offsetWidth / 2) - 25;
+        var arrowStartY = (this.canvas.offsetHeight / 2) - 25;
+        context.fillStyle = 'black';
+        context.beginPath();
+        context.moveTo(arrowStartX, arrowStartY);
+        context.lineTo(arrowStartX, arrowStartX + 50);
+        context.lineTo(arrowStartX + 50, arrowStartX + 25);
+        context.closePath();
+        context.fill();
     };
     Game.prototype.Draw = function () {
         var matrix = this.board.Matrix;
