@@ -268,6 +268,59 @@ var Game = /** @class */ (function () {
         }
         this.board.snake.Direction = newDirection;
     };
+    Game.prototype.Touch = function (touchEvent) {
+        if (!this.isRunning)
+            return;
+        touchEvent.preventDefault();
+        var touches = touchEvent.changedTouches;
+        var touch = touches[touches.length - 1];
+        var matrix = this.board.Matrix;
+        //nb. assume a normalised array (ie. the second dimension is never jagged)
+        var cellCountY = matrix.length;
+        var cellCountX = matrix[0].length;
+        var cellWidth = this.canvas.offsetWidth / cellCountX;
+        var cellHeight = this.canvas.offsetHeight / cellCountY;
+        var snakePosition = this.board.snake.SnakePosition;
+        var snakeDirection = this.board.snake.Direction;
+        //nb. the following coordinates refer to the top, left hand side of the current cell the snake's head resides in
+        var snakeCoordinatesX = snakePosition.currentX * cellWidth;
+        var snakeCoordinatesY = snakePosition.currentY * cellHeight;
+        //ref: https://stackoverflow.com/questions/17130395/real-mouse-position-in-canvas
+        var rect = this.canvas.getBoundingClientRect();
+        var mouseX = touch.pageX - rect.left;
+        var mouseY = touch.pageY - rect.top;
+        var newDirection = snakeDirection;
+        switch (snakeDirection) {
+            case SnakeDirection.Up:
+                if (mouseX < snakeCoordinatesX)
+                    newDirection = SnakeDirection.Left;
+                else if (mouseX > snakeCoordinatesX)
+                    newDirection = SnakeDirection.Right;
+                break;
+            case SnakeDirection.Down:
+                if (mouseX < snakeCoordinatesX)
+                    newDirection = SnakeDirection.Left;
+                else if (mouseX > snakeCoordinatesX)
+                    newDirection = SnakeDirection.Right;
+                break;
+            case SnakeDirection.Left:
+                if (mouseY < snakeCoordinatesY)
+                    newDirection = SnakeDirection.Up;
+                else if (mouseY > snakeCoordinatesY)
+                    newDirection = SnakeDirection.Down;
+                break;
+            case SnakeDirection.Right:
+                if (mouseY < snakeCoordinatesY)
+                    newDirection = SnakeDirection.Up;
+                else if (mouseY > snakeCoordinatesY)
+                    newDirection = SnakeDirection.Down;
+                break;
+            default:
+                //should never happen
+                throw new Error();
+        }
+        this.board.snake.Direction = newDirection;
+    };
     return Game;
 }());
 ;
@@ -277,6 +330,7 @@ window.onload = function () {
     canvas.addEventListener("click", function (e) { return game.Start(); });
     //ref: http://bencentra.com/code/2014/12/05/html5-canvas-touch-events.html
     canvas.addEventListener("mousedown", function (e) { return game.MouseDown(e); });
+    canvas.addEventListener("touchstart", function (e) { return game.Touch(e); });
     document.addEventListener("keydown", function (e) { return game.KeyPress(e.keyCode); });
 };
 //# sourceMappingURL=app.js.map
