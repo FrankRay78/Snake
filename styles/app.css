@@ -1,6 +1,10 @@
 ﻿
-.instructions
-{
+h1 {
+    /* prevent header from wrapping */
+    white-space: nowrap;
+}
+
+.instructions {
     font-style: italic;
 }
 

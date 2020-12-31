@@ -8,7 +8,7 @@ enum SnakeDirection {
 
 class Snake {
 
-    private readonly GameOverMessage: string = '<b style="color: magenta">Game Over</b> - Click the board to try again';
+    private readonly GameOverMessage: string = 'Game Over';
 
     //nb. not zero based
     private cellCountX: number;
@@ -103,11 +103,14 @@ class Snake {
 
 class Board {
 
-    private readonly canvas: HTMLCanvasElement;
     private matrix;
     public readonly snake: Snake;
 
-    constructor(canvas: HTMLCanvasElement, public cellCountX = 20, public cellCountY = 20) {
+    get Matrix(): [][] {
+        return this.matrix;
+    }
+
+    constructor(public cellCountX = 20, public cellCountY = 20) {
 
         //Initialse the underlying matrix
         //ref: https://stackoverflow.com/questions/8301400/how-do-you-easily-create-empty-matrices-javascript
@@ -119,7 +122,6 @@ class Board {
             }
         }
 
-        this.canvas = canvas;
         this.snake = new Snake(this.matrix);
     }
 
@@ -146,23 +148,86 @@ class Board {
 
         this.snake.Update();
     }
+};
 
-    GetCellDimensions() {
-        return { cellWidth: this.canvas.offsetWidth / this.cellCountX, cellHeight: this.canvas.offsetHeight / this.cellCountY };
+class Game {
+
+    private readonly board: Board;
+    private timerToken: number;
+    private isRunning: boolean;
+
+
+    constructor(public canvas: HTMLCanvasElement) {
+
+        this.isRunning = false;
+
+        this.board = new Board();
+
+        //Draw the board in its starting state
+        this.board.Initialise();
+        this.Draw();
+    }
+
+    Start() {
+        if (this.isRunning) return;
+
+        //Draw the board in its starting state
+        this.board.Initialise();
+        this.Draw();
+
+        this.timerToken = setInterval(() => {
+
+            try {
+
+                this.board.Update();
+
+                this.Draw();
+
+            } catch (e) {
+
+                this.Stop();
+
+
+                //Show game over message
+
+                const context = this.canvas.getContext('2d');
+
+                context.fillStyle = 'magenta';
+                context.font = '48px serif';
+                context.fillText(e.message, this.canvas.offsetWidth * 0.1, this.canvas.offsetHeight * 0.2);
+            }
+
+
+        }, 200);
+
+        this.isRunning = true;
+    }
+
+    Stop() {
+        clearTimeout(this.timerToken);
+
+        this.isRunning = false;
     }
 
     Draw(): void {
 
+
+        const matrix = this.board.Matrix;
+
+        //nb. assume a normalised array (ie. the second dimension is never jagged)
+        const cellCountY = matrix.length;
+        const cellCountX = matrix[0].length;
+
+        const cellWidth = this.canvas.offsetWidth / cellCountX;
+        const cellHeight = this.canvas.offsetHeight / cellCountY;
+
+
         const context = this.canvas.getContext('2d');
 
-        const cellDimensions = this.GetCellDimensions();
-        const cellWidth = cellDimensions.cellWidth;
-        const cellHeight = cellDimensions.cellHeight;
+        for (let y = 0; y < cellCountY; y++) {
+            for (let x = 0; x < cellCountX; x++) {
 
-        for (let y = 0; y < this.cellCountY; y++) {
-            for (let x = 0; x < this.cellCountX; x++) {
-
-                if (this.matrix[y][x] === 0) {
+                if (matrix[y][x] === 0) {
 
                     //EMPTY CELL
 
@@ -180,7 +245,7 @@ class Board {
                         else
                             context.fillStyle = 'white';
                     }
-                    
+
                     context.fillRect(x * cellWidth, y * cellHeight, cellWidth, cellHeight);
 
                     //TODO: lineTo(x, y) ?
@@ -205,63 +270,6 @@ class Board {
         context.strokeStyle = 'DarkGrey';
         context.lineWidth = 1;
         context.strokeRect(0, 0, this.canvas.offsetWidth, this.canvas.offsetHeight);
-    }
-};
-
-class Game {
-
-    private readonly board: Board;
-    private timerToken: number;
-    private isRunning: boolean;
-
-
-    constructor(canvas: HTMLCanvasElement) {
-
-        this.isRunning = false;
-
-        this.board = new Board(canvas);
-
-        //Draw the board in its starting state
-        this.board.Initialise();
-        this.board.Draw();
-    }
-
-    Start() {
-        if (this.isRunning) return;
-
-        //Draw the board in its starting state
-        this.board.Initialise();
-        this.board.Draw();
-
-        this.timerToken = setInterval(() => {
-
-            try {
-
-                const instructions = document.getElementById('instructions') as HTMLParagraphElement;
-                instructions.innerText = "Move the snake around the board";
-
-                this.board.Update();
-
-                this.board.Draw();
-
-            } catch (e) {
-
-                this.Stop();
-
-                const instructions = document.getElementById('instructions') as HTMLParagraphElement;
-                instructions.innerHTML = e.message;
-            }
-
-
-        }, 200);
-
-        this.isRunning = true;
-    }
-
-    Stop() {
-        clearTimeout(this.timerToken);
-
-        this.isRunning = false;
     }
 
     KeyPress(keyCode: number): void {
@@ -296,13 +304,30 @@ class Game {
     MouseDown(mouseEvent: MouseEvent): void {
         if (!this.isRunning) return;
 
+
+        const matrix = this.board.Matrix;
+
+        //nb. assume a normalised array (ie. the second dimension is never jagged)
+        const cellCountY = matrix.length;
+        const cellCountX = matrix[0].length;
+
+        const cellWidth = this.canvas.offsetWidth / cellCountX;
+        const cellHeight = this.canvas.offsetHeight / cellCountY;
+
+
         const snakePosition = this.board.snake.SnakePosition;
-        const cellDimensions = this.board.GetCellDimensions();
         const snakeDirection = this.board.snake.Direction;
 
+
         //nb. the following coordinates refer to the top, left hand side of the current cell the snake's head resides in
-        const snakeCoordinatesX = snakePosition.currentX * cellDimensions.cellWidth;
-        const snakeCoordinatesY = snakePosition.currentY * cellDimensions.cellHeight;
+        const snakeCoordinatesX = snakePosition.currentX * cellWidth;
+        const snakeCoordinatesY = snakePosition.currentY * cellHeight;
+
+
+        //ref: https://stackoverflow.com/questions/17130395/real-mouse-position-in-canvas
+        const rect = this.canvas.getBoundingClientRect();
+        const mouseX = mouseEvent.clientX - rect.left;
+        const mouseY = mouseEvent.clientY - rect.top;
 
 
         let newDirection: SnakeDirection = snakeDirection;
@@ -310,23 +335,36 @@ class Game {
         switch (snakeDirection) {
             case SnakeDirection.Up:
 
+                if (mouseX < snakeCoordinatesX)
+                    newDirection = SnakeDirection.Left;
+                else if (mouseX > snakeCoordinatesX)
+                    newDirection = SnakeDirection.Right;
+
                 break;
 
             case SnakeDirection.Down:
+
+                if (mouseX < snakeCoordinatesX)
+                    newDirection = SnakeDirection.Left;
+                else if (mouseX > snakeCoordinatesX)
+                    newDirection = SnakeDirection.Right;
 
                 break;
 
             case SnakeDirection.Left:
 
+                if (mouseY < snakeCoordinatesY)
+                    newDirection = SnakeDirection.Up;
+                else if (mouseY > snakeCoordinatesY)
+                    newDirection = SnakeDirection.Down;
+
                 break;
 
             case SnakeDirection.Right:
 
-                //TODO: https://stackoverflow.com/questions/17130395/real-mouse-position-in-canvas
-
-                if (mouseEvent.clientY < snakeCoordinatesY)
+                if (mouseY < snakeCoordinatesY)
                     newDirection = SnakeDirection.Up;
-                else if (mouseEvent.clientY > snakeCoordinatesY)
+                else if (mouseY > snakeCoordinatesY)
                     newDirection = SnakeDirection.Down;
 
                 break;

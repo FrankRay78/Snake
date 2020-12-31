@@ -8,7 +8,7 @@ var SnakeDirection;
 var Snake = /** @class */ (function () {
     function Snake(matrix) {
         this.matrix = matrix;
-        this.GameOverMessage = '<b style="color: magenta">Game Over</b> - Click the board to try again';
+        this.GameOverMessage = 'Game Over';
         //nb. assume a normalised array (ie. the second dimension is never jagged)
         this.cellCountY = matrix.length;
         this.cellCountX = matrix[0].length;
@@ -71,7 +71,7 @@ var Snake = /** @class */ (function () {
 }());
 ;
 var Board = /** @class */ (function () {
-    function Board(canvas, cellCountX, cellCountY) {
+    function Board(cellCountX, cellCountY) {
         if (cellCountX === void 0) { cellCountX = 20; }
         if (cellCountY === void 0) { cellCountY = 20; }
         this.cellCountX = cellCountX;
@@ -85,9 +85,15 @@ var Board = /** @class */ (function () {
                 this.matrix[y][x] = 0;
             }
         }
-        this.canvas = canvas;
         this.snake = new Snake(this.matrix);
     }
+    Object.defineProperty(Board.prototype, "Matrix", {
+        get: function () {
+            return this.matrix;
+        },
+        enumerable: false,
+        configurable: true
+    });
     Board.prototype.Initialise = function () {
         //Blank the matrix before initialising
         for (var y = 0; y < this.cellCountY; y++) {
@@ -106,17 +112,56 @@ var Board = /** @class */ (function () {
         }
         this.snake.Update();
     };
-    Board.prototype.GetCellDimensions = function () {
-        return { cellWidth: this.canvas.offsetWidth / this.cellCountX, cellHeight: this.canvas.offsetHeight / this.cellCountY };
+    return Board;
+}());
+;
+var Game = /** @class */ (function () {
+    function Game(canvas) {
+        this.canvas = canvas;
+        this.isRunning = false;
+        this.board = new Board();
+        //Draw the board in its starting state
+        this.board.Initialise();
+        this.Draw();
+    }
+    Game.prototype.Start = function () {
+        var _this = this;
+        if (this.isRunning)
+            return;
+        //Draw the board in its starting state
+        this.board.Initialise();
+        this.Draw();
+        this.timerToken = setInterval(function () {
+            try {
+                _this.board.Update();
+                _this.Draw();
+            }
+            catch (e) {
+                _this.Stop();
+                //Show game over message
+                var context = _this.canvas.getContext('2d');
+                context.fillStyle = 'magenta';
+                context.font = '48px serif';
+                context.fillText(e.message, _this.canvas.offsetWidth * 0.1, _this.canvas.offsetHeight * 0.2);
+            }
+        }, 200);
+        this.isRunning = true;
     };
-    Board.prototype.Draw = function () {
+    Game.prototype.Stop = function () {
+        clearTimeout(this.timerToken);
+        this.isRunning = false;
+    };
+    Game.prototype.Draw = function () {
+        var matrix = this.board.Matrix;
+        //nb. assume a normalised array (ie. the second dimension is never jagged)
+        var cellCountY = matrix.length;
+        var cellCountX = matrix[0].length;
+        var cellWidth = this.canvas.offsetWidth / cellCountX;
+        var cellHeight = this.canvas.offsetHeight / cellCountY;
         var context = this.canvas.getContext('2d');
-        var cellDimensions = this.GetCellDimensions();
-        var cellWidth = cellDimensions.cellWidth;
-        var cellHeight = cellDimensions.cellHeight;
-        for (var y = 0; y < this.cellCountY; y++) {
-            for (var x = 0; x < this.cellCountX; x++) {
-                if (this.matrix[y][x] === 0) {
+        for (var y = 0; y < cellCountY; y++) {
+            for (var x = 0; x < cellCountX; x++) {
+                if (matrix[y][x] === 0) {
                     //EMPTY CELL
                     //alternating chequered backgrounds
                     if (y % 2 === 0) {
@@ -149,43 +194,6 @@ var Board = /** @class */ (function () {
         context.lineWidth = 1;
         context.strokeRect(0, 0, this.canvas.offsetWidth, this.canvas.offsetHeight);
     };
-    return Board;
-}());
-;
-var Game = /** @class */ (function () {
-    function Game(canvas) {
-        this.isRunning = false;
-        this.board = new Board(canvas);
-        //Draw the board in its starting state
-        this.board.Initialise();
-        this.board.Draw();
-    }
-    Game.prototype.Start = function () {
-        var _this = this;
-        if (this.isRunning)
-            return;
-        //Draw the board in its starting state
-        this.board.Initialise();
-        this.board.Draw();
-        this.timerToken = setInterval(function () {
-            try {
-                var instructions = document.getElementById('instructions');
-                instructions.innerText = "Move the snake around the board";
-                _this.board.Update();
-                _this.board.Draw();
-            }
-            catch (e) {
-                _this.Stop();
-                var instructions = document.getElementById('instructions');
-                instructions.innerHTML = e.message;
-            }
-        }, 200);
-        this.isRunning = true;
-    };
-    Game.prototype.Stop = function () {
-        clearTimeout(this.timerToken);
-        this.isRunning = false;
-    };
     Game.prototype.KeyPress = function (keyCode) {
         if (!this.isRunning)
             return;
@@ -213,25 +221,45 @@ var Game = /** @class */ (function () {
     Game.prototype.MouseDown = function (mouseEvent) {
         if (!this.isRunning)
             return;
+        var matrix = this.board.Matrix;
+        //nb. assume a normalised array (ie. the second dimension is never jagged)
+        var cellCountY = matrix.length;
+        var cellCountX = matrix[0].length;
+        var cellWidth = this.canvas.offsetWidth / cellCountX;
+        var cellHeight = this.canvas.offsetHeight / cellCountY;
         var snakePosition = this.board.snake.SnakePosition;
-        var cellDimensions = this.board.GetCellDimensions();
         var snakeDirection = this.board.snake.Direction;
         //nb. the following coordinates refer to the top, left hand side of the current cell the snake's head resides in
-        var snakeCoordinatesX = snakePosition.currentX * cellDimensions.cellWidth;
-        var snakeCoordinatesY = snakePosition.currentY * cellDimensions.cellHeight;
+        var snakeCoordinatesX = snakePosition.currentX * cellWidth;
+        var snakeCoordinatesY = snakePosition.currentY * cellHeight;
+        //ref: https://stackoverflow.com/questions/17130395/real-mouse-position-in-canvas
+        var rect = this.canvas.getBoundingClientRect();
+        var mouseX = mouseEvent.clientX - rect.left;
+        var mouseY = mouseEvent.clientY - rect.top;
         var newDirection = snakeDirection;
         switch (snakeDirection) {
             case SnakeDirection.Up:
+                if (mouseX < snakeCoordinatesX)
+                    newDirection = SnakeDirection.Left;
+                else if (mouseX > snakeCoordinatesX)
+                    newDirection = SnakeDirection.Right;
                 break;
             case SnakeDirection.Down:
+                if (mouseX < snakeCoordinatesX)
+                    newDirection = SnakeDirection.Left;
+                else if (mouseX > snakeCoordinatesX)
+                    newDirection = SnakeDirection.Right;
                 break;
             case SnakeDirection.Left:
+                if (mouseY < snakeCoordinatesY)
+                    newDirection = SnakeDirection.Up;
+                else if (mouseY > snakeCoordinatesY)
+                    newDirection = SnakeDirection.Down;
                 break;
             case SnakeDirection.Right:
-                //TODO: https://stackoverflow.com/questions/17130395/real-mouse-position-in-canvas
-                if (mouseEvent.clientY < snakeCoordinatesY)
+                if (mouseY < snakeCoordinatesY)
                     newDirection = SnakeDirection.Up;
-                else if (mouseEvent.clientY > snakeCoordinatesY)
+                else if (mouseY > snakeCoordinatesY)
                     newDirection = SnakeDirection.Down;
                 break;
             default:
