@@ -150,73 +150,17 @@ class Board {
     }
 };
 
-class Game {
+class BoardRenderer {
 
     private readonly board: Board;
-    private timerToken: number;
-    private isRunning: boolean;
+    private readonly canvas: HTMLCanvasElement;
 
-
-    constructor(public canvas: HTMLCanvasElement) {
-
-        this.isRunning = false;
-
-        this.board = new Board();
-
-        //Draw the board in its starting state
-        this.board.Initialise();
-        this.Draw();
-
-        //Show play arrow
-        this.DrawPlayArrow();
+    constructor(board: Board, canvas: HTMLCanvasElement) {
+        this.board = board;
+        this.canvas = canvas;
     }
 
-    Start() {
-        if (this.isRunning) return;
-
-        //Draw the board in its starting state
-        this.board.Initialise();
-        this.Draw();
-
-        this.timerToken = setInterval(() => {
-
-            try {
-
-                this.board.Update();
-
-                this.Draw();
-
-            } catch (e) {
-
-                this.Stop();
-
-
-                //Show game over message
-
-                const context = this.canvas.getContext('2d');
-
-                context.fillStyle = 'magenta';
-                context.font = '48px serif';
-                context.fillText(e.message, this.canvas.offsetWidth * 0.1, this.canvas.offsetHeight * 0.2);
-
-
-                //Show play arrow
-                this.DrawPlayArrow();
-            }
-
-
-        }, 200);
-
-        this.isRunning = true;
-    }
-
-    Stop() {
-        clearTimeout(this.timerToken);
-
-        this.isRunning = false;
-    }
-
-    GetBoardDimensions() {
+    public GetBoardDimensions() {
 
         const matrix = this.board.Matrix;
 
@@ -230,22 +174,7 @@ class Game {
         return { cellCountX: cellCountX, cellCountY: cellCountY, cellWidth: cellWidth, cellHeight: cellHeight };
     }
 
-    GetSnakeCoordinates() {
-
-        const dimensions = this.GetBoardDimensions();
-
-        const snakePosition = this.board.snake.SnakePosition;
-        const snakeDirection = this.board.snake.Direction;
-
-
-        //nb. the following coordinates refer to the top, left hand side of the current cell the snake's head resides in
-        const snakeCoordinatesX = snakePosition.currentX * dimensions.cellWidth;
-        const snakeCoordinatesY = snakePosition.currentY * dimensions.cellHeight;
-
-        return { snakeDirection: snakeDirection, snakeCoordinatesX: snakeCoordinatesX, snakeCoordinatesY: snakeCoordinatesY};
-    }
-
-    Draw(): void {
+    public Draw(): void {
 
         const dimensions = this.GetBoardDimensions();
 
@@ -291,7 +220,6 @@ class Game {
             }
         }
 
-
         //DARK BORDER AROUND THE WHOLE BOARD
 
         context.strokeStyle = 'DarkGrey';
@@ -299,7 +227,7 @@ class Game {
         context.strokeRect(0, 0, this.canvas.offsetWidth, this.canvas.offsetHeight);
     }
 
-    DrawPlayArrow(): void {
+    public DrawPlayArrow(): void {
         const context = this.canvas.getContext('2d');
 
         const arrowStartX = (this.canvas.offsetWidth / 2) - 25;
@@ -313,6 +241,91 @@ class Game {
         context.lineTo(arrowStartX + 50, arrowStartX + 25);
         context.closePath();
         context.fill();
+    }
+
+    public DrawGameOver(): void {
+        const context = this.canvas.getContext('2d');
+
+        context.fillStyle = 'magenta';
+        context.font = '48px serif';
+        context.fillText('Game Over', this.canvas.offsetWidth * 0.1, this.canvas.offsetHeight * 0.2);
+    }
+};
+
+class Game {
+
+    private readonly board: Board;
+    private readonly boardRenderer: BoardRenderer;
+    private timerToken: number;
+    private isRunning: boolean;
+
+
+    constructor(canvas: HTMLCanvasElement) {
+
+        this.isRunning = false;
+
+        this.board = new Board();
+        this.boardRenderer = new BoardRenderer(this.board, canvas);
+
+        this.board.Initialise();
+
+        //Draw the board in its starting state
+        this.boardRenderer.Draw();
+        this.boardRenderer.DrawPlayArrow();
+    }
+
+    Start() {
+
+        if (this.isRunning) return;
+
+
+        this.board.Initialise();
+
+        this.boardRenderer.Draw();
+
+        this.timerToken = setInterval(() => {
+
+            try {
+
+                this.board.Update();
+
+                this.boardRenderer.Draw();
+
+            } catch (e) {
+
+                this.Stop();
+
+                this.boardRenderer.DrawGameOver();
+
+                this.boardRenderer.DrawPlayArrow();
+            }
+
+
+        }, 200);
+
+        this.isRunning = true;
+    }
+
+    Stop() {
+
+        clearTimeout(this.timerToken);
+
+        this.isRunning = false;
+    }
+
+    GetSnakeCoordinates() {
+
+        const dimensions = this.boardRenderer.GetBoardDimensions();
+
+        const snakePosition = this.board.snake.SnakePosition;
+        const snakeDirection = this.board.snake.Direction;
+
+
+        //nb. the following coordinates refer to the top, left hand side of the current cell the snake's head resides in
+        const snakeCoordinatesX = snakePosition.currentX * dimensions.cellWidth;
+        const snakeCoordinatesY = snakePosition.currentY * dimensions.cellHeight;
+
+        return { snakeDirection: snakeDirection, snakeCoordinatesX: snakeCoordinatesX, snakeCoordinatesY: snakeCoordinatesY};
     }
 
     KeyPress(keyCode: number): void {
@@ -344,17 +357,12 @@ class Game {
         this.board.snake.Direction = newDirection;
     }
 
-    MouseDown(mouseEvent: MouseEvent): void {
+    MouseDown(mouseX: number, mouseY: number): void {
+
         if (!this.isRunning) return;
 
 
         const snakeCoordinates = this.GetSnakeCoordinates();
-
-        //ref: https://stackoverflow.com/questions/17130395/real-mouse-position-in-canvas
-        const rect = this.canvas.getBoundingClientRect();
-        const mouseX = mouseEvent.clientX - rect.left;
-        const mouseY = mouseEvent.clientY - rect.top;
-
 
         let newDirection: SnakeDirection = snakeCoordinates.snakeDirection;
 
@@ -403,21 +411,12 @@ class Game {
         this.board.snake.Direction = newDirection;
     }
 
-    Touch(touchEvent: TouchEvent): void {
-        if (!this.isRunning) return;
+    Touch(mouseX: number, mouseY: number): void {
 
-        touchEvent.preventDefault();
-        const touches = touchEvent.changedTouches;
-        const touch = touches[touches.length - 1];
+        if (!this.isRunning) return;
 
 
         const snakeCoordinates = this.GetSnakeCoordinates();
-
-        //ref: https://stackoverflow.com/questions/17130395/real-mouse-position-in-canvas
-        const rect = this.canvas.getBoundingClientRect();
-        const mouseX = touch.pageX - rect.left;
-        const mouseY = touch.pageY - rect.top;
-
 
         let newDirection: SnakeDirection = snakeCoordinates.snakeDirection;
 
@@ -478,9 +477,29 @@ window.onload = () => {
     canvas.addEventListener("click", (e: Event) => game.Start());
 
     //ref: http://bencentra.com/code/2014/12/05/html5-canvas-touch-events.html
-    canvas.addEventListener("mousedown", (e: MouseEvent) => game.MouseDown(e));
+    canvas.addEventListener("mousedown", (e: MouseEvent) => {
 
-    canvas.addEventListener("touchstart", (e: TouchEvent) => game.Touch(e));
+        //ref: https://stackoverflow.com/questions/17130395/real-mouse-position-in-canvas
+        const rect = canvas.getBoundingClientRect();
+        const mouseX = e.clientX - rect.left;
+        const mouseY = e.clientY - rect.top;
+
+        game.MouseDown(mouseX, mouseY);
+    });
+
+    canvas.addEventListener("touchstart", (touchEvent: TouchEvent) => {
+
+        touchEvent.preventDefault();
+        const touches = touchEvent.changedTouches;
+        const touch = touches[touches.length - 1];
+
+        //ref: https://stackoverflow.com/questions/17130395/real-mouse-position-in-canvas
+        const rect = canvas.getBoundingClientRect();
+        const touchX = touch.pageX - rect.left;
+        const touchY = touch.pageY - rect.top;
+
+        game.Touch(touchX, touchY);
+    });
 
     document.addEventListener("keydown", (e: KeyboardEvent) => game.KeyPress(e.keyCode));
 };

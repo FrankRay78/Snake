@@ -115,47 +115,12 @@ var Board = /** @class */ (function () {
     return Board;
 }());
 ;
-var Game = /** @class */ (function () {
-    function Game(canvas) {
+var BoardRenderer = /** @class */ (function () {
+    function BoardRenderer(board, canvas) {
+        this.board = board;
         this.canvas = canvas;
-        this.isRunning = false;
-        this.board = new Board();
-        //Draw the board in its starting state
-        this.board.Initialise();
-        this.Draw();
-        //Show play arrow
-        this.DrawPlayArrow();
     }
-    Game.prototype.Start = function () {
-        var _this = this;
-        if (this.isRunning)
-            return;
-        //Draw the board in its starting state
-        this.board.Initialise();
-        this.Draw();
-        this.timerToken = setInterval(function () {
-            try {
-                _this.board.Update();
-                _this.Draw();
-            }
-            catch (e) {
-                _this.Stop();
-                //Show game over message
-                var context = _this.canvas.getContext('2d');
-                context.fillStyle = 'magenta';
-                context.font = '48px serif';
-                context.fillText(e.message, _this.canvas.offsetWidth * 0.1, _this.canvas.offsetHeight * 0.2);
-                //Show play arrow
-                _this.DrawPlayArrow();
-            }
-        }, 200);
-        this.isRunning = true;
-    };
-    Game.prototype.Stop = function () {
-        clearTimeout(this.timerToken);
-        this.isRunning = false;
-    };
-    Game.prototype.GetBoardDimensions = function () {
+    BoardRenderer.prototype.GetBoardDimensions = function () {
         var matrix = this.board.Matrix;
         //nb. assume a normalised array (ie. the second dimension is never jagged)
         var cellCountY = matrix.length;
@@ -164,16 +129,7 @@ var Game = /** @class */ (function () {
         var cellHeight = this.canvas.offsetHeight / cellCountY;
         return { cellCountX: cellCountX, cellCountY: cellCountY, cellWidth: cellWidth, cellHeight: cellHeight };
     };
-    Game.prototype.GetSnakeCoordinates = function () {
-        var dimensions = this.GetBoardDimensions();
-        var snakePosition = this.board.snake.SnakePosition;
-        var snakeDirection = this.board.snake.Direction;
-        //nb. the following coordinates refer to the top, left hand side of the current cell the snake's head resides in
-        var snakeCoordinatesX = snakePosition.currentX * dimensions.cellWidth;
-        var snakeCoordinatesY = snakePosition.currentY * dimensions.cellHeight;
-        return { snakeDirection: snakeDirection, snakeCoordinatesX: snakeCoordinatesX, snakeCoordinatesY: snakeCoordinatesY };
-    };
-    Game.prototype.Draw = function () {
+    BoardRenderer.prototype.Draw = function () {
         var dimensions = this.GetBoardDimensions();
         var context = this.canvas.getContext('2d');
         for (var y = 0; y < dimensions.cellCountY; y++) {
@@ -211,7 +167,7 @@ var Game = /** @class */ (function () {
         context.lineWidth = 1;
         context.strokeRect(0, 0, this.canvas.offsetWidth, this.canvas.offsetHeight);
     };
-    Game.prototype.DrawPlayArrow = function () {
+    BoardRenderer.prototype.DrawPlayArrow = function () {
         var context = this.canvas.getContext('2d');
         var arrowStartX = (this.canvas.offsetWidth / 2) - 25;
         var arrowStartY = (this.canvas.offsetHeight / 2) - 25;
@@ -222,6 +178,57 @@ var Game = /** @class */ (function () {
         context.lineTo(arrowStartX + 50, arrowStartX + 25);
         context.closePath();
         context.fill();
+    };
+    BoardRenderer.prototype.DrawGameOver = function () {
+        var context = this.canvas.getContext('2d');
+        context.fillStyle = 'magenta';
+        context.font = '48px serif';
+        context.fillText('Game Over', this.canvas.offsetWidth * 0.1, this.canvas.offsetHeight * 0.2);
+    };
+    return BoardRenderer;
+}());
+;
+var Game = /** @class */ (function () {
+    function Game(canvas) {
+        this.isRunning = false;
+        this.board = new Board();
+        this.boardRenderer = new BoardRenderer(this.board, canvas);
+        this.board.Initialise();
+        //Draw the board in its starting state
+        this.boardRenderer.Draw();
+        this.boardRenderer.DrawPlayArrow();
+    }
+    Game.prototype.Start = function () {
+        var _this = this;
+        if (this.isRunning)
+            return;
+        this.board.Initialise();
+        this.boardRenderer.Draw();
+        this.timerToken = setInterval(function () {
+            try {
+                _this.board.Update();
+                _this.boardRenderer.Draw();
+            }
+            catch (e) {
+                _this.Stop();
+                _this.boardRenderer.DrawGameOver();
+                _this.boardRenderer.DrawPlayArrow();
+            }
+        }, 200);
+        this.isRunning = true;
+    };
+    Game.prototype.Stop = function () {
+        clearTimeout(this.timerToken);
+        this.isRunning = false;
+    };
+    Game.prototype.GetSnakeCoordinates = function () {
+        var dimensions = this.boardRenderer.GetBoardDimensions();
+        var snakePosition = this.board.snake.SnakePosition;
+        var snakeDirection = this.board.snake.Direction;
+        //nb. the following coordinates refer to the top, left hand side of the current cell the snake's head resides in
+        var snakeCoordinatesX = snakePosition.currentX * dimensions.cellWidth;
+        var snakeCoordinatesY = snakePosition.currentY * dimensions.cellHeight;
+        return { snakeDirection: snakeDirection, snakeCoordinatesX: snakeCoordinatesX, snakeCoordinatesY: snakeCoordinatesY };
     };
     Game.prototype.KeyPress = function (keyCode) {
         if (!this.isRunning)
@@ -247,14 +254,10 @@ var Game = /** @class */ (function () {
         }
         this.board.snake.Direction = newDirection;
     };
-    Game.prototype.MouseDown = function (mouseEvent) {
+    Game.prototype.MouseDown = function (mouseX, mouseY) {
         if (!this.isRunning)
             return;
         var snakeCoordinates = this.GetSnakeCoordinates();
-        //ref: https://stackoverflow.com/questions/17130395/real-mouse-position-in-canvas
-        var rect = this.canvas.getBoundingClientRect();
-        var mouseX = mouseEvent.clientX - rect.left;
-        var mouseY = mouseEvent.clientY - rect.top;
         var newDirection = snakeCoordinates.snakeDirection;
         switch (snakeCoordinates.snakeDirection) {
             case SnakeDirection.Up:
@@ -287,17 +290,10 @@ var Game = /** @class */ (function () {
         }
         this.board.snake.Direction = newDirection;
     };
-    Game.prototype.Touch = function (touchEvent) {
+    Game.prototype.Touch = function (mouseX, mouseY) {
         if (!this.isRunning)
             return;
-        touchEvent.preventDefault();
-        var touches = touchEvent.changedTouches;
-        var touch = touches[touches.length - 1];
         var snakeCoordinates = this.GetSnakeCoordinates();
-        //ref: https://stackoverflow.com/questions/17130395/real-mouse-position-in-canvas
-        var rect = this.canvas.getBoundingClientRect();
-        var mouseX = touch.pageX - rect.left;
-        var mouseY = touch.pageY - rect.top;
         var newDirection = snakeCoordinates.snakeDirection;
         switch (snakeCoordinates.snakeDirection) {
             case SnakeDirection.Up:
@@ -338,8 +334,23 @@ window.onload = function () {
     var game = new Game(canvas);
     canvas.addEventListener("click", function (e) { return game.Start(); });
     //ref: http://bencentra.com/code/2014/12/05/html5-canvas-touch-events.html
-    canvas.addEventListener("mousedown", function (e) { return game.MouseDown(e); });
-    canvas.addEventListener("touchstart", function (e) { return game.Touch(e); });
+    canvas.addEventListener("mousedown", function (e) {
+        //ref: https://stackoverflow.com/questions/17130395/real-mouse-position-in-canvas
+        var rect = canvas.getBoundingClientRect();
+        var mouseX = e.clientX - rect.left;
+        var mouseY = e.clientY - rect.top;
+        game.MouseDown(mouseX, mouseY);
+    });
+    canvas.addEventListener("touchstart", function (touchEvent) {
+        touchEvent.preventDefault();
+        var touches = touchEvent.changedTouches;
+        var touch = touches[touches.length - 1];
+        //ref: https://stackoverflow.com/questions/17130395/real-mouse-position-in-canvas
+        var rect = canvas.getBoundingClientRect();
+        var touchX = touch.pageX - rect.left;
+        var touchY = touch.pageY - rect.top;
+        game.Touch(touchX, touchY);
+    });
     document.addEventListener("keydown", function (e) { return game.KeyPress(e.keyCode); });
 };
 //# sourceMappingURL=app.js.map
