@@ -13,19 +13,16 @@ var Snake = /** @class */ (function () {
         this.cellCountY = matrix.length;
         this.cellCountX = matrix[0].length;
     }
-    Object.defineProperty(Snake.prototype, "SnakePosition", {
-        get: function () {
-            return { currentX: this.currentX, currentY: this.currentY };
+    Object.defineProperty(Snake.prototype, "Direction", {
+        set: function (newDirection) {
+            this.direction = newDirection;
         },
         enumerable: false,
         configurable: true
     });
-    Object.defineProperty(Snake.prototype, "Direction", {
+    Object.defineProperty(Snake.prototype, "SnakePosition", {
         get: function () {
-            return this.direction;
-        },
-        set: function (newDirection) {
-            this.direction = newDirection;
+            return { direction: this.direction, currentX: this.currentX, currentY: this.currentY };
         },
         enumerable: false,
         configurable: true
@@ -36,7 +33,6 @@ var Snake = /** @class */ (function () {
         this.currentY = Math.round(this.cellCountY / 2) - 1;
         //Move right initially
         this.direction = SnakeDirection.Right;
-        this.matrix[this.currentY][this.currentX] = 1;
     };
     Snake.prototype.Update = function () {
         switch (this.direction) {
@@ -64,8 +60,6 @@ var Snake = /** @class */ (function () {
                 //should never happen
                 throw new Error();
         }
-        //Update the matrix with the new position of the snake
-        this.matrix[this.currentY][this.currentX] = 1;
     };
     return Snake;
 }());
@@ -95,22 +89,23 @@ var Board = /** @class */ (function () {
         configurable: true
     });
     Board.prototype.Initialise = function () {
-        //Blank the matrix before initialising
-        for (var y = 0; y < this.cellCountY; y++) {
-            for (var x = 0; x < this.cellCountX; x++) {
-                this.matrix[y][x] = 0;
-            }
-        }
         this.snake.Initialise();
+        this.UpdateMatrix();
     };
     Board.prototype.Update = function () {
+        this.snake.Update();
+        this.UpdateMatrix();
+    };
+    Board.prototype.UpdateMatrix = function () {
         //Blank the matrix before performing update
         for (var y = 0; y < this.cellCountY; y++) {
             for (var x = 0; x < this.cellCountX; x++) {
                 this.matrix[y][x] = 0;
             }
         }
-        this.snake.Update();
+        //Update the matrix with the new position of the snake
+        var snakePosition = this.snake.SnakePosition;
+        this.matrix[snakePosition.currentY][snakePosition.currentX] = 1;
     };
     return Board;
 }());
@@ -224,11 +219,10 @@ var Game = /** @class */ (function () {
     Game.prototype.GetSnakeCoordinates = function () {
         var dimensions = this.boardRenderer.GetBoardDimensions();
         var snakePosition = this.board.snake.SnakePosition;
-        var snakeDirection = this.board.snake.Direction;
         //nb. the following coordinates refer to the top, left hand side of the current cell the snake's head resides in
         var snakeCoordinatesX = snakePosition.currentX * dimensions.cellWidth;
         var snakeCoordinatesY = snakePosition.currentY * dimensions.cellHeight;
-        return { snakeDirection: snakeDirection, snakeCoordinatesX: snakeCoordinatesX, snakeCoordinatesY: snakeCoordinatesY };
+        return { snakeDirection: snakePosition.direction, snakeCoordinatesX: snakeCoordinatesX, snakeCoordinatesY: snakeCoordinatesY };
     };
     Game.prototype.KeyPress = function (keyCode) {
         if (!this.isRunning)

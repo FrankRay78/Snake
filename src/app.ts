@@ -18,24 +18,19 @@ class Snake {
     private currentX: number;
     private currentY: number;
 
-    get SnakePosition() {
-        return { currentX: this.currentX, currentY: this.currentY };
-    }
-
     private direction: SnakeDirection;
 
-    get Direction(): SnakeDirection {
-        return this.direction;
-    }
     set Direction(newDirection: SnakeDirection) {
         this.direction = newDirection;
     }
 
-    constructor(private matrix) {
+    get SnakePosition() {
+        return { direction: this.direction, currentX: this.currentX, currentY: this.currentY };
+    }
 
-        //nb. assume a normalised array (ie. the second dimension is never jagged)
-        this.cellCountY = matrix.length;
-        this.cellCountX = matrix[0].length;
+    constructor(cellCountX: number, cellCountY: number) {
+        this.cellCountX = cellCountX;
+        this.cellCountY = cellCountY;
     }
 
     Initialise(): void {
@@ -46,8 +41,6 @@ class Snake {
 
         //Move right initially
         this.direction = SnakeDirection.Right;
-
-        this.matrix[this.currentY][this.currentX] = 1;
     }
 
     Update(): void {
@@ -93,11 +86,6 @@ class Snake {
                 //should never happen
                 throw new Error();
         }
-
-
-        //Update the matrix with the new position of the snake
-
-        this.matrix[this.currentY][this.currentX] = 1;
     }
 };
 
@@ -114,6 +102,7 @@ class Board {
 
         //Initialse the underlying matrix
         //ref: https://stackoverflow.com/questions/8301400/how-do-you-easily-create-empty-matrices-javascript
+        //nb. will always be a normalised array (ie. the second dimension is never jagged)
         this.matrix = [];
         for (let y = 0; y < this.cellCountY; y++) {
             this.matrix[y] = [];
@@ -122,22 +111,24 @@ class Board {
             }
         }
 
-        this.snake = new Snake(this.matrix);
+        this.snake = new Snake(cellCountX, cellCountY);
     }
 
     Initialise(): void {
 
-        //Blank the matrix before initialising
-        for (let y = 0; y < this.cellCountY; y++) {
-            for (let x = 0; x < this.cellCountX; x++) {
-                this.matrix[y][x] = 0;
-            }
-        }
-
         this.snake.Initialise();
+
+        this.UpdateMatrix();
     }
 
     Update(): void {
+
+        this.snake.Update();
+
+        this.UpdateMatrix();
+    }
+
+    private UpdateMatrix(): void {
 
         //Blank the matrix before performing update
         for (let y = 0; y < this.cellCountY; y++) {
@@ -146,7 +137,9 @@ class Board {
             }
         }
 
-        this.snake.Update();
+        //Update the matrix with the new position of the snake
+        const snakePosition = this.snake.SnakePosition;
+        this.matrix[snakePosition.currentY][snakePosition.currentX] = 1;
     }
 };
 
@@ -318,14 +311,12 @@ class Game {
         const dimensions = this.boardRenderer.GetBoardDimensions();
 
         const snakePosition = this.board.snake.SnakePosition;
-        const snakeDirection = this.board.snake.Direction;
-
 
         //nb. the following coordinates refer to the top, left hand side of the current cell the snake's head resides in
         const snakeCoordinatesX = snakePosition.currentX * dimensions.cellWidth;
         const snakeCoordinatesY = snakePosition.currentY * dimensions.cellHeight;
 
-        return { snakeDirection: snakeDirection, snakeCoordinatesX: snakeCoordinatesX, snakeCoordinatesY: snakeCoordinatesY};
+        return { snakeDirection: snakePosition.direction, snakeCoordinatesX: snakeCoordinatesX, snakeCoordinatesY: snakeCoordinatesY};
     }
 
     KeyPress(keyCode: number): void {
