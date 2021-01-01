@@ -280,6 +280,8 @@ class Game {
 
             try {
 
+                //Update the board and redraw it to the canvas on each timer tick
+
                 this.board.Update();
 
                 this.boardRenderer.Draw();
@@ -316,7 +318,7 @@ class Game {
         const snakeCoordinatesX = snakePosition.currentX * dimensions.cellWidth;
         const snakeCoordinatesY = snakePosition.currentY * dimensions.cellHeight;
 
-        return { snakeDirection: snakePosition.direction, snakeCoordinatesX: snakeCoordinatesX, snakeCoordinatesY: snakeCoordinatesY};
+        return { snakeDirection: snakePosition.direction, snakeCoordinatesX: snakeCoordinatesX, snakeCoordinatesY: snakeCoordinatesY };
     }
 
     KeyPress(keyCode: number): void {

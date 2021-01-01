@@ -6,12 +6,10 @@ var SnakeDirection;
     SnakeDirection[SnakeDirection["Right"] = 4] = "Right";
 })(SnakeDirection || (SnakeDirection = {}));
 var Snake = /** @class */ (function () {
-    function Snake(matrix) {
-        this.matrix = matrix;
+    function Snake(cellCountX, cellCountY) {
         this.GameOverMessage = 'Game Over';
-        //nb. assume a normalised array (ie. the second dimension is never jagged)
-        this.cellCountY = matrix.length;
-        this.cellCountX = matrix[0].length;
+        this.cellCountX = cellCountX;
+        this.cellCountY = cellCountY;
     }
     Object.defineProperty(Snake.prototype, "Direction", {
         set: function (newDirection) {
@@ -72,6 +70,7 @@ var Board = /** @class */ (function () {
         this.cellCountY = cellCountY;
         //Initialse the underlying matrix
         //ref: https://stackoverflow.com/questions/8301400/how-do-you-easily-create-empty-matrices-javascript
+        //nb. will always be a normalised array (ie. the second dimension is never jagged)
         this.matrix = [];
         for (var y = 0; y < this.cellCountY; y++) {
             this.matrix[y] = [];
@@ -79,7 +78,7 @@ var Board = /** @class */ (function () {
                 this.matrix[y][x] = 0;
             }
         }
-        this.snake = new Snake(this.matrix);
+        this.snake = new Snake(cellCountX, cellCountY);
     }
     Object.defineProperty(Board.prototype, "Matrix", {
         get: function () {
@@ -201,6 +200,7 @@ var Game = /** @class */ (function () {
         this.boardRenderer.Draw();
         this.timerToken = setInterval(function () {
             try {
+                //Update the board and redraw it to the canvas on each timer tick
                 _this.board.Update();
                 _this.boardRenderer.Draw();
             }
