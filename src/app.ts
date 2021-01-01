@@ -216,24 +216,7 @@ class Game {
         this.isRunning = false;
     }
 
-    DrawPlayArrow(): void {
-        const context = this.canvas.getContext('2d');
-
-        const arrowStartX = (this.canvas.offsetWidth / 2) - 25;
-        const arrowStartY = (this.canvas.offsetHeight / 2) - 25;
-
-        context.fillStyle = 'black';
-
-        context.beginPath();
-        context.moveTo(arrowStartX, arrowStartY);
-        context.lineTo(arrowStartX, arrowStartX + 50);
-        context.lineTo(arrowStartX + 50, arrowStartX + 25);
-        context.closePath();
-        context.fill();
-    }
-
-    Draw(): void {
-
+    GetBoardDimensions() {
 
         const matrix = this.board.Matrix;
 
@@ -244,13 +227,34 @@ class Game {
         const cellWidth = this.canvas.offsetWidth / cellCountX;
         const cellHeight = this.canvas.offsetHeight / cellCountY;
 
+        return { cellCountX: cellCountX, cellCountY: cellCountY, cellWidth: cellWidth, cellHeight: cellHeight };
+    }
+
+    GetSnakeCoordinates() {
+
+        const dimensions = this.GetBoardDimensions();
+
+        const snakePosition = this.board.snake.SnakePosition;
+        const snakeDirection = this.board.snake.Direction;
+
+
+        //nb. the following coordinates refer to the top, left hand side of the current cell the snake's head resides in
+        const snakeCoordinatesX = snakePosition.currentX * dimensions.cellWidth;
+        const snakeCoordinatesY = snakePosition.currentY * dimensions.cellHeight;
+
+        return { snakeDirection: snakeDirection, snakeCoordinatesX: snakeCoordinatesX, snakeCoordinatesY: snakeCoordinatesY};
+    }
+
+    Draw(): void {
+
+        const dimensions = this.GetBoardDimensions();
 
         const context = this.canvas.getContext('2d');
 
-        for (let y = 0; y < cellCountY; y++) {
-            for (let x = 0; x < cellCountX; x++) {
+        for (let y = 0; y < dimensions.cellCountY; y++) {
+            for (let x = 0; x < dimensions.cellCountX; x++) {
 
-                if (matrix[y][x] === 0) {
+                if (this.board.Matrix[y][x] === 0) {
 
                     //EMPTY CELL
 
@@ -269,20 +273,20 @@ class Game {
                             context.fillStyle = 'white';
                     }
 
-                    context.fillRect(x * cellWidth, y * cellHeight, cellWidth, cellHeight);
+                    context.fillRect(x * dimensions.cellWidth, y * dimensions.cellHeight, dimensions.cellWidth, dimensions.cellHeight);
 
                     //TODO: lineTo(x, y) ?
 
                     context.strokeStyle = 'DarkGrey';
                     context.lineWidth = 1;
-                    context.strokeRect(x * cellWidth, y * cellHeight, cellWidth, cellHeight);
+                    context.strokeRect(x * dimensions.cellWidth, y * dimensions.cellHeight, dimensions.cellWidth, dimensions.cellHeight);
                 }
                 else {
 
                     //NON-EMPTY CELL
 
                     context.fillStyle = 'green';
-                    context.fillRect(x * cellWidth, y * cellHeight, cellWidth, cellHeight);
+                    context.fillRect(x * dimensions.cellWidth, y * dimensions.cellHeight, dimensions.cellWidth, dimensions.cellHeight);
                 }
             }
         }
@@ -293,6 +297,22 @@ class Game {
         context.strokeStyle = 'DarkGrey';
         context.lineWidth = 1;
         context.strokeRect(0, 0, this.canvas.offsetWidth, this.canvas.offsetHeight);
+    }
+
+    DrawPlayArrow(): void {
+        const context = this.canvas.getContext('2d');
+
+        const arrowStartX = (this.canvas.offsetWidth / 2) - 25;
+        const arrowStartY = (this.canvas.offsetHeight / 2) - 25;
+
+        context.fillStyle = 'black';
+
+        context.beginPath();
+        context.moveTo(arrowStartX, arrowStartY);
+        context.lineTo(arrowStartX, arrowStartX + 50);
+        context.lineTo(arrowStartX + 50, arrowStartX + 25);
+        context.closePath();
+        context.fill();
     }
 
     KeyPress(keyCode: number): void {
@@ -328,24 +348,7 @@ class Game {
         if (!this.isRunning) return;
 
 
-        const matrix = this.board.Matrix;
-
-        //nb. assume a normalised array (ie. the second dimension is never jagged)
-        const cellCountY = matrix.length;
-        const cellCountX = matrix[0].length;
-
-        const cellWidth = this.canvas.offsetWidth / cellCountX;
-        const cellHeight = this.canvas.offsetHeight / cellCountY;
-
-
-        const snakePosition = this.board.snake.SnakePosition;
-        const snakeDirection = this.board.snake.Direction;
-
-
-        //nb. the following coordinates refer to the top, left hand side of the current cell the snake's head resides in
-        const snakeCoordinatesX = snakePosition.currentX * cellWidth;
-        const snakeCoordinatesY = snakePosition.currentY * cellHeight;
-
+        const snakeCoordinates = this.GetSnakeCoordinates();
 
         //ref: https://stackoverflow.com/questions/17130395/real-mouse-position-in-canvas
         const rect = this.canvas.getBoundingClientRect();
@@ -353,41 +356,41 @@ class Game {
         const mouseY = mouseEvent.clientY - rect.top;
 
 
-        let newDirection: SnakeDirection = snakeDirection;
+        let newDirection: SnakeDirection = snakeCoordinates.snakeDirection;
 
-        switch (snakeDirection) {
+        switch (snakeCoordinates.snakeDirection) {
             case SnakeDirection.Up:
 
-                if (mouseX < snakeCoordinatesX)
+                if (mouseX < snakeCoordinates.snakeCoordinatesX)
                     newDirection = SnakeDirection.Left;
-                else if (mouseX > snakeCoordinatesX)
+                else if (mouseX > snakeCoordinates.snakeCoordinatesX)
                     newDirection = SnakeDirection.Right;
 
                 break;
 
             case SnakeDirection.Down:
 
-                if (mouseX < snakeCoordinatesX)
+                if (mouseX < snakeCoordinates.snakeCoordinatesX)
                     newDirection = SnakeDirection.Left;
-                else if (mouseX > snakeCoordinatesX)
+                else if (mouseX > snakeCoordinates.snakeCoordinatesX)
                     newDirection = SnakeDirection.Right;
 
                 break;
 
             case SnakeDirection.Left:
 
-                if (mouseY < snakeCoordinatesY)
+                if (mouseY < snakeCoordinates.snakeCoordinatesY)
                     newDirection = SnakeDirection.Up;
-                else if (mouseY > snakeCoordinatesY)
+                else if (mouseY > snakeCoordinates.snakeCoordinatesY)
                     newDirection = SnakeDirection.Down;
 
                 break;
 
             case SnakeDirection.Right:
 
-                if (mouseY < snakeCoordinatesY)
+                if (mouseY < snakeCoordinates.snakeCoordinatesY)
                     newDirection = SnakeDirection.Up;
-                else if (mouseY > snakeCoordinatesY)
+                else if (mouseY > snakeCoordinates.snakeCoordinatesY)
                     newDirection = SnakeDirection.Down;
 
                 break;
@@ -408,24 +411,7 @@ class Game {
         const touch = touches[touches.length - 1];
 
 
-        const matrix = this.board.Matrix;
-
-        //nb. assume a normalised array (ie. the second dimension is never jagged)
-        const cellCountY = matrix.length;
-        const cellCountX = matrix[0].length;
-
-        const cellWidth = this.canvas.offsetWidth / cellCountX;
-        const cellHeight = this.canvas.offsetHeight / cellCountY;
-
-
-        const snakePosition = this.board.snake.SnakePosition;
-        const snakeDirection = this.board.snake.Direction;
-
-
-        //nb. the following coordinates refer to the top, left hand side of the current cell the snake's head resides in
-        const snakeCoordinatesX = snakePosition.currentX * cellWidth;
-        const snakeCoordinatesY = snakePosition.currentY * cellHeight;
-
+        const snakeCoordinates = this.GetSnakeCoordinates();
 
         //ref: https://stackoverflow.com/questions/17130395/real-mouse-position-in-canvas
         const rect = this.canvas.getBoundingClientRect();
@@ -433,41 +419,41 @@ class Game {
         const mouseY = touch.pageY - rect.top;
 
 
-        let newDirection: SnakeDirection = snakeDirection;
+        let newDirection: SnakeDirection = snakeCoordinates.snakeDirection;
 
-        switch (snakeDirection) {
+        switch (snakeCoordinates.snakeDirection) {
             case SnakeDirection.Up:
 
-                if (mouseX < snakeCoordinatesX)
+                if (mouseX < snakeCoordinates.snakeCoordinatesX)
                     newDirection = SnakeDirection.Left;
-                else if (mouseX > snakeCoordinatesX)
+                else if (mouseX > snakeCoordinates.snakeCoordinatesX)
                     newDirection = SnakeDirection.Right;
 
                 break;
 
             case SnakeDirection.Down:
 
-                if (mouseX < snakeCoordinatesX)
+                if (mouseX < snakeCoordinates.snakeCoordinatesX)
                     newDirection = SnakeDirection.Left;
-                else if (mouseX > snakeCoordinatesX)
+                else if (mouseX > snakeCoordinates.snakeCoordinatesX)
                     newDirection = SnakeDirection.Right;
 
                 break;
 
             case SnakeDirection.Left:
 
-                if (mouseY < snakeCoordinatesY)
+                if (mouseY < snakeCoordinates.snakeCoordinatesY)
                     newDirection = SnakeDirection.Up;
-                else if (mouseY > snakeCoordinatesY)
+                else if (mouseY > snakeCoordinates.snakeCoordinatesY)
                     newDirection = SnakeDirection.Down;
 
                 break;
 
             case SnakeDirection.Right:
 
-                if (mouseY < snakeCoordinatesY)
+                if (mouseY < snakeCoordinates.snakeCoordinatesY)
                     newDirection = SnakeDirection.Up;
-                else if (mouseY > snakeCoordinatesY)
+                else if (mouseY > snakeCoordinates.snakeCoordinatesY)
                     newDirection = SnakeDirection.Down;
 
                 break;

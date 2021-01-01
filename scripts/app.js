@@ -155,29 +155,30 @@ var Game = /** @class */ (function () {
         clearTimeout(this.timerToken);
         this.isRunning = false;
     };
-    Game.prototype.DrawPlayArrow = function () {
-        var context = this.canvas.getContext('2d');
-        var arrowStartX = (this.canvas.offsetWidth / 2) - 25;
-        var arrowStartY = (this.canvas.offsetHeight / 2) - 25;
-        context.fillStyle = 'black';
-        context.beginPath();
-        context.moveTo(arrowStartX, arrowStartY);
-        context.lineTo(arrowStartX, arrowStartX + 50);
-        context.lineTo(arrowStartX + 50, arrowStartX + 25);
-        context.closePath();
-        context.fill();
-    };
-    Game.prototype.Draw = function () {
+    Game.prototype.GetBoardDimensions = function () {
         var matrix = this.board.Matrix;
         //nb. assume a normalised array (ie. the second dimension is never jagged)
         var cellCountY = matrix.length;
         var cellCountX = matrix[0].length;
         var cellWidth = this.canvas.offsetWidth / cellCountX;
         var cellHeight = this.canvas.offsetHeight / cellCountY;
+        return { cellCountX: cellCountX, cellCountY: cellCountY, cellWidth: cellWidth, cellHeight: cellHeight };
+    };
+    Game.prototype.GetSnakeCoordinates = function () {
+        var dimensions = this.GetBoardDimensions();
+        var snakePosition = this.board.snake.SnakePosition;
+        var snakeDirection = this.board.snake.Direction;
+        //nb. the following coordinates refer to the top, left hand side of the current cell the snake's head resides in
+        var snakeCoordinatesX = snakePosition.currentX * dimensions.cellWidth;
+        var snakeCoordinatesY = snakePosition.currentY * dimensions.cellHeight;
+        return { snakeDirection: snakeDirection, snakeCoordinatesX: snakeCoordinatesX, snakeCoordinatesY: snakeCoordinatesY };
+    };
+    Game.prototype.Draw = function () {
+        var dimensions = this.GetBoardDimensions();
         var context = this.canvas.getContext('2d');
-        for (var y = 0; y < cellCountY; y++) {
-            for (var x = 0; x < cellCountX; x++) {
-                if (matrix[y][x] === 0) {
+        for (var y = 0; y < dimensions.cellCountY; y++) {
+            for (var x = 0; x < dimensions.cellCountX; x++) {
+                if (this.board.Matrix[y][x] === 0) {
                     //EMPTY CELL
                     //alternating chequered backgrounds
                     if (y % 2 === 0) {
@@ -192,16 +193,16 @@ var Game = /** @class */ (function () {
                         else
                             context.fillStyle = 'white';
                     }
-                    context.fillRect(x * cellWidth, y * cellHeight, cellWidth, cellHeight);
+                    context.fillRect(x * dimensions.cellWidth, y * dimensions.cellHeight, dimensions.cellWidth, dimensions.cellHeight);
                     //TODO: lineTo(x, y) ?
                     context.strokeStyle = 'DarkGrey';
                     context.lineWidth = 1;
-                    context.strokeRect(x * cellWidth, y * cellHeight, cellWidth, cellHeight);
+                    context.strokeRect(x * dimensions.cellWidth, y * dimensions.cellHeight, dimensions.cellWidth, dimensions.cellHeight);
                 }
                 else {
                     //NON-EMPTY CELL
                     context.fillStyle = 'green';
-                    context.fillRect(x * cellWidth, y * cellHeight, cellWidth, cellHeight);
+                    context.fillRect(x * dimensions.cellWidth, y * dimensions.cellHeight, dimensions.cellWidth, dimensions.cellHeight);
                 }
             }
         }
@@ -209,6 +210,18 @@ var Game = /** @class */ (function () {
         context.strokeStyle = 'DarkGrey';
         context.lineWidth = 1;
         context.strokeRect(0, 0, this.canvas.offsetWidth, this.canvas.offsetHeight);
+    };
+    Game.prototype.DrawPlayArrow = function () {
+        var context = this.canvas.getContext('2d');
+        var arrowStartX = (this.canvas.offsetWidth / 2) - 25;
+        var arrowStartY = (this.canvas.offsetHeight / 2) - 25;
+        context.fillStyle = 'black';
+        context.beginPath();
+        context.moveTo(arrowStartX, arrowStartY);
+        context.lineTo(arrowStartX, arrowStartX + 50);
+        context.lineTo(arrowStartX + 50, arrowStartX + 25);
+        context.closePath();
+        context.fill();
     };
     Game.prototype.KeyPress = function (keyCode) {
         if (!this.isRunning)
@@ -237,45 +250,35 @@ var Game = /** @class */ (function () {
     Game.prototype.MouseDown = function (mouseEvent) {
         if (!this.isRunning)
             return;
-        var matrix = this.board.Matrix;
-        //nb. assume a normalised array (ie. the second dimension is never jagged)
-        var cellCountY = matrix.length;
-        var cellCountX = matrix[0].length;
-        var cellWidth = this.canvas.offsetWidth / cellCountX;
-        var cellHeight = this.canvas.offsetHeight / cellCountY;
-        var snakePosition = this.board.snake.SnakePosition;
-        var snakeDirection = this.board.snake.Direction;
-        //nb. the following coordinates refer to the top, left hand side of the current cell the snake's head resides in
-        var snakeCoordinatesX = snakePosition.currentX * cellWidth;
-        var snakeCoordinatesY = snakePosition.currentY * cellHeight;
+        var snakeCoordinates = this.GetSnakeCoordinates();
         //ref: https://stackoverflow.com/questions/17130395/real-mouse-position-in-canvas
         var rect = this.canvas.getBoundingClientRect();
         var mouseX = mouseEvent.clientX - rect.left;
         var mouseY = mouseEvent.clientY - rect.top;
-        var newDirection = snakeDirection;
-        switch (snakeDirection) {
+        var newDirection = snakeCoordinates.snakeDirection;
+        switch (snakeCoordinates.snakeDirection) {
             case SnakeDirection.Up:
-                if (mouseX < snakeCoordinatesX)
+                if (mouseX < snakeCoordinates.snakeCoordinatesX)
                     newDirection = SnakeDirection.Left;
-                else if (mouseX > snakeCoordinatesX)
+                else if (mouseX > snakeCoordinates.snakeCoordinatesX)
                     newDirection = SnakeDirection.Right;
                 break;
             case SnakeDirection.Down:
-                if (mouseX < snakeCoordinatesX)
+                if (mouseX < snakeCoordinates.snakeCoordinatesX)
                     newDirection = SnakeDirection.Left;
-                else if (mouseX > snakeCoordinatesX)
+                else if (mouseX > snakeCoordinates.snakeCoordinatesX)
                     newDirection = SnakeDirection.Right;
                 break;
             case SnakeDirection.Left:
-                if (mouseY < snakeCoordinatesY)
+                if (mouseY < snakeCoordinates.snakeCoordinatesY)
                     newDirection = SnakeDirection.Up;
-                else if (mouseY > snakeCoordinatesY)
+                else if (mouseY > snakeCoordinates.snakeCoordinatesY)
                     newDirection = SnakeDirection.Down;
                 break;
             case SnakeDirection.Right:
-                if (mouseY < snakeCoordinatesY)
+                if (mouseY < snakeCoordinates.snakeCoordinatesY)
                     newDirection = SnakeDirection.Up;
-                else if (mouseY > snakeCoordinatesY)
+                else if (mouseY > snakeCoordinates.snakeCoordinatesY)
                     newDirection = SnakeDirection.Down;
                 break;
             default:
@@ -290,45 +293,35 @@ var Game = /** @class */ (function () {
         touchEvent.preventDefault();
         var touches = touchEvent.changedTouches;
         var touch = touches[touches.length - 1];
-        var matrix = this.board.Matrix;
-        //nb. assume a normalised array (ie. the second dimension is never jagged)
-        var cellCountY = matrix.length;
-        var cellCountX = matrix[0].length;
-        var cellWidth = this.canvas.offsetWidth / cellCountX;
-        var cellHeight = this.canvas.offsetHeight / cellCountY;
-        var snakePosition = this.board.snake.SnakePosition;
-        var snakeDirection = this.board.snake.Direction;
-        //nb. the following coordinates refer to the top, left hand side of the current cell the snake's head resides in
-        var snakeCoordinatesX = snakePosition.currentX * cellWidth;
-        var snakeCoordinatesY = snakePosition.currentY * cellHeight;
+        var snakeCoordinates = this.GetSnakeCoordinates();
         //ref: https://stackoverflow.com/questions/17130395/real-mouse-position-in-canvas
         var rect = this.canvas.getBoundingClientRect();
         var mouseX = touch.pageX - rect.left;
         var mouseY = touch.pageY - rect.top;
-        var newDirection = snakeDirection;
-        switch (snakeDirection) {
+        var newDirection = snakeCoordinates.snakeDirection;
+        switch (snakeCoordinates.snakeDirection) {
             case SnakeDirection.Up:
-                if (mouseX < snakeCoordinatesX)
+                if (mouseX < snakeCoordinates.snakeCoordinatesX)
                     newDirection = SnakeDirection.Left;
-                else if (mouseX > snakeCoordinatesX)
+                else if (mouseX > snakeCoordinates.snakeCoordinatesX)
                     newDirection = SnakeDirection.Right;
                 break;
             case SnakeDirection.Down:
-                if (mouseX < snakeCoordinatesX)
+                if (mouseX < snakeCoordinates.snakeCoordinatesX)
                     newDirection = SnakeDirection.Left;
-                else if (mouseX > snakeCoordinatesX)
+                else if (mouseX > snakeCoordinates.snakeCoordinatesX)
                     newDirection = SnakeDirection.Right;
                 break;
             case SnakeDirection.Left:
-                if (mouseY < snakeCoordinatesY)
+                if (mouseY < snakeCoordinates.snakeCoordinatesY)
                     newDirection = SnakeDirection.Up;
-                else if (mouseY > snakeCoordinatesY)
+                else if (mouseY > snakeCoordinates.snakeCoordinatesY)
                     newDirection = SnakeDirection.Down;
                 break;
             case SnakeDirection.Right:
-                if (mouseY < snakeCoordinatesY)
+                if (mouseY < snakeCoordinates.snakeCoordinatesY)
                     newDirection = SnakeDirection.Up;
-                else if (mouseY > snakeCoordinatesY)
+                else if (mouseY > snakeCoordinates.snakeCoordinatesY)
                     newDirection = SnakeDirection.Down;
                 break;
             default:
