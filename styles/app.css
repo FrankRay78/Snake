@@ -11,7 +11,6 @@ h1 {
 
 /*ref: https://stackoverflow.com/questions/826782/how-to-disable-text-selection-highlighting*/
 * {
-    -webkit-touch-callout: none; /* iOS Safari */
     -webkit-user-select: none; /* Safari */
     -khtml-user-select: none; /* Konqueror HTML */
     -moz-user-select: none; /* Old versions of Firefox */
@@ -21,10 +20,9 @@ h1 {
 }
 
 #board {
-    -webkit-touch-callout: all; /* iOS Safari */
-    -webkit-user-select: all; /* Safari */
-    -khtml-user-select: all; /* Konqueror HTML */
-    -moz-user-select: all; /* Old versions of Firefox */
-    -ms-user-select: all; /* Internet Explorer/Edge */
+    -webkit-user-select: text; /* Safari */
+    -khtml-user-select: text; /* Konqueror HTML */
+    -moz-user-select: text; /* Old versions of Firefox */
+    -ms-user-select: text; /* Internet Explorer/Edge */
     user-select: all;
 }
