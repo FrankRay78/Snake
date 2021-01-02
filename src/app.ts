@@ -1,4 +1,25 @@
 ﻿
+class Apple {
+
+    //nb. zero based
+    public currentX: number;
+    public currentY: number;
+
+    get Position() {
+        return { currentX: this.currentX, currentY: this.currentY };
+    }
+
+    constructor(private startingX: number, private startingY: number) {
+        this.currentX = startingX;
+        this.currentY = startingY;
+    }
+
+    Initialise(): void {
+        this.currentX = this.startingX;
+        this.currentY = this.startingY;
+    }
+}
+
 enum SnakeDirection {
     Up = 1,
     Down,
@@ -24,7 +45,7 @@ class Snake {
         this.direction = newDirection;
     }
 
-    get SnakePosition() {
+    get Position() {
         return { direction: this.direction, currentX: this.currentX, currentY: this.currentY };
     }
 
@@ -93,6 +114,7 @@ class Board {
 
     private matrix;
     public readonly snake: Snake;
+    public readonly apple: Apple;
 
     get Matrix(): [][] {
         return this.matrix;
@@ -112,11 +134,13 @@ class Board {
         }
 
         this.snake = new Snake(cellCountX, cellCountY);
+        this.apple = new Apple(Math.round(cellCountX * 0.75), Math.round(cellCountY * 0.75));
     }
 
     Initialise(): void {
 
         this.snake.Initialise();
+        this.apple.Initialise();
 
         this.UpdateMatrix();
     }
@@ -137,9 +161,41 @@ class Board {
             }
         }
 
-        //Update the matrix with the new position of the snake
-        const snakePosition = this.snake.SnakePosition;
+        const snakePosition = this.snake.Position;
+        let applePosition = this.apple.Position;
+
+        if (snakePosition.currentX === applePosition.currentX &&
+            snakePosition.currentY === applePosition.currentY) {
+
+            //Snake has eaten the apple
+
+            //TODO: raise apple eaten event
+
+            //Set a new location for the apple
+
+            let x;
+            let y;
+
+            do {
+                x = this.randomIntFromInterval(0, this.cellCountX - 1);
+                y = this.randomIntFromInterval(0, this.cellCountY - 1);
+            } while (x === snakePosition.currentX && y === snakePosition.currentY);
+
+            //Move the apple to the new location
+            this.apple.currentX = x;
+            this.apple.currentY = y;
+
+            applePosition = this.apple.Position;
+        }
+
+        //Update the matrix with the current position of the snake and apple
         this.matrix[snakePosition.currentY][snakePosition.currentX] = 1;
+        this.matrix[applePosition.currentY][applePosition.currentX] = 2;
+    }
+
+    //ref: https://stackoverflow.com/questions/4959975/generate-random-number-between-two-numbers-in-javascript
+    private randomIntFromInterval(min, max): number { // min and max included 
+        return Math.floor(Math.random() * (max - min + 1) + min);
     }
 };
 
@@ -203,11 +259,18 @@ class BoardRenderer {
                     context.lineWidth = 1;
                     context.strokeRect(x * dimensions.cellWidth, y * dimensions.cellHeight, dimensions.cellWidth, dimensions.cellHeight);
                 }
-                else {
+                else if (this.board.Matrix[y][x] === 1) {
 
-                    //NON-EMPTY CELL
+                    //SNAKE CELL
 
                     context.fillStyle = 'green';
+                    context.fillRect(x * dimensions.cellWidth, y * dimensions.cellHeight, dimensions.cellWidth, dimensions.cellHeight);
+                }
+                else if (this.board.Matrix[y][x] === 2) {
+
+                    //APPLE CELL
+
+                    context.fillStyle = 'red';
                     context.fillRect(x * dimensions.cellWidth, y * dimensions.cellHeight, dimensions.cellWidth, dimensions.cellHeight);
                 }
             }
@@ -249,7 +312,7 @@ class Game {
 
     private readonly board: Board;
     private readonly boardRenderer: BoardRenderer;
-    private timerToken: number;
+    private timerToken: number | undefined;
     private isRunning: boolean;
 
 
@@ -303,6 +366,9 @@ class Game {
 
     Stop() {
 
+        if (!this.isRunning) return;
+
+
         clearTimeout(this.timerToken);
 
         this.isRunning = false;
@@ -312,7 +378,7 @@ class Game {
 
         const dimensions = this.boardRenderer.GetBoardDimensions();
 
-        const snakePosition = this.board.snake.SnakePosition;
+        const snakePosition = this.board.snake.Position;
 
         //nb. the following coordinates refer to the top, left hand side of the current cell the snake's head resides in
         const snakeCoordinatesX = snakePosition.currentX * dimensions.cellWidth;
@@ -467,7 +533,7 @@ window.onload = () => {
 
     const game = new Game(canvas);
 
-    canvas.addEventListener("click", (e: Event) => game.Start());
+    canvas.addEventListener("click", () => game.Start());
 
     //ref: http://bencentra.com/code/2014/12/05/html5-canvas-touch-events.html
     canvas.addEventListener("mousedown", (e: MouseEvent) => {

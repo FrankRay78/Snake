@@ -1,3 +1,23 @@
+var Apple = /** @class */ (function () {
+    function Apple(startingX, startingY) {
+        this.startingX = startingX;
+        this.startingY = startingY;
+        this.currentX = startingX;
+        this.currentY = startingY;
+    }
+    Object.defineProperty(Apple.prototype, "Position", {
+        get: function () {
+            return { currentX: this.currentX, currentY: this.currentY };
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Apple.prototype.Initialise = function () {
+        this.currentX = this.startingX;
+        this.currentY = this.startingY;
+    };
+    return Apple;
+}());
 var SnakeDirection;
 (function (SnakeDirection) {
     SnakeDirection[SnakeDirection["Up"] = 1] = "Up";
@@ -18,7 +38,7 @@ var Snake = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    Object.defineProperty(Snake.prototype, "SnakePosition", {
+    Object.defineProperty(Snake.prototype, "Position", {
         get: function () {
             return { direction: this.direction, currentX: this.currentX, currentY: this.currentY };
         },
@@ -79,6 +99,7 @@ var Board = /** @class */ (function () {
             }
         }
         this.snake = new Snake(cellCountX, cellCountY);
+        this.apple = new Apple(Math.round(cellCountX * 0.75), Math.round(cellCountY * 0.75));
     }
     Object.defineProperty(Board.prototype, "Matrix", {
         get: function () {
@@ -89,6 +110,7 @@ var Board = /** @class */ (function () {
     });
     Board.prototype.Initialise = function () {
         this.snake.Initialise();
+        this.apple.Initialise();
         this.UpdateMatrix();
     };
     Board.prototype.Update = function () {
@@ -102,9 +124,31 @@ var Board = /** @class */ (function () {
                 this.matrix[y][x] = 0;
             }
         }
-        //Update the matrix with the new position of the snake
-        var snakePosition = this.snake.SnakePosition;
+        var snakePosition = this.snake.Position;
+        var applePosition = this.apple.Position;
+        if (snakePosition.currentX === applePosition.currentX &&
+            snakePosition.currentY === applePosition.currentY) {
+            //Snake has eaten the apple
+            //TODO: raise apple eaten event
+            //Set a new location for the apple
+            var x = void 0;
+            var y = void 0;
+            do {
+                x = this.randomIntFromInterval(0, this.cellCountX - 1);
+                y = this.randomIntFromInterval(0, this.cellCountY - 1);
+            } while (x === snakePosition.currentX && y === snakePosition.currentY);
+            //Move the apple to the new location
+            this.apple.currentX = x;
+            this.apple.currentY = y;
+            applePosition = this.apple.Position;
+        }
+        //Update the matrix with the current position of the snake and apple
         this.matrix[snakePosition.currentY][snakePosition.currentX] = 1;
+        this.matrix[applePosition.currentY][applePosition.currentX] = 2;
+    };
+    //ref: https://stackoverflow.com/questions/4959975/generate-random-number-between-two-numbers-in-javascript
+    Board.prototype.randomIntFromInterval = function (min, max) {
+        return Math.floor(Math.random() * (max - min + 1) + min);
     };
     return Board;
 }());
@@ -149,9 +193,14 @@ var BoardRenderer = /** @class */ (function () {
                     context.lineWidth = 1;
                     context.strokeRect(x * dimensions.cellWidth, y * dimensions.cellHeight, dimensions.cellWidth, dimensions.cellHeight);
                 }
-                else {
-                    //NON-EMPTY CELL
+                else if (this.board.Matrix[y][x] === 1) {
+                    //SNAKE CELL
                     context.fillStyle = 'green';
+                    context.fillRect(x * dimensions.cellWidth, y * dimensions.cellHeight, dimensions.cellWidth, dimensions.cellHeight);
+                }
+                else if (this.board.Matrix[y][x] === 2) {
+                    //APPLE CELL
+                    context.fillStyle = 'red';
                     context.fillRect(x * dimensions.cellWidth, y * dimensions.cellHeight, dimensions.cellWidth, dimensions.cellHeight);
                 }
             }
@@ -213,12 +262,14 @@ var Game = /** @class */ (function () {
         this.isRunning = true;
     };
     Game.prototype.Stop = function () {
+        if (!this.isRunning)
+            return;
         clearTimeout(this.timerToken);
         this.isRunning = false;
     };
     Game.prototype.GetSnakeCoordinates = function () {
         var dimensions = this.boardRenderer.GetBoardDimensions();
-        var snakePosition = this.board.snake.SnakePosition;
+        var snakePosition = this.board.snake.Position;
         //nb. the following coordinates refer to the top, left hand side of the current cell the snake's head resides in
         var snakeCoordinatesX = snakePosition.currentX * dimensions.cellWidth;
         var snakeCoordinatesY = snakePosition.currentY * dimensions.cellHeight;
@@ -326,7 +377,7 @@ var Game = /** @class */ (function () {
 window.onload = function () {
     var canvas = document.getElementById('board');
     var game = new Game(canvas);
-    canvas.addEventListener("click", function (e) { return game.Start(); });
+    canvas.addEventListener("click", function () { return game.Start(); });
     //ref: http://bencentra.com/code/2014/12/05/html5-canvas-touch-events.html
     canvas.addEventListener("mousedown", function (e) {
         //ref: https://stackoverflow.com/questions/17130395/real-mouse-position-in-canvas

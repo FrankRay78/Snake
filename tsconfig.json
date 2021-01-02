@@ -1,5 +1,12 @@
 {
     "compilerOptions": {
+        //https://www.stevefenton.co.uk/2013/01/getting-the-right-set-up-for-typescript/
+        //"strict": true,
+        "experimentalDecorators": true,
+        "noFallthroughCasesInSwitch": true,
+        "noImplicitReturns": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
         "noImplicitAny": false,
         "noEmitOnError": true,
         "removeComments": false,
