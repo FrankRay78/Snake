@@ -84,8 +84,8 @@ var Snake = /** @class */ (function () {
 ;
 var Board = /** @class */ (function () {
     function Board(cellCountX, cellCountY) {
-        if (cellCountX === void 0) { cellCountX = 20; }
-        if (cellCountY === void 0) { cellCountY = 20; }
+        if (cellCountX === void 0) { cellCountX = 15; }
+        if (cellCountY === void 0) { cellCountY = 15; }
         this.cellCountX = cellCountX;
         this.cellCountY = cellCountY;
         //Initialse the underlying matrix
@@ -98,6 +98,8 @@ var Board = /** @class */ (function () {
                 this.matrix[y][x] = 0;
             }
         }
+        this.applesEaten = 0;
+        this.RaiseAppleEatenEvent();
         this.snake = new Snake(cellCountX, cellCountY);
         this.apple = new Apple(Math.round(cellCountX * 0.75), Math.round(cellCountY * 0.75));
     }
@@ -109,6 +111,8 @@ var Board = /** @class */ (function () {
         configurable: true
     });
     Board.prototype.Initialise = function () {
+        this.applesEaten = 0;
+        this.RaiseAppleEatenEvent();
         this.snake.Initialise();
         this.apple.Initialise();
         this.UpdateMatrix();
@@ -128,8 +132,10 @@ var Board = /** @class */ (function () {
         var applePosition = this.apple.Position;
         if (snakePosition.currentX === applePosition.currentX &&
             snakePosition.currentY === applePosition.currentY) {
-            //Snake has eaten the apple
-            //TODO: raise apple eaten event
+            //SNAKE HAS EATEN THE APPLE
+            this.applesEaten = this.applesEaten + 1;
+            //Raise apple eaten event
+            this.RaiseAppleEatenEvent();
             //Set a new location for the apple
             var x = void 0;
             var y = void 0;
@@ -145,6 +151,10 @@ var Board = /** @class */ (function () {
         //Update the matrix with the current position of the snake and apple
         this.matrix[snakePosition.currentY][snakePosition.currentX] = 1;
         this.matrix[applePosition.currentY][applePosition.currentX] = 2;
+    };
+    Board.prototype.RaiseAppleEatenEvent = function () {
+        if (this.onAppleEaten)
+            this.onAppleEaten(this.applesEaten);
     };
     //ref: https://stackoverflow.com/questions/4959975/generate-random-number-between-two-numbers-in-javascript
     Board.prototype.randomIntFromInterval = function (min, max) {
@@ -236,6 +246,10 @@ var Game = /** @class */ (function () {
         this.isRunning = false;
         this.board = new Board();
         this.boardRenderer = new BoardRenderer(this.board, canvas);
+        this.board.onAppleEaten = function (applesEaten) {
+            //Update the game score
+            document.getElementById('appleCount').innerText = applesEaten.toString();
+        };
         this.board.Initialise();
         //Draw the board in its starting state
         this.boardRenderer.Draw();

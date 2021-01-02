@@ -112,6 +112,9 @@ class Snake {
 
 class Board {
 
+    public onAppleEaten?: (applesEaten: number) => void;
+    private applesEaten: number;
+
     private matrix;
     public readonly snake: Snake;
     public readonly apple: Apple;
@@ -120,7 +123,7 @@ class Board {
         return this.matrix;
     }
 
-    constructor(public cellCountX = 20, public cellCountY = 20) {
+    constructor(public cellCountX = 15, public cellCountY = 15) {
 
         //Initialse the underlying matrix
         //ref: https://stackoverflow.com/questions/8301400/how-do-you-easily-create-empty-matrices-javascript
@@ -133,11 +136,17 @@ class Board {
             }
         }
 
+        this.applesEaten = 0;
+        this.RaiseAppleEatenEvent();
+
         this.snake = new Snake(cellCountX, cellCountY);
         this.apple = new Apple(Math.round(cellCountX * 0.75), Math.round(cellCountY * 0.75));
     }
 
     Initialise(): void {
+
+        this.applesEaten = 0;
+        this.RaiseAppleEatenEvent();
 
         this.snake.Initialise();
         this.apple.Initialise();
@@ -167,9 +176,13 @@ class Board {
         if (snakePosition.currentX === applePosition.currentX &&
             snakePosition.currentY === applePosition.currentY) {
 
-            //Snake has eaten the apple
+            //SNAKE HAS EATEN THE APPLE
 
-            //TODO: raise apple eaten event
+            this.applesEaten = this.applesEaten + 1;
+
+            //Raise apple eaten event
+
+            this.RaiseAppleEatenEvent();
 
             //Set a new location for the apple
 
@@ -191,6 +204,11 @@ class Board {
         //Update the matrix with the current position of the snake and apple
         this.matrix[snakePosition.currentY][snakePosition.currentX] = 1;
         this.matrix[applePosition.currentY][applePosition.currentX] = 2;
+    }
+
+    private RaiseAppleEatenEvent(): void {
+        if (this.onAppleEaten)
+            this.onAppleEaten(this.applesEaten);
     }
 
     //ref: https://stackoverflow.com/questions/4959975/generate-random-number-between-two-numbers-in-javascript
@@ -322,6 +340,12 @@ class Game {
 
         this.board = new Board();
         this.boardRenderer = new BoardRenderer(this.board, canvas);
+
+        this.board.onAppleEaten = (applesEaten: number) => {
+
+            //Update the game score
+            document.getElementById('appleCount').innerText = applesEaten.toString();
+        }
 
         this.board.Initialise();
 
