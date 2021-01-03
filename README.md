@@ -13,6 +13,7 @@ Implemented so far are:
 * [Multiple files making up Type Script project](https://stackoverflow.com/questions/15335474/multiple-files-making-up-type-script-project)
 * [Can you create Typescript packages? like c# dlls](https://stackoverflow.com/questions/15664032/can-you-create-typescript-packages-like-c-sharp-dlls)
 * [Canvas Animations in TypeScript](https://codeburst.io/canvas-animations-in-typescript-97ba0163cb19)
+* [Using Touch Events with the HTML5 Canvas](http://bencentra.com/code/2014/12/05/html5-canvas-touch-events.html)
 * [Event Creation and Handling Techniques in TypeScript](https://hackwild.com/article/event-handling-techniques/)
 
 ### Credits
