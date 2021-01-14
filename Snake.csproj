@@ -78,6 +78,7 @@
     <Content Include="dist\bootstrap\js\bootstrap.esm.min.js" />
     <Content Include="dist\bootstrap\js\bootstrap.js" />
     <Content Include="dist\bootstrap\js\bootstrap.min.js" />
+    <Content Include="dist\requirejs\require.js" />
     <Content Include="favico\android-chrome-192x192.png" />
     <Content Include="favico\android-chrome-512x512.png" />
     <Content Include="favico\apple-touch-icon.png" />
@@ -112,10 +113,12 @@
     <Content Include="dist\bootstrap\css\bootstrap.rtl.css.map" />
     <Content Include="dist\bootstrap\css\bootstrap.rtl.min.css.map" />
     <Content Include="scripts\app.js" />
+    <Content Include="scripts\models\apple.js" />
     <Content Include="tsconfig.json" />
     <Content Include="scripts\app.js.map" />
     <Content Include="favico\favicon_package_v0.16.zip" />
     <Content Include="favico\site.webmanifest" />
+    <Content Include="scripts\models\apple.js.map" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -131,6 +134,7 @@
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="src\app.ts" />
+    <TypeScriptCompile Include="src\models\apple.ts" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
@@ -165,6 +169,7 @@
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup>
-    <PostBuildEvent>xcopy "$(SolutionDir)node_modules\bootstrap\dist" "$(SolutionDir)dist\bootstrap\" /D /E /R /K /Y</PostBuildEvent>
+    <PostBuildEvent>xcopy "$(SolutionDir)node_modules\bootstrap\dist" "$(SolutionDir)dist\bootstrap\" /D /E /R /K /Y 
+xcopy "$(SolutionDir)node_modules\requirejs\require.js" "$(SolutionDir)dist\requirejs\" /D /R /K /Y</PostBuildEvent>
   </PropertyGroup>
 </Project>
