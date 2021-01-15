@@ -4,21 +4,26 @@
 //https://devblogs.microsoft.com/visualstudio/using-requirejs-with-visual-studio/
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    class Apple {
-        constructor(startingX, startingY) {
+    var Apple = /** @class */ (function () {
+        function Apple(startingX, startingY) {
             this.startingX = startingX;
             this.startingY = startingY;
             this.currentX = startingX;
             this.currentY = startingY;
         }
-        get Position() {
-            return { currentX: this.currentX, currentY: this.currentY };
-        }
-        Initialise() {
+        Object.defineProperty(Apple.prototype, "Position", {
+            get: function () {
+                return { currentX: this.currentX, currentY: this.currentY };
+            },
+            enumerable: false,
+            configurable: true
+        });
+        Apple.prototype.Initialise = function () {
             this.currentX = this.startingX;
             this.currentY = this.startingY;
-        }
-    }
+        };
+        return Apple;
+    }());
     return Apple;
 });
-//# sourceMappingURL=apple.js.map
+//# sourceMappingURL=Apple.js.map
