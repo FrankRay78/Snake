@@ -13,6 +13,9 @@ Implemented so far are:
 4. GitHub post commit hook to execute unit tests
 5. Persist high scores in a database
 
+### Technical & Design Commentary
+1. Types have been split out into separate ts files and loaded when needed through the requirejs framework (installed with NPM). These separate type files will / should allow good unit tests to be written against the TypeScript classes to validate the game logic (once a unit test framework is selected)
+
 ### Resources
 The following resources came in handy when implementing the game:
 ##### Getting Started
