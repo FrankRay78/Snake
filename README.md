@@ -14,6 +14,7 @@ Implemented so far are:
 5. Persist high scores in a database
 
 ### Resources
+The following resources came in handy when implementing the game:
 #### Getting Started
 * [Tutorial: Create an ASP.NET Core app with TypeScript in Visual Studio](https://docs.microsoft.com/en-us/visualstudio/javascript/tutorial-aspnet-with-typescript?view=vs-2019)
 * [Getting the Right Set Up for TypeScript](https://www.stevefenton.co.uk/2013/01/getting-the-right-set-up-for-typescript/)
