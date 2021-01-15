@@ -6,15 +6,25 @@ Implemented so far are:
 1. Mobile responsive layout
 2. Keyboard / mouse / touch controls
 
+### TODO
+1. Make the Snake's length grow upon eating each apple
+2. Collision detection of the snake upon itself
+3. Unit testing (of TypeScript classes)
+4. GitHub post commit hook to execute unit tests
+5. Persist high scores in a database
+
 ### Resources
+#### Getting Started
 * [Tutorial: Create an ASP.NET Core app with TypeScript in Visual Studio](https://docs.microsoft.com/en-us/visualstudio/javascript/tutorial-aspnet-with-typescript?view=vs-2019)
-* [The TypeScript Handbook](https://www.typescriptlang.org/docs/handbook/intro.html)
 * [Getting the Right Set Up for TypeScript](https://www.stevefenton.co.uk/2013/01/getting-the-right-set-up-for-typescript/)
 * [Multiple files making up Type Script project](https://stackoverflow.com/questions/15335474/multiple-files-making-up-type-script-project)
 * [Can you create Typescript packages? like c# dlls](https://stackoverflow.com/questions/15664032/can-you-create-typescript-packages-like-c-sharp-dlls)
+#### Interacting with HTML Elements
 * [Canvas Animations in TypeScript](https://codeburst.io/canvas-animations-in-typescript-97ba0163cb19)
 * [Using Touch Events with the HTML5 Canvas](http://bencentra.com/code/2014/12/05/html5-canvas-touch-events.html)
 * [Event Creation and Handling Techniques in TypeScript](https://hackwild.com/article/event-handling-techniques/)
+#### TypeScript Language Reference
+* [The TypeScript Handbook](https://www.typescriptlang.org/docs/handbook/intro.html)
 
 ### Credits
 Royalty free Snake logo: https://www.cleanpng.com/png-snakes-and-ladders-game-android-clip-art-animated-129978/
