@@ -23,6 +23,11 @@ Implemented so far are:
 * [Canvas Animations in TypeScript](https://codeburst.io/canvas-animations-in-typescript-97ba0163cb19)
 * [Using Touch Events with the HTML5 Canvas](http://bencentra.com/code/2014/12/05/html5-canvas-touch-events.html)
 * [Event Creation and Handling Techniques in TypeScript](https://hackwild.com/article/event-handling-techniques/)
+#### JavaScript file and module loading
+* [HOW TO GET STARTED WITH REQUIREJS](https://requirejs.org/docs/start.html#examples)
+* [Using RequireJS with Visual Studio](https://devblogs.microsoft.com/visualstudio/using-requirejs-with-visual-studio/)
+* [What's the correct way to use requireJS with typescript?](https://stackoverflow.com/questions/20079464/whats-the-correct-way-to-use-requirejs-with-typescript)
+* [How to use npm installed requireJS for browser](https://stackoverflow.com/questions/35405412/how-to-use-npm-installed-requirejs-for-browser)
 #### TypeScript Language Reference
 * [The TypeScript Handbook](https://www.typescriptlang.org/docs/handbook/intro.html)
 
