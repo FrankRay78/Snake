@@ -1,5 +1,7 @@
 # Snake
-A browser-based TypeScript implementation of the classic retro game of the same name: https://en.wikipedia.org/wiki/Snake_(video_game_genre)
+A browser-based TypeScript implementation of the classic retro game, Snake ([Wikipedia](https://en.wikipedia.org/wiki/Snake_(video_game_genre)))
+
+**Play the game --> [here](https://frankray78.github.io/Snake/) <--**
 
 ### Features
 Implemented so far are:
@@ -12,6 +14,9 @@ Implemented so far are:
 3. Unit testing (of TypeScript classes)
 4. GitHub post commit hook to execute unit tests
 5. Persist high scores in a database
+
+### Technical & Design Commentary
+Types have been split out into separate ts files and loaded when needed through the requirejs framework (installed with NPM). These separate type files will / should allow good unit tests to be written against the TypeScript classes to validate the game logic (once a unit test framework is selected)
 
 ### Resources
 The following resources came in handy when implementing the game:
@@ -33,4 +38,4 @@ The following resources came in handy when implementing the game:
 * [The TypeScript Handbook](https://www.typescriptlang.org/docs/handbook/intro.html)
 
 ### Credits
-Royalty free Snake logo: https://www.cleanpng.com/png-snakes-and-ladders-game-android-clip-art-animated-129978/
+Royalty free Snake logo courtesy of [CLEANPNG](https://www.cleanpng.com/png-snakes-and-ladders-game-android-clip-art-animated-129978/)
