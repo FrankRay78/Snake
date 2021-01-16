@@ -13,11 +13,9 @@ class BoardRenderer {
 
     public GetBoardDimensions() {
 
-        const matrix = this.board.Matrix;
-
         //nb. assume a normalised array (ie. the second dimension is never jagged)
-        const cellCountY = matrix.length;
-        const cellCountX = matrix[0].length;
+        const cellCountY = this.board.cellCountY;
+        const cellCountX = this.board.cellCountX;
 
         const cellWidth = this.canvas.offsetWidth / cellCountX;
         const cellHeight = this.canvas.offsetHeight / cellCountY;
@@ -27,14 +25,34 @@ class BoardRenderer {
 
     public Draw(): void {
 
+        const context = this.canvas.getContext('2d');
+
         const dimensions = this.GetBoardDimensions();
 
-        const context = this.canvas.getContext('2d');
+        const snakePosition = this.board.snake.Position;
+        const applePosition = this.board.apple.Position;
 
         for (let y = 0; y < dimensions.cellCountY; y++) {
             for (let x = 0; x < dimensions.cellCountX; x++) {
 
-                if (this.board.Matrix[y][x] === 0) {
+                if (y === snakePosition.currentY &&
+                    x === snakePosition.currentX) {
+
+                    //SNAKE CELL
+
+                    context.fillStyle = 'green';
+                    context.fillRect(x * dimensions.cellWidth, y * dimensions.cellHeight, dimensions.cellWidth, dimensions.cellHeight);
+                }
+                else if (
+                    y === applePosition.currentY &&
+                    x === applePosition.currentX) {
+
+                    //APPLE CELL
+
+                    context.fillStyle = 'red';
+                    context.fillRect(x * dimensions.cellWidth, y * dimensions.cellHeight, dimensions.cellWidth, dimensions.cellHeight);
+                }
+                else {
 
                     //EMPTY CELL
 
@@ -55,25 +73,9 @@ class BoardRenderer {
 
                     context.fillRect(x * dimensions.cellWidth, y * dimensions.cellHeight, dimensions.cellWidth, dimensions.cellHeight);
 
-                    //TODO: lineTo(x, y) ?
-
                     context.strokeStyle = 'DarkGrey';
                     context.lineWidth = 1;
                     context.strokeRect(x * dimensions.cellWidth, y * dimensions.cellHeight, dimensions.cellWidth, dimensions.cellHeight);
-                }
-                else if (this.board.Matrix[y][x] === 1) {
-
-                    //SNAKE CELL
-
-                    context.fillStyle = 'green';
-                    context.fillRect(x * dimensions.cellWidth, y * dimensions.cellHeight, dimensions.cellWidth, dimensions.cellHeight);
-                }
-                else if (this.board.Matrix[y][x] === 2) {
-
-                    //APPLE CELL
-
-                    context.fillStyle = 'red';
-                    context.fillRect(x * dimensions.cellWidth, y * dimensions.cellHeight, dimensions.cellWidth, dimensions.cellHeight);
                 }
             }
         }
@@ -104,9 +106,14 @@ class BoardRenderer {
     public DrawGameOver(): void {
         const context = this.canvas.getContext('2d');
 
-        context.fillStyle = 'magenta';
-        context.font = '48px serif';
-        context.fillText('Game Over', this.canvas.offsetWidth * 0.1, this.canvas.offsetHeight * 0.2);
+        context.globalAlpha = 0.1;
+        context.fillStyle = "Magenta";
+        context.fillRect(0, 0, this.canvas.offsetWidth, this.canvas.offsetHeight);
+        context.globalAlpha = 1;
+
+        context.fillStyle = 'Indigo';
+        context.font = '48px bold Arial';
+        context.fillText('Game Over', this.canvas.offsetWidth * 0.12, this.canvas.offsetHeight * 0.2);
     }
 };
 

@@ -7,26 +7,10 @@ class Board {
     public onAppleEaten?: (applesEaten: number) => void;
     private applesEaten: number;
 
-    private matrix;
     public readonly snake: Snake;
     public readonly apple: Apple;
 
-    get Matrix(): [][] {
-        return this.matrix;
-    }
-
     constructor(public cellCountX = 15, public cellCountY = 15) {
-
-        //Initialse the underlying matrix
-        //ref: https://stackoverflow.com/questions/8301400/how-do-you-easily-create-empty-matrices-javascript
-        //nb. will always be a normalised array (ie. the second dimension is never jagged)
-        this.matrix = [];
-        for (let y = 0; y < this.cellCountY; y++) {
-            this.matrix[y] = [];
-            for (let x = 0; x < this.cellCountX; x++) {
-                this.matrix[y][x] = 0;
-            }
-        }
 
         this.applesEaten = 0;
         this.RaiseAppleEatenEvent();
@@ -43,24 +27,17 @@ class Board {
         this.snake.Initialise();
         this.apple.Initialise();
 
-        this.UpdateMatrix();
+        this.UpdateBoard();
     }
 
     Update(): void {
 
         this.snake.Update();
 
-        this.UpdateMatrix();
+        this.UpdateBoard();
     }
 
-    private UpdateMatrix(): void {
-
-        //Blank the matrix before performing update
-        for (let y = 0; y < this.cellCountY; y++) {
-            for (let x = 0; x < this.cellCountX; x++) {
-                this.matrix[y][x] = 0;
-            }
-        }
+    private UpdateBoard(): void {
 
         const snakePosition = this.snake.Position;
         let applePosition = this.apple.Position;
@@ -92,10 +69,6 @@ class Board {
 
             applePosition = this.apple.Position;
         }
-
-        //Update the matrix with the current position of the snake and apple
-        this.matrix[snakePosition.currentY][snakePosition.currentX] = 1;
-        this.matrix[applePosition.currentY][applePosition.currentX] = 2;
     }
 
     private RaiseAppleEatenEvent(): void {
