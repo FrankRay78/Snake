@@ -79,7 +79,7 @@ class Game {
         this.isRunning = false;
     }
 
-    GetSnakeCoordinates() {
+    private GetSnakeCoordinates() {
 
         const dimensions = this.boardRenderer.GetBoardDimensions();
 
