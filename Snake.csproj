@@ -113,12 +113,22 @@
     <Content Include="dist\bootstrap\css\bootstrap.rtl.css.map" />
     <Content Include="dist\bootstrap\css\bootstrap.rtl.min.css.map" />
     <Content Include="scripts\app.js" />
-    <Content Include="scripts\models\apple.js" />
+    <Content Include="scripts\models\Apple.js" />
+    <Content Include="scripts\models\Board.js" />
+    <Content Include="scripts\models\BoardRenderer.js" />
+    <Content Include="scripts\models\Game.js" />
+    <Content Include="scripts\models\Snake.js" />
+    <Content Include="scripts\models\SnakeDirection.js" />
     <Content Include="tsconfig.json" />
     <Content Include="scripts\app.js.map" />
     <Content Include="favico\favicon_package_v0.16.zip" />
     <Content Include="favico\site.webmanifest" />
-    <Content Include="scripts\models\apple.js.map" />
+    <Content Include="scripts\models\Apple.js.map" />
+    <Content Include="scripts\models\Board.js.map" />
+    <Content Include="scripts\models\BoardRenderer.js.map" />
+    <Content Include="scripts\models\Game.js.map" />
+    <Content Include="scripts\models\Snake.js.map" />
+    <Content Include="scripts\models\SnakeDirection.js.map" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
