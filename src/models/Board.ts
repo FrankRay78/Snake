@@ -4,76 +4,52 @@ import Snake = require('./Snake');
 
 class Board {
 
-    public onAppleEaten?: (applesEaten: number) => void;
-    private applesEaten: number;
-
     public readonly snake: Snake;
     public readonly apple: Apple;
 
     constructor(public cellCountX = 15, public cellCountY = 15) {
 
-        this.applesEaten = 0;
-        this.RaiseAppleEatenEvent();
-
-        this.snake = new Snake(cellCountX, cellCountY);
         this.apple = new Apple(Math.round(cellCountX * 0.75), Math.round(cellCountY * 0.75));
+        this.snake = new Snake(cellCountX, cellCountY, this.apple);
+
+        this.snake.onAppleEaten = (applesEaten: number) => {
+
+            //Update the game score
+            document.getElementById('appleCount').innerText = applesEaten.toString();
+
+            //Set a new position for the next apple
+            this.PlaceNextApple();
+        }
     }
 
     Initialise(): void {
 
-        this.applesEaten = 0;
-        this.RaiseAppleEatenEvent();
-
         this.snake.Initialise();
         this.apple.Initialise();
-
-        this.UpdateBoard();
     }
 
-    Update(): void {
-
-        this.snake.Update();
-
-        this.UpdateBoard();
-    }
-
-    private UpdateBoard(): void {
+    private PlaceNextApple(): void {
 
         const snakePosition = this.snake.Position;
-        let applePosition = this.apple.Position;
 
-        if (snakePosition.currentX === applePosition.currentX &&
-            snakePosition.currentY === applePosition.currentY) {
+        //Set a new location for the apple
 
-            //SNAKE HAS EATEN THE APPLE
+        let x;
+        let y;
 
-            this.applesEaten = this.applesEaten + 1;
+        do {
+            //Find a new location for the apple which is 1). on the board and 2). not on the snake
 
-            //Raise apple eaten event
+            x = this.randomIntFromInterval(0, this.cellCountX - 1);
+            y = this.randomIntFromInterval(0, this.cellCountY - 1);
 
-            this.RaiseAppleEatenEvent();
+        } while (
+            x === snakePosition.currentX &&
+            y === snakePosition.currentY);
 
-            //Set a new location for the apple
-
-            let x;
-            let y;
-
-            do {
-                x = this.randomIntFromInterval(0, this.cellCountX - 1);
-                y = this.randomIntFromInterval(0, this.cellCountY - 1);
-            } while (x === snakePosition.currentX && y === snakePosition.currentY);
-
-            //Move the apple to the new location
-            this.apple.currentX = x;
-            this.apple.currentY = y;
-
-            applePosition = this.apple.Position;
-        }
-    }
-
-    private RaiseAppleEatenEvent(): void {
-        if (this.onAppleEaten)
-            this.onAppleEaten(this.applesEaten);
+        //Move the apple to the new location
+        this.apple.currentX = x;
+        this.apple.currentY = y;
     }
 
     //ref: https://stackoverflow.com/questions/4959975/generate-random-number-between-two-numbers-in-javascript

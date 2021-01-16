@@ -22,11 +22,6 @@ class Game {
         this.board = new Board();
         this.boardRenderer = new BoardRenderer(this.board, canvas);
 
-        this.board.onAppleEaten = (applesEaten: number) => {
-
-            //Update the game score
-            document.getElementById('appleCount').innerText = applesEaten.toString();
-        }
 
         this.board.Initialise();
 
@@ -50,7 +45,7 @@ class Game {
 
                 //Update the board and redraw it to the canvas on each timer tick
 
-                this.board.Update();
+                this.board.snake.Update();
 
                 this.boardRenderer.Draw();
 

@@ -4,8 +4,6 @@ define(["require", "exports"], function (require, exports) {
         function Apple(startingX, startingY) {
             this.startingX = startingX;
             this.startingY = startingY;
-            this.currentX = startingX;
-            this.currentY = startingY;
         }
         Object.defineProperty(Apple.prototype, "Position", {
             get: function () {

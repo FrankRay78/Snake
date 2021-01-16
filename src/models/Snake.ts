@@ -1,13 +1,13 @@
 ﻿
 import SnakeDirection = require('./SnakeDirection');
+import Apple = require('./Apple');
 
 class Snake {
 
     private readonly GameOverMessage: string = 'Game Over';
 
-    //nb. not zero based
-    private cellCountX: number;
-    private cellCountY: number;
+    public onAppleEaten?: (applesEaten: number) => void;
+    private applesEaten: number;
 
     //nb. zero based
     private currentX: number;
@@ -23,12 +23,13 @@ class Snake {
         return { direction: this.direction, currentX: this.currentX, currentY: this.currentY };
     }
 
-    constructor(cellCountX: number, cellCountY: number) {
-        this.cellCountX = cellCountX;
-        this.cellCountY = cellCountY;
+    constructor(private cellCountX: number, private cellCountY: number, public apple: Apple) {
     }
 
     Initialise(): void {
+
+        this.applesEaten = 0;
+        this.RaiseAppleEatenEvent();
 
         //Initial starting position for the snake
         this.currentX = Math.round(this.cellCountX / 2) - 1;
@@ -39,6 +40,8 @@ class Snake {
     }
 
     Update(): void {
+
+        //Update the position of the snake
 
         switch (this.direction) {
             case SnakeDirection.Up:
@@ -81,6 +84,29 @@ class Snake {
                 //should never happen
                 throw new Error();
         }
+
+
+        //Check if the snake has eaten an apple
+
+        const snakePosition = this.Position;
+        const applePosition = this.apple.Position; 
+
+        if (snakePosition.currentX === applePosition.currentX &&
+            snakePosition.currentY === applePosition.currentY) {
+
+            //SNAKE HAS EATEN THE APPLE
+
+            this.applesEaten = this.applesEaten + 1;
+
+            //Raise apple eaten event
+
+            this.RaiseAppleEatenEvent();
+        }
+    }
+
+    private RaiseAppleEatenEvent(): void {
+        if (this.onAppleEaten)
+            this.onAppleEaten(this.applesEaten);
     }
 };
 
