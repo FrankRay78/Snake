@@ -10,8 +10,6 @@ class Apple {
     }
 
     constructor(private startingX: number, private startingY: number) {
-        this.currentX = startingX;
-        this.currentY = startingY;
     }
 
     Initialise(): void {

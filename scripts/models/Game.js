@@ -5,10 +5,6 @@ define(["require", "exports", "./SnakeDirection", "./Board", "./BoardRenderer"],
             this.isRunning = false;
             this.board = new Board();
             this.boardRenderer = new BoardRenderer(this.board, canvas);
-            this.board.onAppleEaten = function (applesEaten) {
-                //Update the game score
-                document.getElementById('appleCount').innerText = applesEaten.toString();
-            };
             this.board.Initialise();
             //Draw the board in its starting state
             this.boardRenderer.Draw();
@@ -30,7 +26,7 @@ define(["require", "exports", "./SnakeDirection", "./Board", "./BoardRenderer"],
             this.timerToken = setInterval(function () {
                 try {
                     //Update the board and redraw it to the canvas on each timer tick
-                    _this.board.Update();
+                    _this.board.snake.Update();
                     _this.boardRenderer.Draw();
                 }
                 catch (e) {
