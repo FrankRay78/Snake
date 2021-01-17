@@ -78,6 +78,7 @@
     <Content Include="dist\bootstrap\js\bootstrap.esm.min.js" />
     <Content Include="dist\bootstrap\js\bootstrap.js" />
     <Content Include="dist\bootstrap\js\bootstrap.min.js" />
+    <Content Include="dist\requirejs\require.js" />
     <Content Include="favico\android-chrome-192x192.png" />
     <Content Include="favico\android-chrome-512x512.png" />
     <Content Include="favico\apple-touch-icon.png" />
@@ -87,6 +88,10 @@
     <Content Include="favico\favicon.ico" />
     <Content Include="favico\mstile-150x150.png" />
     <Content Include="favico\safari-pinned-tab.svg" />
+    <Content Include="images\fra_logo.png" />
+    <Content Include="images\fra_logo_300.png" />
+    <Content Include="images\fra_logo_300_no-tag-line.png" />
+    <Content Include="images\fra_logo_300_no-tag-line_transparentbg.png" />
     <Content Include="README.md" />
     <Content Include="package.json" />
     <Content Include="dist\bootstrap\js\bootstrap.bundle.js.map" />
@@ -112,10 +117,22 @@
     <Content Include="dist\bootstrap\css\bootstrap.rtl.css.map" />
     <Content Include="dist\bootstrap\css\bootstrap.rtl.min.css.map" />
     <Content Include="scripts\app.js" />
+    <Content Include="scripts\models\Apple.js" />
+    <Content Include="scripts\models\Board.js" />
+    <Content Include="scripts\models\BoardRenderer.js" />
+    <Content Include="scripts\models\Game.js" />
+    <Content Include="scripts\models\Snake.js" />
+    <Content Include="scripts\models\SnakeDirection.js" />
     <Content Include="tsconfig.json" />
     <Content Include="scripts\app.js.map" />
     <Content Include="favico\favicon_package_v0.16.zip" />
     <Content Include="favico\site.webmanifest" />
+    <Content Include="scripts\models\Apple.js.map" />
+    <Content Include="scripts\models\Board.js.map" />
+    <Content Include="scripts\models\BoardRenderer.js.map" />
+    <Content Include="scripts\models\Game.js.map" />
+    <Content Include="scripts\models\Snake.js.map" />
+    <Content Include="scripts\models\SnakeDirection.js.map" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -131,6 +148,12 @@
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="src\app.ts" />
+    <TypeScriptCompile Include="src\models\Apple.ts" />
+    <TypeScriptCompile Include="src\models\Board.ts" />
+    <TypeScriptCompile Include="src\models\BoardRenderer.ts" />
+    <TypeScriptCompile Include="src\models\Game.ts" />
+    <TypeScriptCompile Include="src\models\Snake.ts" />
+    <TypeScriptCompile Include="src\models\SnakeDirection.ts" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
@@ -165,6 +188,7 @@
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup>
-    <PostBuildEvent>xcopy "$(SolutionDir)node_modules\bootstrap\dist" "$(SolutionDir)dist\bootstrap\" /D /E /R /K /Y</PostBuildEvent>
+    <PostBuildEvent>xcopy "$(SolutionDir)node_modules\bootstrap\dist" "$(SolutionDir)dist\bootstrap\" /D /E /R /K /Y 
+xcopy "$(SolutionDir)node_modules\requirejs\require.js" "$(SolutionDir)dist\requirejs\" /D /R /K /Y</PostBuildEvent>
   </PropertyGroup>
 </Project>

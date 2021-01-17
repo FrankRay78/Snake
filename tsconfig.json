@@ -11,7 +11,8 @@
         "noEmitOnError": true,
         "removeComments": false,
         "sourceMap": true,
-        "target": "es5",
+        "target": "ES5",
+        "module": "AMD",
         "outDir": "scripts"
     },
   "exclude": [
