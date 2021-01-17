@@ -1,12 +1,39 @@
 ﻿
+@media (min-width: 800px) {
+    body {
+        padding-left: 60px;
+    }
+    .container {
+        margin-left: unset;
+    }
+}
+
+body {
+    margin: 20px;
+}
+
+.container {
+    width: 340px;
+    background-color: ivory;
+}
+
 h1 {
     /* prevent header from wrapping */
     white-space: nowrap;
+    margin-bottom: 20px;
 }
 
+#myTab, #myTabContent {
 
-#instructions {
-    width: 300px;
+}
+
+.tab-pane {
+    padding-top: 12px;
+}
+
+.FRALogo {
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 /*ref: https://stackoverflow.com/questions/826782/how-to-disable-text-selection-highlighting*/
@@ -19,10 +46,10 @@ h1 {
                           supported by Chrome, Edge, Opera and Firefox */
 }
 
-#board {
+#board, p {
     -webkit-user-select: text; /* Safari */
     -khtml-user-select: text; /* Konqueror HTML */
     -moz-user-select: text; /* Old versions of Firefox */
     -ms-user-select: text; /* Internet Explorer/Edge */
-    user-select: all;
+    user-select: text;
 }

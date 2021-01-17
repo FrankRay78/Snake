@@ -88,6 +88,10 @@
     <Content Include="favico\favicon.ico" />
     <Content Include="favico\mstile-150x150.png" />
     <Content Include="favico\safari-pinned-tab.svg" />
+    <Content Include="images\fra_logo.png" />
+    <Content Include="images\fra_logo_300.png" />
+    <Content Include="images\fra_logo_300_no-tag-line.png" />
+    <Content Include="images\fra_logo_300_no-tag-line_transparentbg.png" />
     <Content Include="README.md" />
     <Content Include="package.json" />
     <Content Include="dist\bootstrap\js\bootstrap.bundle.js.map" />
