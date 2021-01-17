@@ -13,7 +13,8 @@ Implemented so far are:
 2. Collision detection of the snake upon itself
 3. Unit testing (of TypeScript classes)
 4. GitHub post commit hook to execute unit tests
-5. Persist high scores in a database
+5. Persist high scores in a database with the help of a webapi service
+6. Give the snake a timer and make it autonomous; redraw the htmlcanvas on browser screen refresh event
 
 ### Technical & Design Commentary
 Types have been split out into separate ts files and loaded when needed through the requirejs framework (installed with NPM). These separate type files will / should allow good unit tests to be written against the TypeScript classes to validate the game logic (once a unit test framework is selected)
