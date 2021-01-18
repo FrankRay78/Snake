@@ -11,7 +11,7 @@ Implemented so far are:
 ### TODO
 1. Make the Snake's length grow upon eating each apple
 2. Collision detection of the snake upon itself
-3. Unit testing (of TypeScript classes)
+3. Unit testing (of TypeScript classes) [**In progress**]
 4. GitHub post commit hook to execute unit tests
 5. Persist high scores in a database with the help of a webapi service
 6. Give the snake a timer and make it autonomous; redraw the htmlcanvas on browser screen refresh event
@@ -35,6 +35,10 @@ The following resources came in handy when implementing the game:
 * [Using RequireJS with Visual Studio](https://devblogs.microsoft.com/visualstudio/using-requirejs-with-visual-studio/)
 * [What's the correct way to use requireJS with typescript?](https://stackoverflow.com/questions/20079464/whats-the-correct-way-to-use-requirejs-with-typescript)
 * [How to use npm installed requireJS for browser](https://stackoverflow.com/questions/35405412/how-to-use-npm-installed-requirejs-for-browser)
+##### Unit Testing
+* [ts-jest](https://www.npmjs.com/package/ts-jest)
+* [Unit Testing with Typescript and Jest](https://dev.to/muhajirdev/unit-testing-with-typescript-and-jest-2gln)
+* [Jest - TypeScript Deep Dive](https://basarat.gitbook.io/typescript/intro-1/jest)
 ##### TypeScript Language Reference
 * [The TypeScript Handbook](https://www.typescriptlang.org/docs/handbook/intro.html)
 

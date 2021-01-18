@@ -39,7 +39,7 @@ class Game {
 
         this.boardRenderer.Draw();
 
-        this.timerToken = setInterval(() => {
+        this.timerToken = window.setInterval(() => {
 
             try {
 

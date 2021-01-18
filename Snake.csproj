@@ -92,6 +92,7 @@
     <Content Include="images\fra_logo_300.png" />
     <Content Include="images\fra_logo_300_no-tag-line.png" />
     <Content Include="images\fra_logo_300_no-tag-line_transparentbg.png" />
+    <Content Include="jest.config.js" />
     <Content Include="README.md" />
     <Content Include="package.json" />
     <Content Include="dist\bootstrap\js\bootstrap.bundle.js.map" />
@@ -152,6 +153,7 @@
     <TypeScriptCompile Include="src\models\Board.ts" />
     <TypeScriptCompile Include="src\models\BoardRenderer.ts" />
     <TypeScriptCompile Include="src\models\Game.ts" />
+    <TypeScriptCompile Include="src\tests\Snake.Tests.ts" />
     <TypeScriptCompile Include="src\models\Snake.ts" />
     <TypeScriptCompile Include="src\models\SnakeDirection.ts" />
   </ItemGroup>

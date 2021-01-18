@@ -1,20 +1,20 @@
 define(["require", "exports", "./models/Game"], function (require, exports, Game) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    window.onload = function () {
-        var canvas = document.getElementById('board');
-        var game = new Game(canvas);
-        canvas.addEventListener("click", function () { return game.Start(); }, false);
-        document.addEventListener("keydown", function (e) { return game.KeyPress(e.keyCode); }, false);
-        canvas.addEventListener("mousedown", function (e) {
+    window.onload = () => {
+        const canvas = document.getElementById('board');
+        const game = new Game(canvas);
+        canvas.addEventListener("click", () => game.Start(), false);
+        document.addEventListener("keydown", (e) => game.KeyPress(e.keyCode), false);
+        canvas.addEventListener("mousedown", (e) => {
             //ref: https://stackoverflow.com/questions/17130395/real-mouse-position-in-canvas
-            var rect = canvas.getBoundingClientRect();
-            var mouseX = e.clientX - rect.left;
-            var mouseY = e.clientY - rect.top;
+            const rect = canvas.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left;
+            const mouseY = e.clientY - rect.top;
             game.MouseDown(mouseX, mouseY);
         }, false);
         //ref: http://bencentra.com/code/2014/12/05/html5-canvas-touch-events.html
-        canvas.addEventListener("touchstart", function (touchEvent) {
+        canvas.addEventListener("touchstart", (touchEvent) => {
             touchEvent.preventDefault();
             if (!game.IsRunning) {
                 //nb. the click event above doesn't fire on mobile devices
@@ -22,12 +22,12 @@ define(["require", "exports", "./models/Game"], function (require, exports, Game
                 game.Start();
                 return;
             }
-            var touches = touchEvent.changedTouches;
-            var touch = touches[touches.length - 1];
+            const touches = touchEvent.changedTouches;
+            const touch = touches[touches.length - 1];
             //ref: https://stackoverflow.com/questions/17130395/real-mouse-position-in-canvas
-            var rect = canvas.getBoundingClientRect();
-            var touchX = touch.pageX - rect.left;
-            var touchY = touch.pageY - rect.top;
+            const rect = canvas.getBoundingClientRect();
+            const touchX = touch.pageX - rect.left;
+            const touchY = touch.pageY - rect.top;
             game.Touch(touchX, touchY);
         }, false);
     };

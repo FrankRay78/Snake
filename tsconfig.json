@@ -11,9 +11,13 @@
         "noEmitOnError": true,
         "removeComments": false,
         "sourceMap": true,
-        "target": "ES5",
+        "target": "ES6",
         "module": "AMD",
-        "outDir": "scripts"
+        "outDir": "scripts",
+
+        //Since you have specified modules: "es6" on your tsconfig.json. TypeScript Compiler will use Classic module resolution, which unfortunately, does not resolve non-relative imports in node_modules
+        //https://github.com/babel/babel/issues/10237
+        "moduleResolution": "node"
     },
   "exclude": [
     "node_modules",

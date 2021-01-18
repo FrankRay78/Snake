@@ -1,7 +1,7 @@
 define(["require", "exports", "./SnakeDirection", "./Board", "./BoardRenderer"], function (require, exports, SnakeDirection, Board, BoardRenderer) {
     "use strict";
-    var Game = /** @class */ (function () {
-        function Game(canvas) {
+    class Game {
+        constructor(canvas) {
             this.isRunning = false;
             this.board = new Board();
             this.boardRenderer = new BoardRenderer(this.board, canvas);
@@ -10,53 +10,48 @@ define(["require", "exports", "./SnakeDirection", "./Board", "./BoardRenderer"],
             this.boardRenderer.Draw();
             this.boardRenderer.DrawPlayArrow();
         }
-        Object.defineProperty(Game.prototype, "IsRunning", {
-            get: function () {
-                return this.isRunning;
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Game.prototype.Start = function () {
-            var _this = this;
+        get IsRunning() {
+            return this.isRunning;
+        }
+        Start() {
             if (this.isRunning)
                 return;
             this.board.Initialise();
             this.boardRenderer.Draw();
-            this.timerToken = setInterval(function () {
+            this.timerToken = window.setInterval(() => {
                 try {
                     //Update the board and redraw it to the canvas on each timer tick
-                    _this.board.snake.Update();
-                    _this.boardRenderer.Draw();
+                    this.board.snake.Update();
+                    this.boardRenderer.Draw();
                 }
                 catch (e) {
-                    _this.Stop();
-                    _this.boardRenderer.DrawGameOver();
-                    _this.boardRenderer.DrawPlayArrow();
+                    this.Stop();
+                    this.boardRenderer.DrawGameOver();
+                    this.boardRenderer.DrawPlayArrow();
                 }
             }, 200);
             this.isRunning = true;
-        };
-        Game.prototype.Stop = function () {
+        }
+        Stop() {
             if (!this.isRunning)
                 return;
             clearTimeout(this.timerToken);
             this.isRunning = false;
-        };
-        Game.prototype.GetSnakeCoordinates = function () {
-            var dimensions = this.boardRenderer.GetBoardDimensions();
-            var snakePosition = this.board.snake.Position;
+        }
+        GetSnakeCoordinates() {
+            const dimensions = this.boardRenderer.GetBoardDimensions();
+            const snakePosition = this.board.snake.Position;
             //nb. the following coordinates refer to the top, left hand side of the current cell the snake's head resides in
-            var snakeCoordinatesX = snakePosition.currentX * dimensions.cellWidth;
-            var snakeCoordinatesY = snakePosition.currentY * dimensions.cellHeight;
+            const snakeCoordinatesX = snakePosition.currentX * dimensions.cellWidth;
+            const snakeCoordinatesY = snakePosition.currentY * dimensions.cellHeight;
             return { snakeDirection: snakePosition.direction, snakeCoordinatesX: snakeCoordinatesX, snakeCoordinatesY: snakeCoordinatesY };
-        };
-        Game.prototype.KeyPress = function (keyCode) {
+        }
+        KeyPress(keyCode) {
             if (!this.isRunning)
                 return;
             if (keyCode < 37 || keyCode > 40)
                 return;
-            var newDirection;
+            let newDirection;
             if (keyCode === 38) {
                 // up arrow
                 newDirection = SnakeDirection.Up;
@@ -74,12 +69,12 @@ define(["require", "exports", "./SnakeDirection", "./Board", "./BoardRenderer"],
                 newDirection = SnakeDirection.Right;
             }
             this.board.snake.Direction = newDirection;
-        };
-        Game.prototype.MouseDown = function (mouseX, mouseY) {
+        }
+        MouseDown(mouseX, mouseY) {
             if (!this.isRunning)
                 return;
-            var snakeCoordinates = this.GetSnakeCoordinates();
-            var newDirection = snakeCoordinates.snakeDirection;
+            const snakeCoordinates = this.GetSnakeCoordinates();
+            let newDirection = snakeCoordinates.snakeDirection;
             switch (snakeCoordinates.snakeDirection) {
                 case SnakeDirection.Up:
                     if (mouseX < snakeCoordinates.snakeCoordinatesX)
@@ -110,12 +105,12 @@ define(["require", "exports", "./SnakeDirection", "./Board", "./BoardRenderer"],
                     throw new Error();
             }
             this.board.snake.Direction = newDirection;
-        };
-        Game.prototype.Touch = function (mouseX, mouseY) {
+        }
+        Touch(mouseX, mouseY) {
             if (!this.isRunning)
                 return;
-            var snakeCoordinates = this.GetSnakeCoordinates();
-            var newDirection = snakeCoordinates.snakeDirection;
+            const snakeCoordinates = this.GetSnakeCoordinates();
+            let newDirection = snakeCoordinates.snakeDirection;
             switch (snakeCoordinates.snakeDirection) {
                 case SnakeDirection.Up:
                     if (mouseX < snakeCoordinates.snakeCoordinatesX)
@@ -146,9 +141,8 @@ define(["require", "exports", "./SnakeDirection", "./Board", "./BoardRenderer"],
                     throw new Error();
             }
             this.board.snake.Direction = newDirection;
-        };
-        return Game;
-    }());
+        }
+    }
     ;
     return Game;
 });

@@ -1,27 +1,19 @@
 define(["require", "exports", "./SnakeDirection"], function (require, exports, SnakeDirection) {
     "use strict";
-    var Snake = /** @class */ (function () {
-        function Snake(cellCountX, cellCountY, apple) {
+    class Snake {
+        constructor(cellCountX, cellCountY, apple) {
             this.cellCountX = cellCountX;
             this.cellCountY = cellCountY;
             this.apple = apple;
             this.GameOverMessage = 'Game Over';
         }
-        Object.defineProperty(Snake.prototype, "Direction", {
-            set: function (newDirection) {
-                this.direction = newDirection;
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(Snake.prototype, "Position", {
-            get: function () {
-                return { direction: this.direction, currentX: this.currentX, currentY: this.currentY };
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Snake.prototype.Initialise = function () {
+        set Direction(newDirection) {
+            this.direction = newDirection;
+        }
+        get Position() {
+            return { direction: this.direction, currentX: this.currentX, currentY: this.currentY };
+        }
+        Initialise() {
             this.applesEaten = 0;
             this.RaiseAppleEatenEvent();
             //Initial starting position for the snake
@@ -29,8 +21,8 @@ define(["require", "exports", "./SnakeDirection"], function (require, exports, S
             this.currentY = Math.round(this.cellCountY / 2) - 1;
             //Move right initially
             this.direction = SnakeDirection.Right;
-        };
-        Snake.prototype.Update = function () {
+        }
+        Update() {
             //Update the position of the snake
             switch (this.direction) {
                 case SnakeDirection.Up:
@@ -58,8 +50,8 @@ define(["require", "exports", "./SnakeDirection"], function (require, exports, S
                     throw new Error();
             }
             //Check if the snake has eaten an apple
-            var snakePosition = this.Position;
-            var applePosition = this.apple.Position;
+            const snakePosition = this.Position;
+            const applePosition = this.apple.Position;
             if (snakePosition.currentX === applePosition.currentX &&
                 snakePosition.currentY === applePosition.currentY) {
                 //SNAKE HAS EATEN THE APPLE
@@ -67,13 +59,12 @@ define(["require", "exports", "./SnakeDirection"], function (require, exports, S
                 //Raise apple eaten event
                 this.RaiseAppleEatenEvent();
             }
-        };
-        Snake.prototype.RaiseAppleEatenEvent = function () {
+        }
+        RaiseAppleEatenEvent() {
             if (this.onAppleEaten)
                 this.onAppleEaten(this.applesEaten);
-        };
-        return Snake;
-    }());
+        }
+    }
     ;
     return Snake;
 });
