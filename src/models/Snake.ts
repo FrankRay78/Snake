@@ -23,7 +23,7 @@ class Snake {
         return { direction: this.direction, currentX: this.currentX, currentY: this.currentY };
     }
 
-    constructor(private cellCountX: number, private cellCountY: number, public apple: Apple) {
+    constructor(private cellCountX: number, private cellCountY: number, public apple: Apple | null) {
     }
 
     Initialise(): void {
@@ -88,19 +88,22 @@ class Snake {
 
         //Check if the snake has eaten an apple
 
-        const snakePosition = this.Position;
-        const applePosition = this.apple.Position; 
+        if (this.apple) {
 
-        if (snakePosition.currentX === applePosition.currentX &&
-            snakePosition.currentY === applePosition.currentY) {
+            const snakePosition = this.Position;
+            const applePosition = this.apple.Position; 
 
-            //SNAKE HAS EATEN THE APPLE
+            if (snakePosition.currentX === applePosition.currentX &&
+                snakePosition.currentY === applePosition.currentY) {
 
-            this.applesEaten = this.applesEaten + 1;
+                //SNAKE HAS EATEN THE APPLE
 
-            //Raise apple eaten event
+                this.applesEaten = this.applesEaten + 1;
 
-            this.RaiseAppleEatenEvent();
+                //Raise apple eaten event
+
+                this.RaiseAppleEatenEvent();
+            }
         }
     }
 

@@ -1,16 +1,17 @@
 define(["require", "exports"], function (require, exports) {
     "use strict";
     class Apple {
-        constructor(startingX, startingY) {
-            this.startingX = startingX;
-            this.startingY = startingY;
+        constructor(cellCountX, cellCountY) {
+            this.cellCountX = cellCountX;
+            this.cellCountY = cellCountY;
         }
         get Position() {
             return { currentX: this.currentX, currentY: this.currentY };
         }
         Initialise() {
-            this.currentX = this.startingX;
-            this.currentY = this.startingY;
+            //Initial starting position for the apple
+            this.currentX = Math.round(this.cellCountX * 0.75);
+            this.currentY = Math.round(this.cellCountY * 0.75);
         }
     }
     return Apple;

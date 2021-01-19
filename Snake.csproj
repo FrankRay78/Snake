@@ -124,6 +124,7 @@
     <Content Include="scripts\models\Game.js" />
     <Content Include="scripts\models\Snake.js" />
     <Content Include="scripts\models\SnakeDirection.js" />
+    <Content Include="scripts\tests\Snake.Test.js" />
     <Content Include="tsconfig.json" />
     <Content Include="scripts\app.js.map" />
     <Content Include="favico\favicon_package_v0.16.zip" />
@@ -134,6 +135,7 @@
     <Content Include="scripts\models\Game.js.map" />
     <Content Include="scripts\models\Snake.js.map" />
     <Content Include="scripts\models\SnakeDirection.js.map" />
+    <Content Include="scripts\tests\Snake.Test.js.map" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -153,6 +155,7 @@
     <TypeScriptCompile Include="src\models\Board.ts" />
     <TypeScriptCompile Include="src\models\BoardRenderer.ts" />
     <TypeScriptCompile Include="src\models\Game.ts" />
+    <TypeScriptCompile Include="src\tests\Apple.Tests.ts" />
     <TypeScriptCompile Include="src\tests\Snake.Tests.ts" />
     <TypeScriptCompile Include="src\models\Snake.ts" />
     <TypeScriptCompile Include="src\models\SnakeDirection.ts" />

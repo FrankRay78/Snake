@@ -50,14 +50,16 @@ define(["require", "exports", "./SnakeDirection"], function (require, exports, S
                     throw new Error();
             }
             //Check if the snake has eaten an apple
-            const snakePosition = this.Position;
-            const applePosition = this.apple.Position;
-            if (snakePosition.currentX === applePosition.currentX &&
-                snakePosition.currentY === applePosition.currentY) {
-                //SNAKE HAS EATEN THE APPLE
-                this.applesEaten = this.applesEaten + 1;
-                //Raise apple eaten event
-                this.RaiseAppleEatenEvent();
+            if (this.apple) {
+                const snakePosition = this.Position;
+                const applePosition = this.apple.Position;
+                if (snakePosition.currentX === applePosition.currentX &&
+                    snakePosition.currentY === applePosition.currentY) {
+                    //SNAKE HAS EATEN THE APPLE
+                    this.applesEaten = this.applesEaten + 1;
+                    //Raise apple eaten event
+                    this.RaiseAppleEatenEvent();
+                }
             }
         }
         RaiseAppleEatenEvent() {
