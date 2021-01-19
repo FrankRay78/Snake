@@ -7,19 +7,19 @@ define(["require", "exports"], function (require, exports) {
         }
         GetBoardDimensions() {
             //nb. assume a normalised array (ie. the second dimension is never jagged)
-            const cellCountY = this.board.cellCountY;
-            const cellCountX = this.board.cellCountX;
-            const cellWidth = this.canvas.offsetWidth / cellCountX;
-            const cellHeight = this.canvas.offsetHeight / cellCountY;
-            return { cellCountX: cellCountX, cellCountY: cellCountY, cellWidth: cellWidth, cellHeight: cellHeight };
+            const boardDimensionY = this.board.boardDimensionY;
+            const boardDimensionX = this.board.boardDimensionX;
+            const cellWidth = this.canvas.offsetWidth / boardDimensionX;
+            const cellHeight = this.canvas.offsetHeight / boardDimensionY;
+            return { boardDimensionX: boardDimensionX, boardDimensionY: boardDimensionY, cellWidth: cellWidth, cellHeight: cellHeight };
         }
         Draw() {
             const context = this.canvas.getContext('2d');
             const dimensions = this.GetBoardDimensions();
             const snakePosition = this.board.snake.Position;
             const applePosition = this.board.apple.Position;
-            for (let y = 0; y < dimensions.cellCountY; y++) {
-                for (let x = 0; x < dimensions.cellCountX; x++) {
+            for (let y = 0; y < dimensions.boardDimensionY; y++) {
+                for (let x = 0; x < dimensions.boardDimensionX; x++) {
                     if (y === snakePosition.currentY &&
                         x === snakePosition.currentX) {
                         //SNAKE CELL

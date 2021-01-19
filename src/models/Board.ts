@@ -1,16 +1,25 @@
 ﻿
 import Apple = require('./Apple');
 import Snake = require('./Snake');
+import SnakeDirection = require('./SnakeDirection');
 
 class Board {
 
     public readonly snake: Snake;
     public readonly apple: Apple;
 
-    constructor(public cellCountX = 15, public cellCountY = 15) {
+    constructor(public boardDimensionX = 15, public boardDimensionY = 15) {
 
-        this.apple = new Apple(Math.round(cellCountX * 0.75), Math.round(cellCountY * 0.75));
-        this.snake = new Snake(cellCountX, cellCountY, this.apple);
+        //Initial starting position for the apple
+        const appleX = Math.round(boardDimensionX * 0.75);
+        const appleY = Math.round(boardDimensionY * 0.75);
+
+        //Initial starting position for the snake
+        const snakeX = Math.round(boardDimensionX / 2) - 1;
+        const snakeY = Math.round(boardDimensionY / 2) - 1;
+
+        this.apple = new Apple(appleX, appleY);
+        this.snake = new Snake(boardDimensionX, boardDimensionY, SnakeDirection.Right, snakeX, snakeY, this.apple);
 
         this.snake.onAppleEaten = (applesEaten: number) => {
 
@@ -40,8 +49,8 @@ class Board {
         do {
             //Find a new location for the apple which is 1). on the board and 2). not on the snake
 
-            x = this.randomIntFromInterval(0, this.cellCountX - 1);
-            y = this.randomIntFromInterval(0, this.cellCountY - 1);
+            x = this.randomIntFromInterval(0, this.boardDimensionX - 1);
+            y = this.randomIntFromInterval(0, this.boardDimensionY - 1);
 
         } while (
             x === snakePosition.currentX &&

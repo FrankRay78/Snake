@@ -14,13 +14,13 @@ class BoardRenderer {
     public GetBoardDimensions() {
 
         //nb. assume a normalised array (ie. the second dimension is never jagged)
-        const cellCountY = this.board.cellCountY;
-        const cellCountX = this.board.cellCountX;
+        const boardDimensionY = this.board.boardDimensionY;
+        const boardDimensionX = this.board.boardDimensionX;
 
-        const cellWidth = this.canvas.offsetWidth / cellCountX;
-        const cellHeight = this.canvas.offsetHeight / cellCountY;
+        const cellWidth = this.canvas.offsetWidth / boardDimensionX;
+        const cellHeight = this.canvas.offsetHeight / boardDimensionY;
 
-        return { cellCountX: cellCountX, cellCountY: cellCountY, cellWidth: cellWidth, cellHeight: cellHeight };
+        return { boardDimensionX: boardDimensionX, boardDimensionY: boardDimensionY, cellWidth: cellWidth, cellHeight: cellHeight };
     }
 
     public Draw(): void {
@@ -32,8 +32,8 @@ class BoardRenderer {
         const snakePosition = this.board.snake.Position;
         const applePosition = this.board.apple.Position;
 
-        for (let y = 0; y < dimensions.cellCountY; y++) {
-            for (let x = 0; x < dimensions.cellCountX; x++) {
+        for (let y = 0; y < dimensions.boardDimensionY; y++) {
+            for (let x = 0; x < dimensions.boardDimensionX; x++) {
 
                 if (y === snakePosition.currentY &&
                     x === snakePosition.currentX) {

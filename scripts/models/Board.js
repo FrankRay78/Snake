@@ -1,11 +1,17 @@
-define(["require", "exports", "./Apple", "./Snake"], function (require, exports, Apple, Snake) {
+define(["require", "exports", "./Apple", "./Snake", "./SnakeDirection"], function (require, exports, Apple, Snake, SnakeDirection) {
     "use strict";
     class Board {
-        constructor(cellCountX = 15, cellCountY = 15) {
-            this.cellCountX = cellCountX;
-            this.cellCountY = cellCountY;
-            this.apple = new Apple(Math.round(cellCountX * 0.75), Math.round(cellCountY * 0.75));
-            this.snake = new Snake(cellCountX, cellCountY, this.apple);
+        constructor(boardDimensionX = 15, boardDimensionY = 15) {
+            this.boardDimensionX = boardDimensionX;
+            this.boardDimensionY = boardDimensionY;
+            //Initial starting position for the apple
+            const appleX = Math.round(boardDimensionX * 0.75);
+            const appleY = Math.round(boardDimensionY * 0.75);
+            //Initial starting position for the snake
+            const snakeX = Math.round(boardDimensionX / 2) - 1;
+            const snakeY = Math.round(boardDimensionY / 2) - 1;
+            this.apple = new Apple(appleX, appleY);
+            this.snake = new Snake(boardDimensionX, boardDimensionY, SnakeDirection.Right, snakeX, snakeY, this.apple);
             this.snake.onAppleEaten = (applesEaten) => {
                 //Update the game score
                 document.getElementById('appleCount').innerText = applesEaten.toString();
@@ -24,8 +30,8 @@ define(["require", "exports", "./Apple", "./Snake"], function (require, exports,
             let y;
             do {
                 //Find a new location for the apple which is 1). on the board and 2). not on the snake
-                x = this.randomIntFromInterval(0, this.cellCountX - 1);
-                y = this.randomIntFromInterval(0, this.cellCountY - 1);
+                x = this.randomIntFromInterval(0, this.boardDimensionX - 1);
+                y = this.randomIntFromInterval(0, this.boardDimensionY - 1);
             } while (x === snakePosition.currentX &&
                 y === snakePosition.currentY);
             //Move the apple to the new location

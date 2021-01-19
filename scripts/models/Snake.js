@@ -1,9 +1,12 @@
 define(["require", "exports", "./SnakeDirection"], function (require, exports, SnakeDirection) {
     "use strict";
     class Snake {
-        constructor(cellCountX, cellCountY, apple) {
-            this.cellCountX = cellCountX;
-            this.cellCountY = cellCountY;
+        constructor(boardDimensionX, boardDimensionY, startingDirection, startingX, startingY, apple) {
+            this.boardDimensionX = boardDimensionX;
+            this.boardDimensionY = boardDimensionY;
+            this.startingDirection = startingDirection;
+            this.startingX = startingX;
+            this.startingY = startingY;
             this.apple = apple;
             this.GameOverMessage = 'Game Over';
         }
@@ -17,10 +20,10 @@ define(["require", "exports", "./SnakeDirection"], function (require, exports, S
             this.applesEaten = 0;
             this.RaiseAppleEatenEvent();
             //Initial starting position for the snake
-            this.currentX = Math.round(this.cellCountX / 2) - 1;
-            this.currentY = Math.round(this.cellCountY / 2) - 1;
+            this.currentX = this.startingX;
+            this.currentY = this.startingY;
             //Move right initially
-            this.direction = SnakeDirection.Right;
+            this.direction = this.startingDirection;
         }
         Update() {
             //Update the position of the snake
@@ -31,7 +34,7 @@ define(["require", "exports", "./SnakeDirection"], function (require, exports, S
                     this.currentY = this.currentY - 1;
                     break;
                 case SnakeDirection.Down:
-                    if (this.currentY + 1 === this.cellCountY)
+                    if (this.currentY + 1 === this.boardDimensionY)
                         throw new Error(this.GameOverMessage);
                     this.currentY = this.currentY + 1;
                     break;
@@ -41,7 +44,7 @@ define(["require", "exports", "./SnakeDirection"], function (require, exports, S
                     this.currentX = this.currentX - 1;
                     break;
                 case SnakeDirection.Right:
-                    if (this.currentX + 1 === this.cellCountX)
+                    if (this.currentX + 1 === this.boardDimensionX)
                         throw new Error(this.GameOverMessage);
                     this.currentX = this.currentX + 1;
                     break;

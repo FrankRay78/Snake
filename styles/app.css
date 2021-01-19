@@ -41,7 +41,7 @@ h1 {
                           supported by Chrome, Edge, Opera and Firefox */
 }
 
-#board, p {
+#board {
     -webkit-user-select: text; /* Safari */
     -khtml-user-select: text; /* Konqueror HTML */
     -moz-user-select: text; /* Old versions of Firefox */

@@ -23,7 +23,7 @@ class Snake {
         return { direction: this.direction, currentX: this.currentX, currentY: this.currentY };
     }
 
-    constructor(private cellCountX: number, private cellCountY: number, public apple: Apple | null) {
+    constructor(private boardDimensionX: number, private boardDimensionY: number, private startingDirection: SnakeDirection, private startingX: number, private startingY: number, public apple: Apple | null) {
     }
 
     Initialise(): void {
@@ -32,11 +32,11 @@ class Snake {
         this.RaiseAppleEatenEvent();
 
         //Initial starting position for the snake
-        this.currentX = Math.round(this.cellCountX / 2) - 1;
-        this.currentY = Math.round(this.cellCountY / 2) - 1;
+        this.currentX = this.startingX;
+        this.currentY = this.startingY;
 
         //Move right initially
-        this.direction = SnakeDirection.Right;
+        this.direction = this.startingDirection;
     }
 
     Update(): void {
@@ -55,7 +55,7 @@ class Snake {
 
             case SnakeDirection.Down:
 
-                if (this.currentY + 1 === this.cellCountY)
+                if (this.currentY + 1 === this.boardDimensionY)
                     throw new Error(this.GameOverMessage);
 
                 this.currentY = this.currentY + 1;
@@ -73,7 +73,7 @@ class Snake {
 
             case SnakeDirection.Right:
 
-                if (this.currentX + 1 === this.cellCountX)
+                if (this.currentX + 1 === this.boardDimensionX)
                     throw new Error(this.GameOverMessage);
 
                 this.currentX = this.currentX + 1;

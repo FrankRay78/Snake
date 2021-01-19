@@ -9,14 +9,14 @@ class Apple {
         return { currentX: this.currentX, currentY: this.currentY };
     }
 
-    constructor(private cellCountX: number, private cellCountY: number) {
+    constructor(private startingX: number, private startingY: number) {
     }
 
     Initialise(): void {
 
         //Initial starting position for the apple
-        this.currentX = Math.round(this.cellCountX * 0.75);
-        this.currentY = Math.round(this.cellCountY * 0.75)
+        this.currentX = this.startingX;
+        this.currentY = this.startingY;
     }
 }
 
