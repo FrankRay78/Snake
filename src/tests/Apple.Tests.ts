@@ -23,8 +23,7 @@ test('Apple can be moved', () => {
     expect(apple.Position.currentY).toBe(appleY);
 
     //Move the apple to a new location
-    apple.currentX = 1;
-    apple.currentY = 1;
+    apple.SetPosition(1, 1);
 
     expect(apple.Position.currentX).toBe(1);
     expect(apple.Position.currentY).toBe(1);
@@ -40,8 +39,7 @@ test('Apple can be initialised after moving', () => {
     expect(apple.Position.currentY).toBe(appleY);
 
     //Move the apple to a new location
-    apple.currentX = 1;
-    apple.currentY = 1;
+    apple.SetPosition(1, 1);
 
     expect(apple.Position.currentX).toBe(1);
     expect(apple.Position.currentY).toBe(1);

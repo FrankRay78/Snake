@@ -1,21 +1,21 @@
 ﻿
-import Board = require('./Board');
+import Game = require('./Game');
 
-class BoardRenderer {
+class GameRenderer {
 
-    private readonly board: Board;
+    private readonly game: Game;
     private readonly canvas: HTMLCanvasElement;
 
-    constructor(board: Board, canvas: HTMLCanvasElement) {
-        this.board = board;
+    constructor(canvas: HTMLCanvasElement, game: Game) {
         this.canvas = canvas;
+        this.game = game;
     }
 
     public GetBoardDimensions() {
 
         //nb. assume a normalised array (ie. the second dimension is never jagged)
-        const boardDimensionY = this.board.boardDimensionY;
-        const boardDimensionX = this.board.boardDimensionX;
+        const boardDimensionY = this.game.boardDimensionY;
+        const boardDimensionX = this.game.boardDimensionX;
 
         const cellWidth = this.canvas.offsetWidth / boardDimensionX;
         const cellHeight = this.canvas.offsetHeight / boardDimensionY;
@@ -29,8 +29,8 @@ class BoardRenderer {
 
         const dimensions = this.GetBoardDimensions();
 
-        const snakePosition = this.board.snake.Position;
-        const applePosition = this.board.apple.Position;
+        const snakePosition = this.game.snake.Position;
+        const applePosition = this.game.apple.Position;
 
         for (let y = 0; y < dimensions.boardDimensionY; y++) {
             for (let x = 0; x < dimensions.boardDimensionX; x++) {
@@ -117,4 +117,4 @@ class BoardRenderer {
     }
 };
 
-export = BoardRenderer;
+export = GameRenderer;

@@ -8,6 +8,10 @@ define(["require", "exports"], function (require, exports) {
         get Position() {
             return { currentX: this.currentX, currentY: this.currentY };
         }
+        SetPosition(currentX, currentY) {
+            this.currentX = currentX;
+            this.currentY = currentY;
+        }
         Initialise() {
             //Initial starting position for the apple
             this.currentX = this.startingX;

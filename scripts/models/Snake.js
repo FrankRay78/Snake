@@ -18,7 +18,6 @@ define(["require", "exports", "./SnakeDirection"], function (require, exports, S
         }
         Initialise() {
             this.applesEaten = 0;
-            this.RaiseAppleEatenEvent();
             //Initial starting position for the snake
             this.currentX = this.startingX;
             this.currentY = this.startingY;

@@ -1,14 +1,14 @@
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    class BoardRenderer {
-        constructor(board, canvas) {
-            this.board = board;
+    class GameRenderer {
+        constructor(canvas, game) {
             this.canvas = canvas;
+            this.game = game;
         }
         GetBoardDimensions() {
             //nb. assume a normalised array (ie. the second dimension is never jagged)
-            const boardDimensionY = this.board.boardDimensionY;
-            const boardDimensionX = this.board.boardDimensionX;
+            const boardDimensionY = this.game.boardDimensionY;
+            const boardDimensionX = this.game.boardDimensionX;
             const cellWidth = this.canvas.offsetWidth / boardDimensionX;
             const cellHeight = this.canvas.offsetHeight / boardDimensionY;
             return { boardDimensionX: boardDimensionX, boardDimensionY: boardDimensionY, cellWidth: cellWidth, cellHeight: cellHeight };
@@ -16,8 +16,8 @@ define(["require", "exports"], function (require, exports) {
         Draw() {
             const context = this.canvas.getContext('2d');
             const dimensions = this.GetBoardDimensions();
-            const snakePosition = this.board.snake.Position;
-            const applePosition = this.board.apple.Position;
+            const snakePosition = this.game.snake.Position;
+            const applePosition = this.game.apple.Position;
             for (let y = 0; y < dimensions.boardDimensionY; y++) {
                 for (let x = 0; x < dimensions.boardDimensionX; x++) {
                     if (y === snakePosition.currentY &&
@@ -83,6 +83,6 @@ define(["require", "exports"], function (require, exports) {
         }
     }
     ;
-    return BoardRenderer;
+    return GameRenderer;
 });
-//# sourceMappingURL=BoardRenderer.js.map
+//# sourceMappingURL=GameRenderer.js.map

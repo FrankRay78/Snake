@@ -152,8 +152,7 @@
   <ItemGroup>
     <TypeScriptCompile Include="src\app.ts" />
     <TypeScriptCompile Include="src\models\Apple.ts" />
-    <TypeScriptCompile Include="src\models\Board.ts" />
-    <TypeScriptCompile Include="src\models\BoardRenderer.ts" />
+    <TypeScriptCompile Include="src\models\GameRenderer.ts" />
     <TypeScriptCompile Include="src\models\Game.ts" />
     <TypeScriptCompile Include="src\tests\Apple.Tests.ts" />
     <TypeScriptCompile Include="src\tests\Snake.Tests.ts" />

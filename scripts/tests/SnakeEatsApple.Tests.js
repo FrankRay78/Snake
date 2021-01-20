@@ -6,10 +6,6 @@ define(["require", "exports", "../models/Apple", "../models/Snake", "../models/S
     const appleY = 5;
     const snakeX = 5;
     const snakeY = 5;
-    //const appleEatenCallback = (applesEaten: number) => {
-    //    //Empty callback except for the log below to keep the TS linter happy
-    //    console.log(applesEaten);
-    //};
     test('Snake eats apple', () => {
         //Place apple and snake on the board
         const apple = new Apple(appleX, appleY);

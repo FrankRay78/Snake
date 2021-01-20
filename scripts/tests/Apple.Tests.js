@@ -15,8 +15,7 @@ define(["require", "exports", "../models/Apple"], function (require, exports, Ap
         expect(apple.Position.currentX).toBe(appleX);
         expect(apple.Position.currentY).toBe(appleY);
         //Move the apple to a new location
-        apple.currentX = 1;
-        apple.currentY = 1;
+        apple.SetPosition(1, 1);
         expect(apple.Position.currentX).toBe(1);
         expect(apple.Position.currentY).toBe(1);
     });
@@ -26,8 +25,7 @@ define(["require", "exports", "../models/Apple"], function (require, exports, Ap
         expect(apple.Position.currentX).toBe(appleX);
         expect(apple.Position.currentY).toBe(appleY);
         //Move the apple to a new location
-        apple.currentX = 1;
-        apple.currentY = 1;
+        apple.SetPosition(1, 1);
         expect(apple.Position.currentX).toBe(1);
         expect(apple.Position.currentY).toBe(1);
         apple.Initialise();

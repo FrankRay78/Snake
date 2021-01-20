@@ -2,11 +2,16 @@
 class Apple {
 
     //nb. zero based
-    public currentX: number;
-    public currentY: number;
+    private currentX: number;
+    private currentY: number;
 
     get Position() {
         return { currentX: this.currentX, currentY: this.currentY };
+    }
+
+    SetPosition(currentX: number, currentY: number) {
+        this.currentX = currentX;
+        this.currentY = currentY;
     }
 
     constructor(private startingX: number, private startingY: number) {
