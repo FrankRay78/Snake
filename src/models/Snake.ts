@@ -23,12 +23,26 @@ class Snake {
         return { direction: this.direction, currentX: this.currentX, currentY: this.currentY };
     }
 
-    constructor(private boardDimensionX: number, private boardDimensionY: number, private startingDirection: SnakeDirection, private startingX: number, private startingY: number, public apple: Apple | null) {
+    private length: number;
+
+    get Length() {
+        return this.length;
+    }
+
+    constructor(
+        private boardDimensionX: number,
+        private boardDimensionY: number,
+        private startingDirection: SnakeDirection,
+        private startingX: number,
+        private startingY: number,
+        private growIncrement: number,
+        public apple: Apple | null) {
     }
 
     Initialise(): void {
 
         this.applesEaten = 0;
+        this.length = 1;
 
         //Initial starting position for the snake
         this.currentX = this.startingX;
@@ -97,7 +111,8 @@ class Snake {
 
                 //SNAKE HAS EATEN THE APPLE
 
-                this.applesEaten = this.applesEaten + 1;
+                this.applesEaten += 1;
+                this.length += this.growIncrement;
 
                 //Raise apple eaten event
 

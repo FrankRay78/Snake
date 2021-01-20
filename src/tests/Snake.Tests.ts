@@ -5,27 +5,30 @@ import SnakeDirection = require('../models/SnakeDirection');
 const boardDimension = { X: 10, Y: 10 };
 const snakeX = 5;
 const snakeY = 5;
+const snakeGrowIncrement = 2;
 
 test('Snake is placed on the board', () => {
 
-    const snake = new Snake(boardDimension.X, boardDimension.Y, SnakeDirection.Right, snakeX, snakeY, null);
+    const snake = new Snake(boardDimension.X, boardDimension.Y, SnakeDirection.Right, snakeX, snakeY, snakeGrowIncrement, null);
 
     snake.Initialise();
 
     expect(snake.Position.direction).toBe(SnakeDirection.Right);
     expect(snake.Position.currentX).toBe(snakeX);
     expect(snake.Position.currentY).toBe(snakeY);
+    expect(snake.Length).toBe(1);
 });
 
 test('Snake moves right', () => {
 
-    const snake = new Snake(boardDimension.X, boardDimension.Y, SnakeDirection.Right, snakeX, snakeY, null);
+    const snake = new Snake(boardDimension.X, boardDimension.Y, SnakeDirection.Right, snakeX, snakeY, snakeGrowIncrement, null);
 
     snake.Initialise();
 
     expect(snake.Position.direction).toBe(SnakeDirection.Right);
     expect(snake.Position.currentX).toBe(snakeX);
     expect(snake.Position.currentY).toBe(snakeY);
+    expect(snake.Length).toBe(1);
 
     snake.Update();
 
@@ -40,13 +43,14 @@ test('Snake moves right', () => {
 
 test('Snake moves up', () => {
 
-    const snake = new Snake(boardDimension.X, boardDimension.Y, SnakeDirection.Up, snakeX, snakeY, null);
+    const snake = new Snake(boardDimension.X, boardDimension.Y, SnakeDirection.Up, snakeX, snakeY, snakeGrowIncrement, null);
 
     snake.Initialise();
 
     expect(snake.Position.direction).toBe(SnakeDirection.Up);
     expect(snake.Position.currentX).toBe(snakeX);
     expect(snake.Position.currentY).toBe(snakeY);
+    expect(snake.Length).toBe(1);
 
     snake.Update();
 
@@ -61,13 +65,14 @@ test('Snake moves up', () => {
 
 test('Snake can change direction', () => {
 
-    const snake = new Snake(boardDimension.X, boardDimension.Y, SnakeDirection.Right, snakeX, snakeY, null);
+    const snake = new Snake(boardDimension.X, boardDimension.Y, SnakeDirection.Right, snakeX, snakeY, snakeGrowIncrement, null);
 
     snake.Initialise();
 
     expect(snake.Position.direction).toBe(SnakeDirection.Right);
     expect(snake.Position.currentX).toBe(snakeX);
     expect(snake.Position.currentY).toBe(snakeY);
+    expect(snake.Length).toBe(1);
 
     snake.Update();
     snake.Update();
@@ -87,13 +92,14 @@ test('Snake can change direction', () => {
 
 test('Snake falls off board', () => {
 
-    const snake = new Snake(boardDimension.X, boardDimension.Y, SnakeDirection.Right, snakeX, snakeY, null);
+    const snake = new Snake(boardDimension.X, boardDimension.Y, SnakeDirection.Right, snakeX, snakeY, snakeGrowIncrement, null);
 
     snake.Initialise();
 
     expect(snake.Position.direction).toBe(SnakeDirection.Right);
     expect(snake.Position.currentX).toBe(snakeX);
     expect(snake.Position.currentY).toBe(snakeY);
+    expect(snake.Length).toBe(1);
 
     expect(() => {
 
@@ -114,13 +120,14 @@ test('Snake falls off board', () => {
 
 test('Snake can be initialised after moving', () => {
 
-    const snake = new Snake(boardDimension.X, boardDimension.Y, SnakeDirection.Right, snakeX, snakeY, null);
+    const snake = new Snake(boardDimension.X, boardDimension.Y, SnakeDirection.Right, snakeX, snakeY, snakeGrowIncrement, null);
 
     snake.Initialise();
 
     expect(snake.Position.direction).toBe(SnakeDirection.Right);
     expect(snake.Position.currentX).toBe(snakeX);
     expect(snake.Position.currentY).toBe(snakeY);
+    expect(snake.Length).toBe(1);
 
     snake.Update();
     snake.Direction = SnakeDirection.Down;
@@ -130,11 +137,12 @@ test('Snake can be initialised after moving', () => {
     expect(snake.Position.currentY).not.toEqual(snakeY);
 
 
-    //Initialise the snake and ensure it goes back to the starting position
+    //Initialise the snake and ensure it goes back to its starting configuration
 
     snake.Initialise();
 
     expect(snake.Position.direction).toBe(SnakeDirection.Right);
     expect(snake.Position.currentX).toEqual(snakeX);
     expect(snake.Position.currentY).toEqual(snakeY);
+    expect(snake.Length).toBe(1);
 });

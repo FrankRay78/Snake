@@ -7,11 +7,12 @@ define(["require", "exports", "./Apple", "./Snake", "./SnakeDirection", "./GameR
             //Initial starting position for the apple
             const appleX = Math.round(boardDimensionX * 0.75);
             const appleY = Math.round(boardDimensionY * 0.75);
+            this.apple = new Apple(appleX, appleY);
             //Initial starting position for the snake
             const snakeX = Math.round(boardDimensionX / 2) - 1;
             const snakeY = Math.round(boardDimensionY / 2) - 1;
-            this.apple = new Apple(appleX, appleY);
-            this.snake = new Snake(boardDimensionX, boardDimensionY, SnakeDirection.Right, snakeX, snakeY, this.apple);
+            const snakeGrowIncrement = 2;
+            this.snake = new Snake(boardDimensionX, boardDimensionY, SnakeDirection.Right, snakeX, snakeY, snakeGrowIncrement, this.apple);
             this.snake.onAppleEaten = (applesEaten) => {
                 //Update the game score
                 document.getElementById('appleCount').innerText = applesEaten.toString();

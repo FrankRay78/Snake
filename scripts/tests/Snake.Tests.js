@@ -4,15 +4,16 @@ define(["require", "exports", "../models/Snake", "../models/SnakeDirection"], fu
     const boardDimension = { X: 10, Y: 10 };
     const snakeX = 5;
     const snakeY = 5;
+    const snakeGrowIncrement = 2;
     test('Snake is placed on the board', () => {
-        const snake = new Snake(boardDimension.X, boardDimension.Y, SnakeDirection.Right, snakeX, snakeY, null);
+        const snake = new Snake(boardDimension.X, boardDimension.Y, SnakeDirection.Right, snakeX, snakeY, snakeGrowIncrement, null);
         snake.Initialise();
         expect(snake.Position.direction).toBe(SnakeDirection.Right);
         expect(snake.Position.currentX).toBe(snakeX);
         expect(snake.Position.currentY).toBe(snakeY);
     });
     test('Snake moves right', () => {
-        const snake = new Snake(boardDimension.X, boardDimension.Y, SnakeDirection.Right, snakeX, snakeY, null);
+        const snake = new Snake(boardDimension.X, boardDimension.Y, SnakeDirection.Right, snakeX, snakeY, snakeGrowIncrement, null);
         snake.Initialise();
         expect(snake.Position.direction).toBe(SnakeDirection.Right);
         expect(snake.Position.currentX).toBe(snakeX);
@@ -25,7 +26,7 @@ define(["require", "exports", "../models/Snake", "../models/SnakeDirection"], fu
         expect(snake.Position.currentY).toBe(snakeY);
     });
     test('Snake moves up', () => {
-        const snake = new Snake(boardDimension.X, boardDimension.Y, SnakeDirection.Up, snakeX, snakeY, null);
+        const snake = new Snake(boardDimension.X, boardDimension.Y, SnakeDirection.Up, snakeX, snakeY, snakeGrowIncrement, null);
         snake.Initialise();
         expect(snake.Position.direction).toBe(SnakeDirection.Up);
         expect(snake.Position.currentX).toBe(snakeX);
@@ -38,7 +39,7 @@ define(["require", "exports", "../models/Snake", "../models/SnakeDirection"], fu
         expect(snake.Position.currentY).toBe(snakeY - 2);
     });
     test('Snake can change direction', () => {
-        const snake = new Snake(boardDimension.X, boardDimension.Y, SnakeDirection.Right, snakeX, snakeY, null);
+        const snake = new Snake(boardDimension.X, boardDimension.Y, SnakeDirection.Right, snakeX, snakeY, snakeGrowIncrement, null);
         snake.Initialise();
         expect(snake.Position.direction).toBe(SnakeDirection.Right);
         expect(snake.Position.currentX).toBe(snakeX);
@@ -55,7 +56,7 @@ define(["require", "exports", "../models/Snake", "../models/SnakeDirection"], fu
         expect(snake.Position.currentY).toBe(snakeY + 2);
     });
     test('Snake falls off board', () => {
-        const snake = new Snake(boardDimension.X, boardDimension.Y, SnakeDirection.Right, snakeX, snakeY, null);
+        const snake = new Snake(boardDimension.X, boardDimension.Y, SnakeDirection.Right, snakeX, snakeY, snakeGrowIncrement, null);
         snake.Initialise();
         expect(snake.Position.direction).toBe(SnakeDirection.Right);
         expect(snake.Position.currentX).toBe(snakeX);
@@ -71,7 +72,7 @@ define(["require", "exports", "../models/Snake", "../models/SnakeDirection"], fu
         //nb. if we ever exit the function here, then the test will fail
     });
     test('Snake can be initialised after moving', () => {
-        const snake = new Snake(boardDimension.X, boardDimension.Y, SnakeDirection.Right, snakeX, snakeY, null);
+        const snake = new Snake(boardDimension.X, boardDimension.Y, SnakeDirection.Right, snakeX, snakeY, snakeGrowIncrement, null);
         snake.Initialise();
         expect(snake.Position.direction).toBe(SnakeDirection.Right);
         expect(snake.Position.currentX).toBe(snakeX);

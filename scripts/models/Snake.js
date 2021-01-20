@@ -1,12 +1,13 @@
 define(["require", "exports", "./SnakeDirection"], function (require, exports, SnakeDirection) {
     "use strict";
     class Snake {
-        constructor(boardDimensionX, boardDimensionY, startingDirection, startingX, startingY, apple) {
+        constructor(boardDimensionX, boardDimensionY, startingDirection, startingX, startingY, growIncrement, apple) {
             this.boardDimensionX = boardDimensionX;
             this.boardDimensionY = boardDimensionY;
             this.startingDirection = startingDirection;
             this.startingX = startingX;
             this.startingY = startingY;
+            this.growIncrement = growIncrement;
             this.apple = apple;
             this.GameOverMessage = 'Game Over';
         }
@@ -16,8 +17,12 @@ define(["require", "exports", "./SnakeDirection"], function (require, exports, S
         get Position() {
             return { direction: this.direction, currentX: this.currentX, currentY: this.currentY };
         }
+        get Length() {
+            return this.length;
+        }
         Initialise() {
             this.applesEaten = 0;
+            this.length = 1;
             //Initial starting position for the snake
             this.currentX = this.startingX;
             this.currentY = this.startingY;
@@ -58,7 +63,8 @@ define(["require", "exports", "./SnakeDirection"], function (require, exports, S
                 if (snakePosition.currentX === applePosition.currentX &&
                     snakePosition.currentY === applePosition.currentY) {
                     //SNAKE HAS EATEN THE APPLE
-                    this.applesEaten = this.applesEaten + 1;
+                    this.applesEaten += 1;
+                    this.length += this.growIncrement;
                     //Raise apple eaten event
                     this.RaiseAppleEatenEvent();
                 }
