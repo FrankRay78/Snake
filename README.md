@@ -1,23 +1,34 @@
 # Snake
 A browser-based TypeScript implementation of the classic retro game, Snake ([Wikipedia](https://en.wikipedia.org/wiki/Snake_(video_game_genre)))
 
-**Play the game --> [here](https://frankray78.github.io/Snake/) <--**
+**[Click here to play the game](https://frankray78.github.io/Snake/)**
 
-### Features
-Implemented so far are:
+Features implemented so far are:
 1. Mobile responsive layout
 2. Keyboard / mouse / touch controls
 
-### TODO
-1. Make the Snake's length grow upon eating each apple
-2. Collision detection of the snake upon itself
-3. Unit testing (of TypeScript classes) [**In progress**]
+### Technical Design
+A non-UML class diagram for the Snake game is as follows:
+
+![Class diagram for Snake game](https://github.com/FrankRay78/Snake/blob/master/documentation/Class%20diagram%20-%20cropped%20-%20resized%20800%20width.png)
+
+| Class      | Description |
+| ----------- | ----------- |
+| Apple | Is given a location on the board and remains static until the snake eats it by running into the same square. |
+| Snake | Moves around the board 'eating' apples. Each apple eaten results in the snake growing in length, making it harder to remain in the game because the snake cannot run across itself or hit the edge of the board. |
+| Game | A container for holding the Apple and Snake objects. Also responsible for capturing user events (ie. keyboard / mouse / touch), snake events (ie. snake has eaten an apple) and game events (ie. game over). |
+| GameRenderer | Responsible for converting the game state at point of redraw into pixel rendering to the Html canvas element.  |
+
+### Unit Testing
+A comprehensive suite of unit tests have been written against the Apple and Snake classes to validate a lot of the game logic. Classes have been split out into separate ts files and loaded when needed through the [RequireJS](https://requirejs.org/) framework (installed with NPM). The use of separate type files have allowed unit tests to be easily written against individual classes. [Jest](https://jestjs.io/) unit test framework was selected and remains a good choice due to ease of use and breadth of functionality.
+
+### Development Backlog
+1. Make the Snake's length grow upon eating each apple [**In Progress**]
+2. Collision detection of the snake upon itself [**In Progress**]
+3. ~~Unit testing (of TypeScript classes)~~ [Done - 20 January 2021]
 4. GitHub post commit hook to execute unit tests
 5. Persist high scores in a database with the help of a webapi service
 6. Give the snake a timer and make it autonomous; redraw the htmlcanvas on browser screen refresh event
-
-### Technical & Design Commentary
-Types have been split out into separate ts files and loaded when needed through the requirejs framework (installed with NPM). These separate type files will / should allow good unit tests to be written against the TypeScript classes to validate the game logic (once a unit test framework is selected)
 
 ### Resources
 The following resources came in handy when implementing the game:
