@@ -79,6 +79,7 @@
     <Content Include="dist\bootstrap\js\bootstrap.js" />
     <Content Include="dist\bootstrap\js\bootstrap.min.js" />
     <Content Include="dist\requirejs\require.js" />
+    <Content Include="documentation\Class diagram - cropped - resized 800 width.png" />
     <Content Include="documentation\Class diagram - cropped.png" />
     <Content Include="favico\android-chrome-192x192.png" />
     <Content Include="favico\android-chrome-512x512.png" />
