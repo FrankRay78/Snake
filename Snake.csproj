@@ -79,6 +79,7 @@
     <Content Include="dist\bootstrap\js\bootstrap.js" />
     <Content Include="dist\bootstrap\js\bootstrap.min.js" />
     <Content Include="dist\requirejs\require.js" />
+    <Content Include="documentation\Class diagram - cropped.png" />
     <Content Include="favico\android-chrome-192x192.png" />
     <Content Include="favico\android-chrome-512x512.png" />
     <Content Include="favico\apple-touch-icon.png" />
@@ -136,6 +137,7 @@
     <Content Include="scripts\models\Snake.js.map" />
     <Content Include="scripts\models\SnakeDirection.js.map" />
     <Content Include="scripts\tests\Snake.Test.js.map" />
+    <Content Include="documentation\Class diagram.pptx" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
