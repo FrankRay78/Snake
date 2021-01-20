@@ -159,6 +159,7 @@
     <TypeScriptCompile Include="src\tests\Snake.Tests.ts" />
     <TypeScriptCompile Include="src\models\Snake.ts" />
     <TypeScriptCompile Include="src\models\SnakeDirection.ts" />
+    <TypeScriptCompile Include="src\tests\SnakeEatsApple.Tests.ts" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
