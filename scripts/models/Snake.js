@@ -12,7 +12,34 @@ define(["require", "exports", "./SnakeDirection", "./SnakePosition"], function (
             this.GameOverMessage = 'Game Over';
         }
         set Direction(newDirection) {
-            this.direction = newDirection;
+            if (this.Length === 1) {
+                //Always allow the snake to change direction 180 degrees before it's started growing (ie. single cell)
+                this.direction = newDirection;
+            }
+            else {
+                //Prevent any 180 degree changes if the snake already has a tail
+                switch (this.direction) {
+                    case SnakeDirection.Up:
+                        if (newDirection === SnakeDirection.Down)
+                            return;
+                        break;
+                    case SnakeDirection.Down:
+                        if (newDirection === SnakeDirection.Up)
+                            return;
+                        break;
+                    case SnakeDirection.Left:
+                        if (newDirection === SnakeDirection.Right)
+                            return;
+                        break;
+                    case SnakeDirection.Right:
+                        if (newDirection === SnakeDirection.Left)
+                            return;
+                        break;
+                    default:
+                }
+                //We're still here so all good to update the direction
+                this.direction = newDirection;
+            }
         }
         get Length() {
             return this.snakeHeadAndBody.length;

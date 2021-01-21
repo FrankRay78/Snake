@@ -82,3 +82,78 @@ test('Snake eats apple', () => {
     expect(snake.Length).toBe(1);
 });
 
+test('Snake can change direction 180 degress when starting out', () => {
+
+    const snake = new Snake(boardDimension.X, boardDimension.Y, SnakeDirection.Right, snakeX, snakeY, snakeGrowIncrement, null);
+
+    snake.Initialise();
+
+    expect(snake.HeadPosition.direction).toBe(SnakeDirection.Right);
+    expect(snake.HeadPosition.currentX).toBe(snakeX);
+    expect(snake.HeadPosition.currentY).toBe(snakeY);
+    expect(snake.Length).toBe(1);
+
+    snake.Update();
+
+    expect(snake.HeadPosition.currentX).toBe(snakeX + 1);
+    expect(snake.HeadPosition.currentY).toBe(snakeY);
+
+    snake.Direction = SnakeDirection.Left;
+    expect(snake.HeadPosition.direction).toBe(SnakeDirection.Left);
+
+    snake.Update();
+
+    expect(snake.HeadPosition.currentX).toBe(snakeX);
+    expect(snake.HeadPosition.currentY).toBe(snakeY);
+});
+
+test('Snake cannot change direction 180 degress once it has grown', () => {
+
+    //Place the apple on the board just in front of the snake
+
+    const apple = new Apple(snakeX + 1, snakeY);
+
+    apple.Initialise();
+
+    expect(apple.Position.currentX).toBe(snakeX + 1);
+    expect(apple.Position.currentY).toBe(snakeY);
+
+
+    //Place the snake on the board
+
+    const snake = new Snake(boardDimension.X, boardDimension.Y, SnakeDirection.Right, snakeX, snakeY, snakeGrowIncrement, apple);
+
+    const appleEatenCallback = jest.fn();
+    snake.onAppleEaten = appleEatenCallback;
+
+    snake.Initialise();
+
+    expect(snake.HeadPosition.direction).toBe(SnakeDirection.Right);
+    expect(snake.HeadPosition.currentX).toBe(snakeX);
+    expect(snake.HeadPosition.currentY).toBe(snakeY);
+    expect(snake.Length).toBe(1);
+
+
+    //Snake eats the apple here
+    snake.Update(); 
+    expect(appleEatenCallback).toBeCalled();
+
+
+    snake.Update();
+    expect(snake.Length).toBe(2);
+
+    snake.Direction = SnakeDirection.Left;
+    expect(snake.HeadPosition.direction).toBe(SnakeDirection.Right);
+
+    snake.Update();
+    expect(snake.Length).toBe(3);
+
+    snake.Direction = SnakeDirection.Left;
+    expect(snake.HeadPosition.direction).toBe(SnakeDirection.Right);
+
+    snake.Update();
+    expect(snake.Length).toBe(3);
+
+    snake.Direction = SnakeDirection.Up;
+    expect(snake.HeadPosition.direction).toBe(SnakeDirection.Up);
+});
