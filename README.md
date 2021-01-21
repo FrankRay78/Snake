@@ -3,7 +3,7 @@ A browser-based TypeScript implementation of the classic retro game, Snake ([Wik
 
 **[Click here to play the game](https://frankray78.github.io/Snake/)**
 
-Features implemented so far are:
+Game features implemented so far are:
 1. Mobile responsive layout
 2. Keyboard / mouse / touch controls
 
