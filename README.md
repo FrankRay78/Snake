@@ -20,7 +20,7 @@ A non-UML class diagram for the Snake game is as follows:
 | GameRenderer | Responsible for converting the game state at point of redraw into pixel rendering to the Html canvas element.  |
 
 ### Unit Testing
-A comprehensive suite of unit tests have been written against the Apple and Snake classes to validate a lot of the game logic. Classes have been split out into separate TS files and loaded when needed through the [RequireJS](https://requirejs.org/) framework (installed with NPM). The use of separate type files have allowed unit tests to be easily written against individual classes. [Jest](https://jestjs.io/) unit test framework was selected and remains a good choice due to ease of use and breadth of functionality.
+A comprehensive suite of unit tests have been written against the Apple and Snake classes to validate a lot of the game logic. Classes have been split out into separate TS files and loaded when needed through the [RequireJS](https://requirejs.org/) framework (installed with NPM). The use of separate type files have allowed unit tests to be easily written against individual classes. [Jest](https://jestjs.io/) unit test framework (also installed with NPM) was selected and remains a good choice due to ease of use and breadth of functionality.
 
 ### Development Backlog
 1. ~~Make the Snake's length grow upon eating each apple~~ [Done - 21 January 2021]
