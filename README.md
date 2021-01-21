@@ -23,8 +23,8 @@ A non-UML class diagram for the Snake game is as follows:
 A comprehensive suite of unit tests have been written against the Apple and Snake classes to validate a lot of the game logic. Classes have been split out into separate ts files and loaded when needed through the [RequireJS](https://requirejs.org/) framework (installed with NPM). The use of separate type files have allowed unit tests to be easily written against individual classes. [Jest](https://jestjs.io/) unit test framework was selected and remains a good choice due to ease of use and breadth of functionality.
 
 ### Development Backlog
-1. Make the Snake's length grow upon eating each apple [**In Progress**]
-2. Collision detection of the snake upon itself [**In Progress**]
+1. ~~Make the Snake's length grow upon eating each apple~~ [Done - 21 January 2021]
+2. ~~Collision detection of the snake upon itself~~ [Done - 21 January 2021]
 3. ~~Unit testing (of TypeScript classes)~~ [Done - 20 January 2021]
 4. GitHub post commit hook to execute unit tests
 5. Persist high scores in a database with the help of a webapi service
