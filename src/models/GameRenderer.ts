@@ -29,19 +29,29 @@ class GameRenderer {
 
         const dimensions = this.GetBoardDimensions();
 
-        const snakePosition = this.game.snake.Position;
         const applePosition = this.game.apple.Position;
 
         for (let y = 0; y < dimensions.boardDimensionY; y++) {
             for (let x = 0; x < dimensions.boardDimensionX; x++) {
+                if (this.game.snake.SnakeOverlapsWith(x, y)) {
 
-                if (y === snakePosition.currentY &&
-                    x === snakePosition.currentX) {
+                    const snakeHeadPosition = this.game.snake.HeadPosition;
 
-                    //SNAKE CELL
+                    if (y === snakeHeadPosition.currentY &&
+                        x === snakeHeadPosition.currentX) {
 
-                    context.fillStyle = 'green';
-                    context.fillRect(x * dimensions.cellWidth, y * dimensions.cellHeight, dimensions.cellWidth, dimensions.cellHeight);
+                        //SNAKE HEAD CELL
+
+                        context.fillStyle = 'green';
+                        context.fillRect(x * dimensions.cellWidth, y * dimensions.cellHeight, dimensions.cellWidth, dimensions.cellHeight);
+                    }
+                    else {
+
+                        //SNAKE BODY CELL
+
+                        context.fillStyle = 'lightgreen';
+                        context.fillRect(x * dimensions.cellWidth, y * dimensions.cellHeight, dimensions.cellWidth, dimensions.cellHeight);
+                    }
                 }
                 else if (
                     y === applePosition.currentY &&

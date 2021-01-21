@@ -68,8 +68,6 @@ class Game {
 
     private PlaceNextApple(): void {
 
-        const snakePosition = this.snake.Position;
-
         //Set a new location for the apple
 
         let x;
@@ -81,9 +79,7 @@ class Game {
             x = this.randomIntFromInterval(0, this.boardDimensionX - 1);
             y = this.randomIntFromInterval(0, this.boardDimensionY - 1);
 
-        } while (
-            x === snakePosition.currentX &&
-            y === snakePosition.currentY);
+        } while (this.snake.SnakeOverlapsWith(x, y));
 
         //Move the apple to the new location
         this.apple.SetPosition(x, y);
@@ -145,7 +141,7 @@ class Game {
 
         const dimensions = this.gameRenderer.GetBoardDimensions();
 
-        const snakePosition = this.snake.Position;
+        const snakePosition = this.snake.HeadPosition;
 
         //nb. the following coordinates refer to the top, left hand side of the current cell the snake's head resides in
         const snakeCoordinatesX = snakePosition.currentX * dimensions.cellWidth;

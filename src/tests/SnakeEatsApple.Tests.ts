@@ -3,7 +3,7 @@ import Apple = require('../models/Apple');
 import Snake = require('../models/Snake');
 import SnakeDirection = require('../models/SnakeDirection');
 
-const boardDimension = { X: 10, Y: 10 };
+const boardDimension = { X: 100, Y: 100 }; //big board to make sure the snake doesn't fall off!
 const appleX = 7;
 const appleY = 5;
 const snakeX = 5;
@@ -28,9 +28,9 @@ test('Snake eats apple', () => {
 
     snake.Initialise();
 
-    expect(snake.Position.direction).toBe(SnakeDirection.Right);
-    expect(snake.Position.currentX).toBe(snakeX);
-    expect(snake.Position.currentY).toBe(snakeY);
+    expect(snake.HeadPosition.direction).toBe(SnakeDirection.Right);
+    expect(snake.HeadPosition.currentX).toBe(snakeX);
+    expect(snake.HeadPosition.currentY).toBe(snakeY);
     expect(snake.Length).toBe(1);
 
 
@@ -40,16 +40,45 @@ test('Snake eats apple', () => {
     snake.Update();
 
     expect(appleEatenCallback).toBeCalled();
-    expect(snake.Length).toBe(snakeGrowIncrement + 1);
+
+    snake.Update();
+    expect(snake.Length).toBe(2);
+
+    snake.Update();
+    expect(snake.Length).toBe(3); //snake is fully grown here
+
+    snake.Update();
+    snake.Update();
+    snake.Update();
+    expect(snake.Length).toBe(3);
+
+
+    //Move the apple to a new location
+    apple.SetPosition(snake.HeadPosition.currentX + 1, snake.HeadPosition.currentY);
+
+
+    snake.Update();
+    expect(appleEatenCallback).toBeCalled();
+
+    snake.Update();
+    expect(snake.Length).toBe(4);
+
+    snake.Update();
+    expect(snake.Length).toBe(5); //snake is fully grown here
+
+    snake.Update();
+    snake.Update();
+    snake.Update();
+    expect(snake.Length).toBe(5);
 
 
     //Initialise the snake and ensure it goes back to its starting configuration
 
     snake.Initialise();
 
-    expect(snake.Position.direction).toBe(SnakeDirection.Right);
-    expect(snake.Position.currentX).toEqual(snakeX);
-    expect(snake.Position.currentY).toEqual(snakeY);
+    expect(snake.HeadPosition.direction).toBe(SnakeDirection.Right);
+    expect(snake.HeadPosition.currentX).toEqual(snakeX);
+    expect(snake.HeadPosition.currentY).toEqual(snakeY);
     expect(snake.Length).toBe(1);
 });
 

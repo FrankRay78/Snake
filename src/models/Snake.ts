@@ -1,5 +1,6 @@
 ﻿
 import SnakeDirection = require('./SnakeDirection');
+import SnakePosition = require('./SnakePosition');
 import Apple = require('./Apple');
 
 class Snake {
@@ -8,10 +9,7 @@ class Snake {
 
     public onAppleEaten?: (applesEaten: number) => void;
     private applesEaten: number;
-
-    //nb. zero based
-    private currentX: number;
-    private currentY: number;
+    private growthRequired: number;
 
     private direction: SnakeDirection;
 
@@ -19,14 +17,25 @@ class Snake {
         this.direction = newDirection;
     }
 
-    get Position() {
-        return { direction: this.direction, currentX: this.currentX, currentY: this.currentY };
-    }
-
-    private length: number;
+    private snakeHeadAndBody: SnakePosition[];
 
     get Length() {
-        return this.length;
+        return this.snakeHeadAndBody.length;
+    }
+
+    get HeadPosition() {
+        return { direction: this.direction, currentX: this.snakeHeadAndBody[0].X, currentY: this.snakeHeadAndBody[0].Y };
+    }
+
+    public SnakeOverlapsWith(x: number, y: number): boolean {
+
+        let i;
+        for (i = 0; i < this.snakeHeadAndBody.length; i += 1) {
+            if (this.snakeHeadAndBody[i].X === x && this.snakeHeadAndBody[i].Y === y)
+                return true;
+        }
+
+        return false;
     }
 
     constructor(
@@ -42,11 +51,11 @@ class Snake {
     Initialise(): void {
 
         this.applesEaten = 0;
-        this.length = 1;
+        this.growthRequired = 0;
 
         //Initial starting position for the snake
-        this.currentX = this.startingX;
-        this.currentY = this.startingY;
+        this.snakeHeadAndBody = [];
+        this.snakeHeadAndBody.push(new SnakePosition(this.startingX, this.startingY)); 
 
         //Move right initially
         this.direction = this.startingDirection;
@@ -59,37 +68,49 @@ class Snake {
         switch (this.direction) {
             case SnakeDirection.Up:
 
-                if (this.currentY === 0)
+                if (this.HeadPosition.currentY === 0)
                     throw new Error(this.GameOverMessage);
 
-                this.currentY = this.currentY - 1;
+                if (this.SnakeOverlapsWith(this.HeadPosition.currentX, this.HeadPosition.currentY - 1))
+                    throw new Error(this.GameOverMessage);
+
+                this.UpdateSnakeGrowIfRequired(this.HeadPosition.currentX, this.HeadPosition.currentY - 1);
 
                 break;
 
             case SnakeDirection.Down:
 
-                if (this.currentY + 1 === this.boardDimensionY)
+                if (this.HeadPosition.currentY + 1 === this.boardDimensionY)
                     throw new Error(this.GameOverMessage);
 
-                this.currentY = this.currentY + 1;
+                if (this.SnakeOverlapsWith(this.HeadPosition.currentX, this.HeadPosition.currentY + 1))
+                    throw new Error(this.GameOverMessage);
+
+                this.UpdateSnakeGrowIfRequired(this.HeadPosition.currentX, this.HeadPosition.currentY + 1);
 
                 break;
 
             case SnakeDirection.Left:
 
-                if (this.currentX === 0)
+                if (this.HeadPosition.currentX === 0)
                     throw new Error(this.GameOverMessage);
 
-                this.currentX = this.currentX - 1;
+                if (this.SnakeOverlapsWith(this.HeadPosition.currentX - 1, this.HeadPosition.currentY))
+                    throw new Error(this.GameOverMessage);
+
+                this.UpdateSnakeGrowIfRequired(this.HeadPosition.currentX - 1, this.HeadPosition.currentY);
 
                 break;
 
             case SnakeDirection.Right:
 
-                if (this.currentX + 1 === this.boardDimensionX)
+                if (this.HeadPosition.currentX + 1 === this.boardDimensionX)
                     throw new Error(this.GameOverMessage);
 
-                this.currentX = this.currentX + 1;
+                if (this.SnakeOverlapsWith(this.HeadPosition.currentX + 1, this.HeadPosition.currentY))
+                    throw new Error(this.GameOverMessage);
+
+                this.UpdateSnakeGrowIfRequired(this.HeadPosition.currentX + 1, this.HeadPosition.currentY);
 
                 break;
 
@@ -103,7 +124,7 @@ class Snake {
 
         if (this.apple) {
 
-            const snakePosition = this.Position;
+            const snakePosition = this.HeadPosition;
             const applePosition = this.apple.Position; 
 
             if (snakePosition.currentX === applePosition.currentX &&
@@ -112,12 +133,28 @@ class Snake {
                 //SNAKE HAS EATEN THE APPLE
 
                 this.applesEaten += 1;
-                this.length += this.growIncrement;
+                this.growthRequired += this.growIncrement;
 
                 //Raise apple eaten event
 
                 this.RaiseAppleEatenEvent();
             }
+        }
+    }
+
+    private UpdateSnakeGrowIfRequired(newHeadX: number, newHeadY: number) {
+
+        if (this.growthRequired > 0) {
+
+            //Add a new head location at the front of the array and leave all other body elements as is (ie. growing the snake's length from the head)
+            this.snakeHeadAndBody.unshift(new SnakePosition(newHeadX, newHeadY));
+            this.growthRequired -= 1;
+        }
+        else {
+
+            //Add a new head location at the front of the array and remove the last body element (ie. the snake moves forward one cell)
+            this.snakeHeadAndBody.unshift(new SnakePosition(newHeadX, newHeadY));
+            this.snakeHeadAndBody.pop();
         }
     }
 

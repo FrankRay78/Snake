@@ -38,7 +38,6 @@ define(["require", "exports", "./Apple", "./Snake", "./SnakeDirection", "./GameR
             document.getElementById('appleCount').innerText = '0';
         }
         PlaceNextApple() {
-            const snakePosition = this.snake.Position;
             //Set a new location for the apple
             let x;
             let y;
@@ -46,8 +45,7 @@ define(["require", "exports", "./Apple", "./Snake", "./SnakeDirection", "./GameR
                 //Find a new location for the apple which is 1). on the board and 2). not on the snake
                 x = this.randomIntFromInterval(0, this.boardDimensionX - 1);
                 y = this.randomIntFromInterval(0, this.boardDimensionY - 1);
-            } while (x === snakePosition.currentX &&
-                y === snakePosition.currentY);
+            } while (this.snake.SnakeOverlapsWith(x, y));
             //Move the apple to the new location
             this.apple.SetPosition(x, y);
         }
@@ -83,7 +81,7 @@ define(["require", "exports", "./Apple", "./Snake", "./SnakeDirection", "./GameR
         }
         GetSnakeCoordinates() {
             const dimensions = this.gameRenderer.GetBoardDimensions();
-            const snakePosition = this.snake.Position;
+            const snakePosition = this.snake.HeadPosition;
             //nb. the following coordinates refer to the top, left hand side of the current cell the snake's head resides in
             const snakeCoordinatesX = snakePosition.currentX * dimensions.cellWidth;
             const snakeCoordinatesY = snakePosition.currentY * dimensions.cellHeight;
