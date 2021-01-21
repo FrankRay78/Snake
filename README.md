@@ -14,7 +14,7 @@ A non-UML class diagram for the Snake game is as follows:
 
 | Class      | Description |
 | ----------- | ----------- |
-| Apple | Is given a location on the board and remains static until the snake eats it by running into the same square. |
+| Apple | Is given a location on the board and remains static until the snake eats it by running into the same square. The user's score is incremented and another apple placed on the board for the snake to eat. |
 | Snake | Moves around the board 'eating' apples. Each apple eaten results in the snake growing in length, making it harder to remain in the game because the snake cannot run across itself or hit the edge of the board. |
 | Game | A container for holding the Apple and Snake objects. Also responsible for capturing user events (ie. keyboard / mouse / touch), snake events (ie. snake has eaten an apple) and game events (ie. game over). |
 | GameRenderer | Responsible for converting the game state at point of redraw into pixel rendering to the Html canvas element.  |
