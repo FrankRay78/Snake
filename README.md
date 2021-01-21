@@ -8,7 +8,6 @@ Game features implemented so far are:
 2. Keyboard / mouse / touch controls
 
 ### Technical Design
-The game was implemented in HTML, CSS and TypeScript using Visual Studio 2019 as the development IDE.  
 A non-UML class diagram for the Snake game is as follows:
 
 ![Class diagram for Snake game](https://github.com/FrankRay78/Snake/blob/master/documentation/Class%20diagram%20-%20cropped%20-%20resized%20800%20width.png)
@@ -19,6 +18,8 @@ A non-UML class diagram for the Snake game is as follows:
 | Snake | Moves around the board 'eating' apples. Each apple eaten results in the snake growing in length, making it harder to remain in the game because the snake cannot run across itself or hit the edge of the board. |
 | Game | A container for holding the Apple and Snake objects. Also responsible for handling user events (keyboard / mouse / touch), snake events (snake has eaten an apple, snake has run into itself, snake has fallen off the board) and game events ( game over). |
 | GameRenderer | Responsible for converting the game state at point of redraw into pixel rendering to the Html canvas element.  |
+
+The game was implemented in HTML, CSS and TypeScript using Visual Studio 2019 as the development IDE.  
 
 ### Unit Testing
 A comprehensive suite of unit tests have been written against the Apple and Snake classes to validate a lot of the game logic. Classes have been split out into separate TS files and loaded when needed through the [RequireJS](https://requirejs.org/) framework. The use of separate type files have allowed unit tests to be easily written against individual classes. [Jest](https://jestjs.io/) unit test framework was selected and remains a good choice due to ease of use and breadth of functionality. Both RequireJS and Jest were installed with [NPM (Node Package Manager)](https://docs.npmjs.com/about-npm).
