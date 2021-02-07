@@ -1,6 +1,7 @@
 define(["require", "exports", "./models/Game"], function (require, exports, Game) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    //const axios = require('axios').default;
     window.onload = () => {
         const canvas = document.getElementById('board');
         const game = new Game(canvas);

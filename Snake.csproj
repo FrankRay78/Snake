@@ -56,6 +56,8 @@
     <TypeScriptSourceRoot />
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="dist\axios\axios.js" />
+    <Content Include="dist\axios\axios.min.js" />
     <Content Include="dist\bootstrap\css\bootstrap-grid.css" />
     <Content Include="dist\bootstrap\css\bootstrap-grid.min.css" />
     <Content Include="dist\bootstrap\css\bootstrap-grid.rtl.css" />
@@ -139,6 +141,8 @@
     <Content Include="scripts\models\SnakeDirection.js.map" />
     <Content Include="scripts\tests\Snake.Test.js.map" />
     <Content Include="documentation\Class diagram.pptx" />
+    <Content Include="dist\axios\axios.map" />
+    <Content Include="dist\axios\axios.min.map" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -198,6 +202,7 @@
   </ProjectExtensions>
   <PropertyGroup>
     <PostBuildEvent>xcopy "$(SolutionDir)node_modules\bootstrap\dist" "$(SolutionDir)dist\bootstrap\" /D /E /R /K /Y 
-xcopy "$(SolutionDir)node_modules\requirejs\require.js" "$(SolutionDir)dist\requirejs\" /D /R /K /Y</PostBuildEvent>
+xcopy "$(SolutionDir)node_modules\requirejs\require.js" "$(SolutionDir)dist\requirejs\" /D /R /K /Y
+xcopy "$(SolutionDir)node_modules\axios\dist" "$(SolutionDir)dist\axios\" /D /R /K /Y</PostBuildEvent>
   </PropertyGroup>
 </Project>
