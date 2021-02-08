@@ -23,7 +23,7 @@ h1 {
 }
 
 .tab-pane {
-    padding-top: 12px;
+    padding-top: 32px;
 }
 
 /*ref: https://stackoverflow.com/questions/826782/how-to-disable-text-selection-highlighting*/
@@ -34,6 +34,18 @@ h1 {
     -ms-user-select: none; /* Internet Explorer/Edge */
     user-select: none; /* Non-prefixed version, currently
                           supported by Chrome, Edge, Opera and Firefox */
+}
+
+a {
+    text-decoration: none;
+}
+
+
+
+/* Home */
+
+.tab-content #home {
+    padding-top: 12px;
 }
 
 #board {
@@ -47,19 +59,18 @@ h1 {
 
 /* High Scores */
 
-#highscores table {
-    width: 80%;
-    margin-top: 20px;
+#HighScores-Table {
+    width: 100%;
     margin-left: auto;
     margin-right: auto;
 }
 
-#highscores table thead td {
-    background-color: lightgrey;
+#HighScores-Table thead td {
+    background-color: whitesmoke;
     font-weight: bold;
 }
 
-#highscores table td {
+#HighScores-Table td {
     border: solid 1px lightgray;
     padding-left: 5px;
 }
@@ -68,6 +79,5 @@ h1 {
 /* About */
 
 .FRALogo {
-    margin-top: 20px;
     margin-bottom: 20px;
 }

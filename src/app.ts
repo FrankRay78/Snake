@@ -1,8 +1,29 @@
 ﻿
 import Game = require('./models/Game');
-
+import axios = require('../dist/axios/axios');
 
 window.onload = () => {
+
+    axios.get('http://localhost/SnakeWebAPI/api/Snake/GetHighScores')
+        .then(function (response) {
+
+            // handle success
+
+            if (response && response.status === 200 && response.data && response.data.length > 0) {
+
+                const tableBody = document.getElementById('HighScores-TableBody');
+
+                const htmlRows = response.data.map((d) => {
+                    return '<tr><td>' + d.PlayerInitials + '</td><td>' + d.PlayerScore + '</td></tr>'
+                });
+
+                tableBody.innerHTML = htmlRows.join('');
+
+                document.getElementById('HighScores-Table').style.display = "table";
+
+                document.getElementById('NoHighScores').style.display = "none";
+            }
+        })
 
     const canvas = document.getElementById('board') as HTMLCanvasElement;
 
