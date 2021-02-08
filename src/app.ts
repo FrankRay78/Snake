@@ -4,12 +4,24 @@ import axios = require('../dist/axios/axios');
 
 window.onload = () => {
 
+    const canvas = document.getElementById('board') as HTMLCanvasElement;
+
+    const game = new Game(canvas);
+
+
+    //Game high scores
+
+    //TODO: code a proper config file option
+    //https://stackoverflow.com/questions/41467801/how-to-create-an-application-specific-config-file-for-typescript
+
     axios.get('http://localhost/SnakeWebAPI/api/Snake/GetHighScores')
         .then(function (response) {
 
             // handle success
 
             if (response && response.status === 200 && response.data && response.data.length > 0) {
+
+                //TODO: Cache high scores for use later
 
                 const tableBody = document.getElementById('HighScores-TableBody');
 
@@ -25,9 +37,8 @@ window.onload = () => {
             }
         })
 
-    const canvas = document.getElementById('board') as HTMLCanvasElement;
 
-    const game = new Game(canvas);
+    //Game event handlers
 
     canvas.addEventListener("click", () => game.Start(), false);
 
