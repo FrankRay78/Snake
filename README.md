@@ -31,6 +31,7 @@ A comprehensive suite of unit tests have been written against the Apple and Snak
 4. GitHub post commit hook to execute unit tests
 5. Persist high scores in a database with the help of a ASP.Net Web API service
 6. Give the snake a timer and make it autonomous; redraw the Html canvas on browser screen refresh event
+7. Implement a proper config file option ([example](https://stackoverflow.com/questions/41467801/how-to-create-an-application-specific-config-file-for-typescript))
 
 ### Resources
 The following resources came in handy when implementing the game:
