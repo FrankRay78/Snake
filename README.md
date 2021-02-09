@@ -53,8 +53,9 @@ The following resources came in handy when implementing the game:
 * [ts-jest](https://www.npmjs.com/package/ts-jest)
 * [Unit Testing with Typescript and Jest](https://dev.to/muhajirdev/unit-testing-with-typescript-and-jest-2gln)
 * [Jest - TypeScript Deep Dive](https://basarat.gitbook.io/typescript/intro-1/jest)
-##### TypeScript Language Reference
+##### TypeScript Development
 * [The TypeScript Handbook](https://www.typescriptlang.org/docs/handbook/intro.html)
+* [Using ESLint with TypeScript in 2019](https://43081j.com/2019/02/using-eslint-with-typescript)
 
 ### Credits
 Royalty free Snake logo courtesy of [CLEANPNG](https://www.cleanpng.com/png-snakes-and-ladders-game-android-clip-art-animated-129978/)
