@@ -7,23 +7,28 @@ import HighScore = require('./HighScore');
  */
 class HighScoresDummyProvider implements HighScoresProviderInterface {
 
+    private highScores: HighScore[];
+
+    constructor() {
+        this.highScores = [];
+
+        //Pre-seeds
+        this.highScores.push(new HighScore("FDR", 10));
+        this.highScores.push(new HighScore("HGR", 7));
+        this.highScores.push(new HighScore("SRR", 2));
+    }
+
     public GetHighScores(): HighScore[] {
-
-        let highScores = [];
-
-        highScores.push(new HighScore("FDR", 10));
-        highScores.push(new HighScore("HGR", 7));
-        highScores.push(new HighScore("SRR", 2));
-
-        return highScores;
+        return this.highScores;
     };
 
     public IsHighScore(score: number): boolean {
-        return (score >= 5);
+        //always allow the score to be added
+        return true;
     };
 
     SaveHighScore(initials: string, score: number) {
-        //do nothing
+        this.highScores.push(new HighScore(initials, score));
     };
 }
 

@@ -1,49 +1,33 @@
-define(["require", "exports", "./models/Game", "./models/HighScoresDummyProvider"], function (require, exports, Game, HighScoresDummyProvider) {
+define(["require", "exports", "./models/Game", "./models/HighScoresDummyProvider", "./models/HighScoresWebServiceProvider", "./models/HighScoresRenderer"], function (require, exports, Game, HighScoresDummyProvider, HighScoresWebServiceProvider, HighScoresRenderer) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    //import axios = require('../dist/axios/axios');
     window.onload = () => {
         const canvas = document.getElementById('board');
         const game = new Game(canvas);
-        //Game high scores
-        //nb. the high score tab is hidden in the html by default and will only be shown / high scores enabled
-        //if the highScoresProvider variable below has been initialised (ie. there is a working high scores provider)
         let highScoresProvider;
+        //Load the correct high scores provider here: (nb. can also be left blank)
         highScoresProvider = new HighScoresDummyProvider();
+        highScoresProvider = new HighScoresWebServiceProvider();
+        const highScoresRenderer = new HighScoresRenderer(highScoresProvider);
+        /*
+         * Game high scores
+         */
         if (highScoresProvider) {
-            const highScores = highScoresProvider.GetHighScores();
-            if (highScores && highScores.length > 0) {
-                //Display the existing high scores
-                const htmlRows = highScores.map((d) => {
-                    return '<tr><td>' + d.PlayerInitials + '</td><td>' + d.PlayerScore + '</td></tr>';
-                });
-                //Show the high scores table
-                document.getElementById('NoHighScores').style.display = "none";
-                document.getElementById('HighScores-TableBody').innerHTML = htmlRows.join('');
-                document.getElementById('HighScores-Table').style.display = "table";
-            }
+            //nb. the high score tab is hidden in the html by default and will only be shown / high scores enabled
+            //if the highScoresProvider variable below has been initialised (ie. there is a working high scores provider)
+            highScoresRenderer.UpdateHighScores();
             //Show the high scores tab
             document.getElementById('highscores-nav-item').removeAttribute('style');
             document.getElementById('highscores-tab-pane').removeAttribute('style');
+            //Wire up the game over handler
+            game.GameOverHandler = (score) => {
+                highScoresProvider.SaveHighScore("ADM", score);
+                highScoresRenderer.UpdateHighScores();
+            };
         }
-        //axios.get('http://localhost/SnakeWebAPI/api/Snake/GetHighScores')
-        //    .then(function (response) {
-        //        // handle success
-        //        if (response && response.status === 200 && response.data && response.data.length > 0) {
-        //            //TODO: Cache high scores for use later
-        //            const a: number[] = [];
-        //            const aSorted = a.sort((a, b) => a - b);
-        //            console.log(aSorted);
-        //            const tableBody = document.getElementById('HighScores-TableBody');
-        //            const htmlRows = response.data.map((d) => {
-        //                return '<tr><td>' + d.PlayerInitials + '</td><td>' + d.PlayerScore + '</td></tr>'
-        //            });
-        //            tableBody.innerHTML = htmlRows.join('');
-        //            document.getElementById('HighScores-Table').style.display = "table";
-        //            document.getElementById('NoHighScores').style.display = "none";
-        //        }
-        //    })
-        //Game event handlers
+        /*
+         * Game event handlers
+         */
         canvas.addEventListener("click", () => game.Start(), false);
         document.addEventListener("keydown", (e) => game.KeyPress(e.keyCode), false);
         canvas.addEventListener("mousedown", (e) => {

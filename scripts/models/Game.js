@@ -1,4 +1,4 @@
-define(["require", "exports", "./Apple", "./Snake", "./SnakeDirection", "./GameRenderer"], function (require, exports, Apple, Snake, SnakeDirection, GameRenderer) {
+define(["require", "exports", "./Apple", "./Snake", "./SnakeDirection", "./GameRenderer", "./GameOver"], function (require, exports, Apple, Snake, SnakeDirection, GameRenderer, GameOver) {
     "use strict";
     class Game {
         constructor(canvas, boardDimensionX = 15, boardDimensionY = 15) {
@@ -69,6 +69,8 @@ define(["require", "exports", "./Apple", "./Snake", "./SnakeDirection", "./GameR
                     this.Stop();
                     this.gameRenderer.DrawGameOver();
                     this.gameRenderer.DrawPlayArrow();
+                    if (e instanceof GameOver && this.GameOverHandler)
+                        this.GameOverHandler(e.Score);
                 }
             }, 200);
             this.isRunning = true;

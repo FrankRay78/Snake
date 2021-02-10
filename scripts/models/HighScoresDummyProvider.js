@@ -4,20 +4,24 @@ define(["require", "exports", "./HighScore"], function (require, exports, HighSc
      * A dummy implementation of a high scores provider for testing purposes
      */
     class HighScoresDummyProvider {
+        constructor() {
+            this.highScores = [];
+            //Pre-seeds
+            this.highScores.push(new HighScore("FDR", 10));
+            this.highScores.push(new HighScore("HGR", 7));
+            this.highScores.push(new HighScore("SRR", 2));
+        }
         GetHighScores() {
-            let highScores = [];
-            highScores.push(new HighScore("FDR", 10));
-            highScores.push(new HighScore("HGR", 7));
-            highScores.push(new HighScore("SRR", 2));
-            return highScores;
+            return this.highScores;
         }
         ;
         IsHighScore(score) {
-            return (score >= 5);
+            //always allow the score to be added
+            return true;
         }
         ;
         SaveHighScore(initials, score) {
-            //do nothing
+            this.highScores.push(new HighScore(initials, score));
         }
         ;
     }

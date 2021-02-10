@@ -3,6 +3,7 @@ import Apple = require('./Apple');
 import Snake = require('./Snake');
 import SnakeDirection = require('./SnakeDirection');
 import GameRenderer = require('./GameRenderer');
+import GameOver = require('./GameOver');
 
 class Game {
 
@@ -16,6 +17,9 @@ class Game {
     get IsRunning(): boolean {
         return this.isRunning;
     }
+
+    //This pointer to a handler gets called when the user finally busts out of the game
+    public GameOverHandler: (score: number) => void;
 
     constructor(canvas: HTMLCanvasElement, public boardDimensionX = 15, public boardDimensionY = 15) {
 
@@ -118,6 +122,9 @@ class Game {
                 this.gameRenderer.DrawGameOver();
 
                 this.gameRenderer.DrawPlayArrow();
+
+                if (e instanceof GameOver && this.GameOverHandler)
+                    this.GameOverHandler((e as GameOver).Score);
             }
 
 

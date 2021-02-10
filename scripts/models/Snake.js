@@ -1,4 +1,4 @@
-define(["require", "exports", "./SnakeDirection", "./SnakePosition"], function (require, exports, SnakeDirection, SnakePosition) {
+define(["require", "exports", "./SnakeDirection", "./SnakePosition", "./GameOver"], function (require, exports, SnakeDirection, SnakePosition, GameOver) {
     "use strict";
     class Snake {
         constructor(boardDimensionX, boardDimensionY, startingDirection, startingX, startingY, growIncrement, apple) {
@@ -9,9 +9,6 @@ define(["require", "exports", "./SnakeDirection", "./SnakePosition"], function (
             this.startingY = startingY;
             this.growIncrement = growIncrement;
             this.apple = apple;
-            //TODO: custom error class for game over
-            //ref: https://stackoverflow.com/questions/31626231/custom-error-class-in-typescript
-            this.GameOverMessage = 'Game Over';
         }
         set Direction(newDirection) {
             if (this.Length === 1) {
@@ -71,30 +68,30 @@ define(["require", "exports", "./SnakeDirection", "./SnakePosition"], function (
             switch (this.direction) {
                 case SnakeDirection.Up:
                     if (this.HeadPosition.currentY === 0)
-                        throw new Error(this.GameOverMessage);
+                        throw new GameOver(this.applesEaten);
                     if (this.SnakeOverlapsWith(this.HeadPosition.currentX, this.HeadPosition.currentY - 1))
-                        throw new Error(this.GameOverMessage);
+                        throw new GameOver(this.applesEaten);
                     this.UpdateSnakeGrowIfRequired(this.HeadPosition.currentX, this.HeadPosition.currentY - 1);
                     break;
                 case SnakeDirection.Down:
                     if (this.HeadPosition.currentY + 1 === this.boardDimensionY)
-                        throw new Error(this.GameOverMessage);
+                        throw new GameOver(this.applesEaten);
                     if (this.SnakeOverlapsWith(this.HeadPosition.currentX, this.HeadPosition.currentY + 1))
-                        throw new Error(this.GameOverMessage);
+                        throw new GameOver(this.applesEaten);
                     this.UpdateSnakeGrowIfRequired(this.HeadPosition.currentX, this.HeadPosition.currentY + 1);
                     break;
                 case SnakeDirection.Left:
                     if (this.HeadPosition.currentX === 0)
-                        throw new Error(this.GameOverMessage);
+                        throw new GameOver(this.applesEaten);
                     if (this.SnakeOverlapsWith(this.HeadPosition.currentX - 1, this.HeadPosition.currentY))
-                        throw new Error(this.GameOverMessage);
+                        throw new GameOver(this.applesEaten);
                     this.UpdateSnakeGrowIfRequired(this.HeadPosition.currentX - 1, this.HeadPosition.currentY);
                     break;
                 case SnakeDirection.Right:
                     if (this.HeadPosition.currentX + 1 === this.boardDimensionX)
-                        throw new Error(this.GameOverMessage);
+                        throw new GameOver(this.applesEaten);
                     if (this.SnakeOverlapsWith(this.HeadPosition.currentX + 1, this.HeadPosition.currentY))
-                        throw new Error(this.GameOverMessage);
+                        throw new GameOver(this.applesEaten);
                     this.UpdateSnakeGrowIfRequired(this.HeadPosition.currentX + 1, this.HeadPosition.currentY);
                     break;
                 default:
