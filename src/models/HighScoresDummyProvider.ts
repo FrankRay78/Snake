@@ -19,7 +19,11 @@ class HighScoresDummyProvider implements HighScoresProviderInterface {
     }
 
     public GetHighScores(): HighScore[] {
-        return this.highScores;
+
+        //Return the top 10 scores
+        return this.highScores.sort((a, b): number => {
+            return b.PlayerScore - a.PlayerScore
+        }).slice(0, 9);
     };
 
     public IsHighScore(score: number): boolean {

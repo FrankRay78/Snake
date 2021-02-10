@@ -12,7 +12,10 @@ define(["require", "exports", "./HighScore"], function (require, exports, HighSc
             this.highScores.push(new HighScore("SRR", 2));
         }
         GetHighScores() {
-            return this.highScores;
+            //Return the top 10 scores
+            return this.highScores.sort((a, b) => {
+                return b.PlayerScore - a.PlayerScore;
+            }).slice(0, 9);
         }
         ;
         IsHighScore(score) {

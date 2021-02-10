@@ -15,7 +15,7 @@ window.onload = () => {
 
     //Load the correct high scores provider here: (nb. can also be left blank)
     highScoresProvider = new HighScoresDummyProvider();
-    highScoresProvider = new HighScoresWebServiceProvider();
+    //highScoresProvider = new HighScoresWebServiceProvider();
 
     const highScoresRenderer = new HighScoresRenderer(highScoresProvider);
 

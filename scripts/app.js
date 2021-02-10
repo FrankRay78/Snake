@@ -1,4 +1,4 @@
-define(["require", "exports", "./models/Game", "./models/HighScoresDummyProvider", "./models/HighScoresWebServiceProvider", "./models/HighScoresRenderer"], function (require, exports, Game, HighScoresDummyProvider, HighScoresWebServiceProvider, HighScoresRenderer) {
+define(["require", "exports", "./models/Game", "./models/HighScoresDummyProvider", "./models/HighScoresRenderer"], function (require, exports, Game, HighScoresDummyProvider, HighScoresRenderer) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     window.onload = () => {
@@ -7,7 +7,7 @@ define(["require", "exports", "./models/Game", "./models/HighScoresDummyProvider
         let highScoresProvider;
         //Load the correct high scores provider here: (nb. can also be left blank)
         highScoresProvider = new HighScoresDummyProvider();
-        highScoresProvider = new HighScoresWebServiceProvider();
+        //highScoresProvider = new HighScoresWebServiceProvider();
         const highScoresRenderer = new HighScoresRenderer(highScoresProvider);
         /*
          * Game high scores
