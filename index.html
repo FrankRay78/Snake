@@ -38,17 +38,17 @@
 
             <ul class="nav nav-tabs" id="myTab" role="tablist">
                 <li class="nav-item" role="presentation">
-                    <a class="nav-link active" id="home-tab" data-bs-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Game</a>
+                    <a class="nav-link active" id="home-link" data-bs-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Game</a>
+                </li>
+                <li class="nav-item" role="presentation" id="highscores-nav-item" style="display: none;">
+                    <a class="nav-link" id="highscores-link" data-bs-toggle="tab" href="#highscores-tab-pane" role="tab" aria-controls="highscores-tab-pane" aria-selected="false">High Scores</a>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <a class="nav-link" id="highscores-tab" data-bs-toggle="tab" href="#highscores" role="tab" aria-controls="highscores" aria-selected="false">High Scores</a>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <a class="nav-link" id="contact-tab" data-bs-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">About</a>
+                    <a class="nav-link" id="contact-link" data-bs-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">About</a>
                 </li>
             </ul>
             <div class="tab-content" id="myTabContent">
-                <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-link">
 
                     <div id="instructions">
                         <p class="small">Move the snake around the board using arrow keys, mouse clicks or touch</p>
@@ -64,9 +64,9 @@
                     <p class="small">See the <a href="https://github.com/FrankRay78/Snake">GitHub Repo</a> readme file for technical details about the game development and backlog of outstanding items</p>
 
                 </div>
-                <div class="tab-pane fade" id="highscores" role="tabpanel" aria-labelledby="highscores-tab">
+                <div class="tab-pane fade" id="highscores-tab-pane" role="tabpanel" aria-labelledby="highscores-link" style="display: none;">
 
-                    <p id="NoHighScores"><a href="#" onclick="document.getElementById('home-tab').click();">Play the game</a> and become the first to submit a high score!</p>
+                    <p id="NoHighScores"><a href="#" onclick="document.getElementById('home-link').click();">Play the game</a> and become the first to submit a high score!</p>
 
                     <table id="HighScores-Table" style="display: none;">
                         <thead>
@@ -88,7 +88,7 @@
                     </table>
 
                 </div>
-                <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+                <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-link">
 
                     <img class="FRALogo" src="images/fra_logo_300_no-tag-line_transparentbg.png" />
 

@@ -9,6 +9,8 @@ define(["require", "exports", "./SnakeDirection", "./SnakePosition"], function (
             this.startingY = startingY;
             this.growIncrement = growIncrement;
             this.apple = apple;
+            //TODO: custom error class for game over
+            //ref: https://stackoverflow.com/questions/31626231/custom-error-class-in-typescript
             this.GameOverMessage = 'Game Over';
         }
         set Direction(newDirection) {

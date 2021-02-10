@@ -161,6 +161,9 @@
     <TypeScriptCompile Include="src\models\Apple.ts" />
     <TypeScriptCompile Include="src\models\GameRenderer.ts" />
     <TypeScriptCompile Include="src\models\Game.ts" />
+    <TypeScriptCompile Include="src\models\HighScore.ts" />
+    <TypeScriptCompile Include="src\models\HighScoresProviderInterface.ts" />
+    <TypeScriptCompile Include="src\models\HighScoresDummyProvider.ts" />
     <TypeScriptCompile Include="src\models\SnakePosition.ts" />
     <TypeScriptCompile Include="src\tests\Apple.Tests.ts" />
     <TypeScriptCompile Include="src\tests\Snake.Tests.ts" />

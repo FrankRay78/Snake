@@ -1,0 +1,1 @@
+{"version":3,"file":"HighScore.js","sourceRoot":"","sources":["../../src/models/HighScore.ts"],"names":[],"mappings":";;IACA,MAAM,SAAS;QAEX,YAAmB,cAAsB,EAAS,WAAmB;YAAlD,mBAAc,GAAd,cAAc,CAAQ;YAAS,gBAAW,GAAX,WAAW,CAAQ;QAErE,CAAC;KACJ;IAED,OAAS,SAAS,CAAC"}

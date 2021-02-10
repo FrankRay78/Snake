@@ -1,6 +1,8 @@
 ﻿
 import Game = require('./models/Game');
-import axios = require('../dist/axios/axios');
+import HighScoresProviderInterface = require('./models/HighScoresProviderInterface');
+import HighScoresDummyProvider = require('./models/HighScoresDummyProvider');
+//import axios = require('../dist/axios/axios');
 
 window.onload = () => {
 
@@ -11,31 +13,63 @@ window.onload = () => {
 
     //Game high scores
 
-    //TODO: code a proper config file option
-    //https://stackoverflow.com/questions/41467801/how-to-create-an-application-specific-config-file-for-typescript
+    //nb. the high score tab is hidden in the html by default and will only be shown / high scores enabled
+    //if the highScoresProvider variable below has been initialised (ie. there is a working high scores provider)
 
-    axios.get('http://localhost/SnakeWebAPI/api/Snake/GetHighScores')
-        .then(function (response) {
+    let highScoresProvider: HighScoresProviderInterface;
 
-            // handle success
+    highScoresProvider = new HighScoresDummyProvider();
 
-            if (response && response.status === 200 && response.data && response.data.length > 0) {
+    if (highScoresProvider) {
 
-                //TODO: Cache high scores for use later
+        const highScores = highScoresProvider.GetHighScores();
 
-                const tableBody = document.getElementById('HighScores-TableBody');
+        if (highScores && highScores.length > 0) {
 
-                const htmlRows = response.data.map((d) => {
-                    return '<tr><td>' + d.PlayerInitials + '</td><td>' + d.PlayerScore + '</td></tr>'
-                });
+            //Display the existing high scores
 
-                tableBody.innerHTML = htmlRows.join('');
+            const htmlRows = highScores.map((d) => {
+                return '<tr><td>' + d.PlayerInitials + '</td><td>' + d.PlayerScore + '</td></tr>'
+            });
 
-                document.getElementById('HighScores-Table').style.display = "table";
+            //Show the high scores table
+            document.getElementById('NoHighScores').style.display = "none";
+            document.getElementById('HighScores-TableBody').innerHTML = htmlRows.join('');
+            document.getElementById('HighScores-Table').style.display = "table";
+        }
 
-                document.getElementById('NoHighScores').style.display = "none";
-            }
-        })
+        //Show the high scores tab
+        document.getElementById('highscores-nav-item').removeAttribute('style');
+        document.getElementById('highscores-tab-pane').removeAttribute('style');
+    }
+
+
+    //axios.get('http://localhost/SnakeWebAPI/api/Snake/GetHighScores')
+    //    .then(function (response) {
+
+    //        // handle success
+
+    //        if (response && response.status === 200 && response.data && response.data.length > 0) {
+
+    //            //TODO: Cache high scores for use later
+
+    //            const a: number[] = [];
+    //            const aSorted = a.sort((a, b) => a - b);
+    //            console.log(aSorted);
+
+    //            const tableBody = document.getElementById('HighScores-TableBody');
+
+    //            const htmlRows = response.data.map((d) => {
+    //                return '<tr><td>' + d.PlayerInitials + '</td><td>' + d.PlayerScore + '</td></tr>'
+    //            });
+
+    //            tableBody.innerHTML = htmlRows.join('');
+
+    //            document.getElementById('HighScores-Table').style.display = "table";
+
+    //            document.getElementById('NoHighScores').style.display = "none";
+    //        }
+    //    })
 
 
     //Game event handlers

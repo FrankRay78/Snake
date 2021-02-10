@@ -5,6 +5,8 @@ import Apple = require('./Apple');
 
 class Snake {
 
+    //TODO: custom error class for game over
+    //ref: https://stackoverflow.com/questions/31626231/custom-error-class-in-typescript
     private readonly GameOverMessage: string = 'Game Over';
 
     public onAppleEaten?: (applesEaten: number) => void;
