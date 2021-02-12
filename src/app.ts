@@ -4,6 +4,9 @@ import HighScoresProviderInterface = require('./models/HighScoresProviderInterfa
 import HighScoresDummyProvider = require('./models/HighScoresDummyProvider');
 import HighScoresWebServiceProvider = require('./models/HighScoresWebServiceProvider');
 import HighScoresRenderer = require('./models/HighScoresRenderer');
+//import * as $ from 'jquery';
+//import * as bootstrap from "bootstrap";
+import bootstrap = require('../dist/bootstrap/js/bootstrap.bundle');
 
 window.onload = () => {
 
@@ -35,13 +38,33 @@ window.onload = () => {
         document.getElementById('highscores-nav-item').removeAttribute('style');
         document.getElementById('highscores-tab-pane').removeAttribute('style');
 
-        //Wire up the game over handler
-        game.GameOverHandler = (score: number) => {
+        //game.GameOverHandler = (score: number) => {
 
-            highScoresProvider.SaveHighScore("ADM", score);
+        //    //Game over handler
 
-            highScoresRenderer.UpdateHighScores();
-        };
+        //    if (highScoresProvider.IsHighScore(score)) {
+
+        //        //Show the player initial modal dialog
+
+        //        (document.getElementById('txtPlayerInitials') as HTMLInputElement).value = '';
+
+        //        //https://stackoverflow.com/questions/62827002/bootstrap-v5-manually-call-a-modal-mymodal-show-not-working-vanilla-javascrip
+        //        const myModal = new bootstrap.Modal(document.getElementById("playerInitialsModal"));
+        //        myModal.show();
+        //    }
+        //};
+
+        //document.getElementById("btnSaveHighScore").click = () => {
+
+        //    //Save high score handler
+
+        //    const initials = (document.getElementById('txtPlayerInitials') as HTMLInputElement).value;
+        //    const score = Number((document.getElementById('appleCount') as HTMLSpanElement).innerText);
+
+        //    highScoresProvider.SaveHighScore(initials, score);
+
+        //    highScoresRenderer.UpdateHighScores();
+        //};
     }
 
 

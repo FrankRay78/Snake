@@ -19,11 +19,23 @@ define(["require", "exports", "./models/Game", "./models/HighScoresDummyProvider
             //Show the high scores tab
             document.getElementById('highscores-nav-item').removeAttribute('style');
             document.getElementById('highscores-tab-pane').removeAttribute('style');
-            //Wire up the game over handler
-            game.GameOverHandler = (score) => {
-                highScoresProvider.SaveHighScore("ADM", score);
-                highScoresRenderer.UpdateHighScores();
-            };
+            //game.GameOverHandler = (score: number) => {
+            //    //Game over handler
+            //    if (highScoresProvider.IsHighScore(score)) {
+            //        //Show the player initial modal dialog
+            //        (document.getElementById('txtPlayerInitials') as HTMLInputElement).value = '';
+            //        //https://stackoverflow.com/questions/62827002/bootstrap-v5-manually-call-a-modal-mymodal-show-not-working-vanilla-javascrip
+            //        const myModal = new bootstrap.Modal(document.getElementById("playerInitialsModal"));
+            //        myModal.show();
+            //    }
+            //};
+            //document.getElementById("btnSaveHighScore").click = () => {
+            //    //Save high score handler
+            //    const initials = (document.getElementById('txtPlayerInitials') as HTMLInputElement).value;
+            //    const score = Number((document.getElementById('appleCount') as HTMLSpanElement).innerText);
+            //    highScoresProvider.SaveHighScore(initials, score);
+            //    highScoresRenderer.UpdateHighScores();
+            //};
         }
         /*
          * Game event handlers

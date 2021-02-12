@@ -42,8 +42,15 @@ a {
 
 
 
-/* Home */
+#playerInitialsModal {
+    width: 250px;
+    left: auto;
+    margin-left: 25px;
+    top: auto;
+    margin-top: 50px;
+}
 
+/* Home */
 .tab-content #home {
     padding-top: 12px;
 }

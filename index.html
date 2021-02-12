@@ -50,6 +50,27 @@
             <div class="tab-content" id="myTabContent">
                 <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-link">
 
+                    <button type="button" onclick="$('#playerInitialsModal').modal('toggle');">Launch modal</button>
+
+                    <!-- Ask player for their initials so their highscore can be saved -->
+                    <div class="modal" id="playerInitialsModal" tabindex="-1" role="dialog">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">New High Score!</h5>
+                                </div>
+                                <div class="modal-body">
+                                    <span>Please enter your initials: </span><input id="txtPlayerInitials" type="text" maxlength="3" style="text-transform:uppercase" />
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" onclick="$('#playerInitialsModal').modal('hide');">Close</button>
+                                    <button id="btnSaveHighScore" type="button" class="btn btn-primary" onclick="$('#playerInitialsModal').modal('hide');">Save</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
                     <div id="instructions">
                         <p class="small">Move the snake around the board using arrow keys, mouse clicks or touch</p>
                         <p class="small" style="text-align: center; font-weight:bold;">Apples eaten: <span id="appleCount"></span></p>
@@ -104,6 +125,7 @@
     </div>
 
     <!-- External scripts to load -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="dist/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="dist/requirejs/require.js" data-main="scripts/app.js"></script>
 </body>
