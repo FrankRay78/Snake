@@ -80,6 +80,10 @@
     <Content Include="dist\bootstrap\js\bootstrap.esm.min.js" />
     <Content Include="dist\bootstrap\js\bootstrap.js" />
     <Content Include="dist\bootstrap\js\bootstrap.min.js" />
+    <Content Include="dist\jquery\jquery.js" />
+    <Content Include="dist\jquery\jquery.min.js" />
+    <Content Include="dist\jquery\jquery.slim.js" />
+    <Content Include="dist\jquery\jquery.slim.min.js" />
     <Content Include="dist\requirejs\require.js" />
     <Content Include="documentation\Class diagram - cropped - resized 800 width.png" />
     <Content Include="documentation\Class diagram - cropped.png" />
@@ -167,6 +171,8 @@
     <Content Include="scripts\tests\Snake.Tests.js.map" />
     <Content Include="scripts\tests\SnakeEatsApple.Tests.js.map" />
     <Content Include="scripts\tests\SnakePosition.Tests.js.map" />
+    <Content Include="dist\jquery\jquery.min.map" />
+    <Content Include="dist\jquery\jquery.slim.min.map" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -233,6 +239,7 @@
   <PropertyGroup>
     <PostBuildEvent>xcopy "$(SolutionDir)node_modules\bootstrap\dist" "$(SolutionDir)dist\bootstrap\" /D /E /R /K /Y 
 xcopy "$(SolutionDir)node_modules\requirejs\require.js" "$(SolutionDir)dist\requirejs\" /D /R /K /Y
-xcopy "$(SolutionDir)node_modules\axios\dist" "$(SolutionDir)dist\axios\" /D /R /K /Y</PostBuildEvent>
+xcopy "$(SolutionDir)node_modules\axios\dist" "$(SolutionDir)dist\axios\" /D /R /K /Y
+xcopy "$(SolutionDir)node_modules\jquery\dist" "$(SolutionDir)dist\jquery\" /D /R /K /Y</PostBuildEvent>
   </PropertyGroup>
 </Project>

@@ -1,59 +1,42 @@
-define(["require", "exports", "./models/Game", "./models/HighScoresDummyProvider", "./models/HighScoresRenderer", "../dist/bootstrap/js/bootstrap.bundle"], function (require, exports, Game, HighScoresDummyProvider, HighScoresRenderer, bootstrap) {
+define(["require", "exports", "./models/Game", "./models/HighScoresDummyProvider", "./models/HighScoresRenderer"], function (require, exports, Game, HighScoresDummyProvider, HighScoresRenderer) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    //import jquery = require('../dist/jquery/jquery');
+    //import bootstrap = require('../dist/bootstrap/js/bootstrap.bundle');
     window.onload = () => {
         const canvas = document.getElementById('board');
         const game = new Game(canvas);
-        let highScoresProvider;
-        //Load the correct high scores provider here: (nb. can also be left blank)
-        highScoresProvider = new HighScoresDummyProvider();
-        //highScoresProvider = new HighScoresWebServiceProvider();
-        const highScoresRenderer = new HighScoresRenderer(highScoresProvider);
         /*
-         * Game high scores
-         */
-        if (highScoresProvider) {
-            //nb. the high score tab is hidden in the html by default and will only be shown / high scores enabled
-            //if the highScoresProvider variable below has been initialised (ie. there is a working high scores provider)
+        * Game high scores
+        */
+        //Load the correct high scores provider here:
+        const highScoresProvider = new HighScoresDummyProvider();
+        //const highScoresProvider: HighScoresProviderInterface = new HighScoresWebServiceProvider();
+        const highScoresRenderer = new HighScoresRenderer(highScoresProvider);
+        highScoresRenderer.UpdateHighScores();
+        game.GameOverHandler = (score) => {
+            //Game over handler
+            if (highScoresProvider.IsHighScore(score)) {
+                //Show the player initial modal dialog
+                document.getElementById('txtPlayerInitials').value = '';
+                //HACK: Bootstrap 5 modal
+                //for some reason beyond my ability, the only way I can get the bootstrap 5 modal to behave properly
+                //is to manipulate it from javascript on the html page which is marshalled through the jQuery language!!
+                //ref: https://stackoverflow.com/questions/62111962/in-vs-code-can-i-validate-my-javascript-but-ignore-a-specific-typescript-error
+                // @ts-ignore
+                OpenModalDialog();
+            }
+        };
+        document.getElementById("btnSaveHighScore").onclick = () => {
+            //Save high score handler
+            const initials = document.getElementById('txtPlayerInitials').value;
+            const score = Number(document.getElementById('appleCount').innerText);
+            highScoresProvider.SaveHighScore(initials, score);
             highScoresRenderer.UpdateHighScores();
-            //Show the high scores tab
-            document.getElementById('highscores-nav-item').removeAttribute('style');
-            document.getElementById('highscores-tab-pane').removeAttribute('style');
-            game.GameOverHandler = (score) => {
-                //Game over handler
-                if (highScoresProvider.IsHighScore(score)) {
-                    //Show the player initial modal dialog
-                    document.getElementById('txtPlayerInitials').value = '';
-                    //https://getbootstrap.com/docs/5.0/components/modal/
-                    //https://stackoverflow.com/questions/62827002/bootstrap-v5-manually-call-a-modal-mymodal-show-not-working-vanilla-javascrip
-                    const myModal = new bootstrap.Modal(document.getElementById("playerInitialsModal"));
-                    myModal.show();
-                    //https://getbootstrap.com/docs/5.0/components/modal/
-                    //let myModal = new bootstrap.Modal.getInstance(document.getElementById("playerInitialsModal"));
-                    //if (!myModal) {
-                    //    myModal = new bootstrap.Modal(document.getElementById("playerInitialsModal"));
-                    //}
-                }
-            };
-            //document.getElementById("btnSaveHighScore").addEventListener("click", () => {
-            //    //Save high score handler
-            //    const initials = (document.getElementById('txtPlayerInitials') as HTMLInputElement).value;
-            //    const score = Number((document.getElementById('appleCount') as HTMLSpanElement).innerText);
-            //    highScoresProvider.SaveHighScore(initials, score);
-            //    highScoresRenderer.UpdateHighScores();
-            //    const myModal = new bootstrap.Modal(document.getElementById("playerInitialsModal"));
-            //    myModal.hide();
-            //}, false);
-            document.getElementById("btnSaveHighScore").onclick = () => {
-                //Save high score handler
-                const initials = document.getElementById('txtPlayerInitials').value;
-                const score = Number(document.getElementById('appleCount').innerText);
-                highScoresProvider.SaveHighScore(initials, score);
-                highScoresRenderer.UpdateHighScores();
-                const myModal = new bootstrap.Modal.getInstance(document.getElementById("playerInitialsModal"));
-                myModal.dispose();
-            };
-        }
+            //HACK: Bootstrap 5 modal (SEE COMMENT ABOVE)
+            // @ts-ignore
+            CloseModalDialog();
+        };
         /*
          * Game event handlers
          */

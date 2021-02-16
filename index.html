@@ -33,7 +33,7 @@
     <div class="container">
         <main role="main" class="pb-3">
             <!-- BODY START -->
-            
+
             <!--<button type="button" onclick="$('#playerInitialsModal').modal('toggle');">Launch modal</button>-->
 
             <!-- Ask player for their initials so their highscore can be saved -->
@@ -44,11 +44,11 @@
                             <h5 class="modal-title">New High Score!</h5>
                         </div>
                         <div class="modal-body">
-                            <span>Please enter your initials: </span><input id="txtPlayerInitials" type="text" maxlength="3" style="text-transform:uppercase" />
+                            <span>Please enter your initials: </span><input id="txtPlayerInitials" type="text" maxlength="3" autocomplete="off" style="text-transform:uppercase" onkeydown="return alphaOnly(event);" />
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="btnSaveHighScore">Save</button>
+                            <button type="button" class="btn btn-primary" id="btnSaveHighScore">Save</button>
                         </div>
                     </div>
                 </div>
@@ -60,8 +60,8 @@
                 <li class="nav-item" role="presentation">
                     <a class="nav-link active" id="home-link" data-bs-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Game</a>
                 </li>
-                <li class="nav-item" role="presentation" id="highscores-nav-item" style="display: none;">
-                    <a class="nav-link" id="highscores-link" data-bs-toggle="tab" href="#highscores-tab-pane" role="tab" aria-controls="highscores-tab-pane" aria-selected="false">High Scores</a>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link" id="highscores-link" data-bs-toggle="tab" href="#highscores" role="tab" aria-controls="highscores" aria-selected="false">High Scores</a>
                 </li>
                 <li class="nav-item" role="presentation">
                     <a class="nav-link" id="contact-link" data-bs-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">About</a>
@@ -84,7 +84,7 @@
                     <p class="small">See the <a href="https://github.com/FrankRay78/Snake">GitHub Repo</a> readme file for technical details about the game development and backlog of outstanding items</p>
 
                 </div>
-                <div class="tab-pane fade" id="highscores-tab-pane" role="tabpanel" aria-labelledby="highscores-link" style="display: none;">
+                <div class="tab-pane fade" id="highscores" role="tabpanel" aria-labelledby="highscores-link">
 
                     <p id="NoHighScores"><a href="#" onclick="document.getElementById('home-link').click();">Play the game</a> and become the first to submit a high score!</p>
 
@@ -96,14 +96,7 @@
                             </tr>
                         </thead>
                         <tbody id="HighScores-TableBody">
-                            <!--<tr>
-                        <td>FDR</td>
-                        <td>100</td>
-                    </tr>
-                    <tr>
-                        <td>HGR</td>
-                        <td>70</td>
-                    </tr>-->
+                            <!--nb. will be filled in by HighScoresProvider-->
                         </tbody>
                     </table>
 
@@ -124,8 +117,24 @@
     </div>
 
     <!-- External scripts to load -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="dist/jquery/jquery.min.js"></script>
     <script src="dist/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="dist/requirejs/require.js" data-main="scripts/app.js"></script>
+
+    <script>
+        <!-- ref: https://stackoverflow.com/questions/19508183/how-to-force-input-to-only-allow-alpha-letters -->
+        function alphaOnly(event) {
+            var key = event.keyCode;
+            return ((key >= 65 && key <= 90) || key == 8);
+        };
+
+        function OpenModalDialog() {
+            $('#playerInitialsModal').modal('show');
+        }
+
+        function CloseModalDialog() {
+            $('#playerInitialsModal').modal('hide');
+        }
+    </script>
 </body>
 </html>

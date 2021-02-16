@@ -4,9 +4,8 @@ import HighScoresProviderInterface = require('./models/HighScoresProviderInterfa
 import HighScoresDummyProvider = require('./models/HighScoresDummyProvider');
 import HighScoresWebServiceProvider = require('./models/HighScoresWebServiceProvider');
 import HighScoresRenderer = require('./models/HighScoresRenderer');
-//import * as $ from 'jquery';
-//import * as bootstrap from "bootstrap";
-import bootstrap = require('../dist/bootstrap/js/bootstrap.bundle');
+//import jquery = require('../dist/jquery/jquery');
+//import bootstrap = require('../dist/bootstrap/js/bootstrap.bundle');
 
 window.onload = () => {
 
@@ -14,88 +13,53 @@ window.onload = () => {
 
     const game = new Game(canvas);
 
-    let highScoresProvider: HighScoresProviderInterface;
 
-    //Load the correct high scores provider here: (nb. can also be left blank)
-    highScoresProvider = new HighScoresDummyProvider();
-    //highScoresProvider = new HighScoresWebServiceProvider();
+    /*
+    * Game high scores
+    */
+
+    //Load the correct high scores provider here:
+    const highScoresProvider: HighScoresProviderInterface = new HighScoresDummyProvider();
+    //const highScoresProvider: HighScoresProviderInterface = new HighScoresWebServiceProvider();
 
     const highScoresRenderer = new HighScoresRenderer(highScoresProvider);
 
+    highScoresRenderer.UpdateHighScores();
 
-    /*
-     * Game high scores
-     */
+    game.GameOverHandler = (score: number) => {
 
-    if (highScoresProvider) {
+        //Game over handler
 
-        //nb. the high score tab is hidden in the html by default and will only be shown / high scores enabled
-        //if the highScoresProvider variable below has been initialised (ie. there is a working high scores provider)
+        if (highScoresProvider.IsHighScore(score)) {
+
+            //Show the player initial modal dialog
+
+            (document.getElementById('txtPlayerInitials') as HTMLInputElement).value = '';
+
+            //HACK: Bootstrap 5 modal
+            //for some reason beyond my ability, the only way I can get the bootstrap 5 modal to behave properly
+            //is to manipulate it from javascript on the html page which is marshalled through the jQuery language!!
+            //ref: https://stackoverflow.com/questions/62111962/in-vs-code-can-i-validate-my-javascript-but-ignore-a-specific-typescript-error
+            // @ts-ignore
+            OpenModalDialog();
+        }
+    };
+
+    document.getElementById("btnSaveHighScore").onclick = () => {
+
+        //Save high score handler
+
+        const initials = (document.getElementById('txtPlayerInitials') as HTMLInputElement).value;
+        const score = Number((document.getElementById('appleCount') as HTMLSpanElement).innerText);
+
+        highScoresProvider.SaveHighScore(initials, score);
 
         highScoresRenderer.UpdateHighScores();
 
-        //Show the high scores tab
-        document.getElementById('highscores-nav-item').removeAttribute('style');
-        document.getElementById('highscores-tab-pane').removeAttribute('style');
-
-        game.GameOverHandler = (score: number) => {
-
-            //Game over handler
-
-            if (highScoresProvider.IsHighScore(score)) {
-
-                //Show the player initial modal dialog
-
-                (document.getElementById('txtPlayerInitials') as HTMLInputElement).value = '';
-
-                //https://getbootstrap.com/docs/5.0/components/modal/
-                //https://stackoverflow.com/questions/62827002/bootstrap-v5-manually-call-a-modal-mymodal-show-not-working-vanilla-javascrip
-                const myModal = new bootstrap.Modal(document.getElementById("playerInitialsModal"));
-                myModal.show();
-
-                //https://getbootstrap.com/docs/5.0/components/modal/
-
-                //let myModal = new bootstrap.Modal.getInstance(document.getElementById("playerInitialsModal"));
-                //if (!myModal) {
-                //    myModal = new bootstrap.Modal(document.getElementById("playerInitialsModal"));
-                //}
-            }
-        };
-
-        //document.getElementById("btnSaveHighScore").addEventListener("click", () => {
-
-        //    //Save high score handler
-
-        //    const initials = (document.getElementById('txtPlayerInitials') as HTMLInputElement).value;
-        //    const score = Number((document.getElementById('appleCount') as HTMLSpanElement).innerText);
-
-        //    highScoresProvider.SaveHighScore(initials, score);
-
-        //    highScoresRenderer.UpdateHighScores();
-
-        //    const myModal = new bootstrap.Modal(document.getElementById("playerInitialsModal"));
-        //    myModal.hide();
-
-        //}, false);
-
-        document.getElementById("btnSaveHighScore").onclick = () => {
-
-            //Save high score handler
-
-            const initials = (document.getElementById('txtPlayerInitials') as HTMLInputElement).value;
-            const score = Number((document.getElementById('appleCount') as HTMLSpanElement).innerText);
-
-            highScoresProvider.SaveHighScore(initials, score);
-
-            highScoresRenderer.UpdateHighScores();
-
-            //const myModal = new bootstrap.Modal.getInstance(document.getElementById("playerInitialsModal"));
-            //myModal.dispose();
-
-            //https://stackoverflow.com/questions/22056147/bootstrap-modal-backdrop-remaining
-            //https://stackoverflow.com/questions/23677765/bootstrap-modal-hide-is-not-working
-        };
-    }
+        //HACK: Bootstrap 5 modal (SEE COMMENT ABOVE)
+        // @ts-ignore
+        CloseModalDialog();
+    };
 
 
     /*

@@ -12,7 +12,7 @@ class HighScoresDummyProvider implements HighScoresProviderInterface {
     constructor() {
         this.highScores = [];
 
-        //Pre-seeds
+        ////Pre-seeds
         this.highScores.push(new HighScore("FDR", 10));
         this.highScores.push(new HighScore("HGR", 7));
         this.highScores.push(new HighScore("SRR", 2));
