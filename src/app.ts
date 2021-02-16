@@ -38,23 +38,31 @@ window.onload = () => {
         document.getElementById('highscores-nav-item').removeAttribute('style');
         document.getElementById('highscores-tab-pane').removeAttribute('style');
 
-        //game.GameOverHandler = (score: number) => {
+        game.GameOverHandler = (score: number) => {
 
-        //    //Game over handler
+            //Game over handler
 
-        //    if (highScoresProvider.IsHighScore(score)) {
+            if (highScoresProvider.IsHighScore(score)) {
 
-        //        //Show the player initial modal dialog
+                //Show the player initial modal dialog
 
-        //        (document.getElementById('txtPlayerInitials') as HTMLInputElement).value = '';
+                (document.getElementById('txtPlayerInitials') as HTMLInputElement).value = '';
 
-        //        //https://stackoverflow.com/questions/62827002/bootstrap-v5-manually-call-a-modal-mymodal-show-not-working-vanilla-javascrip
-        //        const myModal = new bootstrap.Modal(document.getElementById("playerInitialsModal"));
-        //        myModal.show();
-        //    }
-        //};
+                //https://getbootstrap.com/docs/5.0/components/modal/
+                //https://stackoverflow.com/questions/62827002/bootstrap-v5-manually-call-a-modal-mymodal-show-not-working-vanilla-javascrip
+                const myModal = new bootstrap.Modal(document.getElementById("playerInitialsModal"));
+                myModal.show();
 
-        //document.getElementById("btnSaveHighScore").click = () => {
+                //https://getbootstrap.com/docs/5.0/components/modal/
+
+                //let myModal = new bootstrap.Modal.getInstance(document.getElementById("playerInitialsModal"));
+                //if (!myModal) {
+                //    myModal = new bootstrap.Modal(document.getElementById("playerInitialsModal"));
+                //}
+            }
+        };
+
+        //document.getElementById("btnSaveHighScore").addEventListener("click", () => {
 
         //    //Save high score handler
 
@@ -64,7 +72,29 @@ window.onload = () => {
         //    highScoresProvider.SaveHighScore(initials, score);
 
         //    highScoresRenderer.UpdateHighScores();
-        //};
+
+        //    const myModal = new bootstrap.Modal(document.getElementById("playerInitialsModal"));
+        //    myModal.hide();
+
+        //}, false);
+
+        document.getElementById("btnSaveHighScore").onclick = () => {
+
+            //Save high score handler
+
+            const initials = (document.getElementById('txtPlayerInitials') as HTMLInputElement).value;
+            const score = Number((document.getElementById('appleCount') as HTMLSpanElement).innerText);
+
+            highScoresProvider.SaveHighScore(initials, score);
+
+            highScoresRenderer.UpdateHighScores();
+
+            //const myModal = new bootstrap.Modal.getInstance(document.getElementById("playerInitialsModal"));
+            //myModal.dispose();
+
+            //https://stackoverflow.com/questions/22056147/bootstrap-modal-backdrop-remaining
+            //https://stackoverflow.com/questions/23677765/bootstrap-modal-hide-is-not-working
+        };
     }
 
 

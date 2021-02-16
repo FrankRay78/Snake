@@ -27,12 +27,19 @@ class HighScoresDummyProvider implements HighScoresProviderInterface {
     };
 
     public IsHighScore(score: number): boolean {
-        //always allow the score to be added
-        return true;
+        //Accept all scores greater than 0
+        return (score && score > 0);
     };
 
     SaveHighScore(initials: string, score: number) {
-        this.highScores.push(new HighScore(initials, score));
+
+        if (this.IsHighScore(score) &&
+            initials && initials.length > 0 &&
+            initials.length < 4) {
+
+            //Valid initials and score
+            this.highScores.push(new HighScore(initials.toUpperCase(), score));
+        }
     };
 }
 
