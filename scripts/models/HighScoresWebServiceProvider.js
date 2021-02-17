@@ -19,11 +19,6 @@ define(["require", "exports", "../../dist/axios/axios"], function (require, expo
             return highScores;
         }
         ;
-        IsHighScore(score) {
-            //TODO
-            return true;
-        }
-        ;
         SaveHighScore(initials, score) {
             //TODO
         }

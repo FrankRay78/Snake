@@ -1,9 +1,9 @@
 ﻿
 import Game = require('./models/Game');
 import HighScoresProviderInterface = require('./models/HighScoresProviderInterface');
-import HighScoresDummyProvider = require('./models/HighScoresDummyProvider');
+import HighScoresMemoryProvider = require('./models/HighScoresMemoryProvider');
 import HighScoresWebServiceProvider = require('./models/HighScoresWebServiceProvider');
-import HighScoresRenderer = require('./models/HighScoresRenderer');
+import HighScores = require('./models/HighScores');
 //import jquery = require('../dist/jquery/jquery');
 //import bootstrap = require('../dist/bootstrap/js/bootstrap.bundle');
 
@@ -19,18 +19,18 @@ window.onload = () => {
     */
 
     //Load the correct high scores provider here:
-    const highScoresProvider: HighScoresProviderInterface = new HighScoresDummyProvider();
+    const highScoresProvider: HighScoresProviderInterface = new HighScoresMemoryProvider();
     //const highScoresProvider: HighScoresProviderInterface = new HighScoresWebServiceProvider();
 
-    const highScoresRenderer = new HighScoresRenderer(highScoresProvider);
+    const highScores = new HighScores(highScoresProvider);
 
-    highScoresRenderer.UpdateHighScores();
+    highScores.DrawHighScores();
 
     game.GameOverHandler = (score: number) => {
 
         //Game over handler
 
-        if (highScoresProvider.IsHighScore(score)) {
+        if (highScores.IsHighScore(score)) {
 
             //Show the player initial modal dialog
 
@@ -52,9 +52,8 @@ window.onload = () => {
         const initials = (document.getElementById('txtPlayerInitials') as HTMLInputElement).value;
         const score = Number((document.getElementById('appleCount') as HTMLSpanElement).innerText);
 
-        highScoresProvider.SaveHighScore(initials, score);
-
-        highScoresRenderer.UpdateHighScores();
+        highScores.SaveHighScore(initials, score);
+        highScores.DrawHighScores();
 
         //HACK: Bootstrap 5 modal (SEE COMMENT ABOVE)
         // @ts-ignore

@@ -132,10 +132,8 @@
     <Content Include="scripts\models\GameRenderer.js" />
     <Content Include="scripts\models\HighScore.js" />
     <Content Include="scripts\models\HighScores.js" />
-    <Content Include="scripts\models\HighScoresDummyProvider.js" />
-    <Content Include="scripts\models\HighScoresInterface.js" />
+    <Content Include="scripts\models\HighScoresMemoryProvider.js" />
     <Content Include="scripts\models\HighScoresProviderInterface.js" />
-    <Content Include="scripts\models\HighScoresRenderer.js" />
     <Content Include="scripts\models\HighScoresWebServiceProvider.js" />
     <Content Include="scripts\models\Snake.js" />
     <Content Include="scripts\models\SnakeDirection.js" />
@@ -161,10 +159,7 @@
     <Content Include="scripts\models\GameRenderer.js.map" />
     <Content Include="scripts\models\HighScore.js.map" />
     <Content Include="scripts\models\HighScores.js.map" />
-    <Content Include="scripts\models\HighScoresDummyProvider.js.map" />
-    <Content Include="scripts\models\HighScoresInterface.js.map" />
     <Content Include="scripts\models\HighScoresProviderInterface.js.map" />
-    <Content Include="scripts\models\HighScoresRenderer.js.map" />
     <Content Include="scripts\models\HighScoresWebServiceProvider.js.map" />
     <Content Include="scripts\models\SnakePosition.js.map" />
     <Content Include="scripts\tests\Apple.Tests.js.map" />
@@ -173,6 +168,7 @@
     <Content Include="scripts\tests\SnakePosition.Tests.js.map" />
     <Content Include="dist\jquery\jquery.min.map" />
     <Content Include="dist\jquery\jquery.slim.min.map" />
+    <Content Include="scripts\models\HighScoresMemoryProvider.js.map" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -193,9 +189,9 @@
     <TypeScriptCompile Include="src\models\GameRenderer.ts" />
     <TypeScriptCompile Include="src\models\Game.ts" />
     <TypeScriptCompile Include="src\models\HighScore.ts" />
+    <TypeScriptCompile Include="src\models\HighScores.ts" />
     <TypeScriptCompile Include="src\models\HighScoresProviderInterface.ts" />
-    <TypeScriptCompile Include="src\models\HighScoresDummyProvider.ts" />
-    <TypeScriptCompile Include="src\models\HighScoresRenderer.ts" />
+    <TypeScriptCompile Include="src\models\HighScoresMemoryProvider.ts" />
     <TypeScriptCompile Include="src\models\HighScoresWebServiceProvider.ts" />
     <TypeScriptCompile Include="src\models\SnakePosition.ts" />
     <TypeScriptCompile Include="src\tests\Apple.Tests.ts" />

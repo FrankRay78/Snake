@@ -30,11 +30,6 @@ class HighScoresWebServiceProvider implements HighScoresProviderInterface {
         return highScores;
     };
 
-    public IsHighScore(score: number): boolean {
-        //TODO
-        return true;
-    };
-
     SaveHighScore(initials: string, score: number) {
         //TODO
     };

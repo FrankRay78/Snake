@@ -1,4 +1,4 @@
-define(["require", "exports", "./models/Game", "./models/HighScoresDummyProvider", "./models/HighScoresRenderer"], function (require, exports, Game, HighScoresDummyProvider, HighScoresRenderer) {
+define(["require", "exports", "./models/Game", "./models/HighScoresMemoryProvider", "./models/HighScores"], function (require, exports, Game, HighScoresMemoryProvider, HighScores) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     //import jquery = require('../dist/jquery/jquery');
@@ -10,13 +10,13 @@ define(["require", "exports", "./models/Game", "./models/HighScoresDummyProvider
         * Game high scores
         */
         //Load the correct high scores provider here:
-        const highScoresProvider = new HighScoresDummyProvider();
+        const highScoresProvider = new HighScoresMemoryProvider();
         //const highScoresProvider: HighScoresProviderInterface = new HighScoresWebServiceProvider();
-        const highScoresRenderer = new HighScoresRenderer(highScoresProvider);
-        highScoresRenderer.UpdateHighScores();
+        const highScores = new HighScores(highScoresProvider);
+        highScores.DrawHighScores();
         game.GameOverHandler = (score) => {
             //Game over handler
-            if (highScoresProvider.IsHighScore(score)) {
+            if (highScores.IsHighScore(score)) {
                 //Show the player initial modal dialog
                 document.getElementById('txtPlayerInitials').value = '';
                 //HACK: Bootstrap 5 modal
@@ -31,8 +31,8 @@ define(["require", "exports", "./models/Game", "./models/HighScoresDummyProvider
             //Save high score handler
             const initials = document.getElementById('txtPlayerInitials').value;
             const score = Number(document.getElementById('appleCount').innerText);
-            highScoresProvider.SaveHighScore(initials, score);
-            highScoresRenderer.UpdateHighScores();
+            highScores.SaveHighScore(initials, score);
+            highScores.DrawHighScores();
             //HACK: Bootstrap 5 modal (SEE COMMENT ABOVE)
             // @ts-ignore
             CloseModalDialog();
