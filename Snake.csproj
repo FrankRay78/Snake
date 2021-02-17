@@ -195,6 +195,7 @@
     <TypeScriptCompile Include="src\models\HighScoresWebServiceProvider.ts" />
     <TypeScriptCompile Include="src\models\SnakePosition.ts" />
     <TypeScriptCompile Include="src\tests\Apple.Tests.ts" />
+    <TypeScriptCompile Include="src\tests\HighScores.Tests.ts" />
     <TypeScriptCompile Include="src\tests\Snake.Tests.ts" />
     <TypeScriptCompile Include="src\models\Snake.ts" />
     <TypeScriptCompile Include="src\models\SnakeDirection.ts" />

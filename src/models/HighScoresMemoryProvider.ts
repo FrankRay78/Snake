@@ -9,8 +9,14 @@ class HighScoresMemoryProvider implements HighScoresProviderInterface {
 
     private scores: HighScore[];
 
+    get MaxHighScoreCount(): number {
+        return 10;
+    }
+
     constructor() {
         this.scores = [];
+
+        //TODO: replace the following hardcoded logic with a parameter on the constructor that accepts a default pre-seed of high scores
 
         //Pre-seeds
         this.scores.push(new HighScore("FDR", 10));
@@ -31,7 +37,7 @@ class HighScoresMemoryProvider implements HighScoresProviderInterface {
         //Return the top 10 scores
         return this.scores.sort((a, b): number => {
             return b.PlayerScore - a.PlayerScore
-        }).slice(0, 10);
+        }).slice(0, this.MaxHighScoreCount);
     };
 
     SaveHighScore(initials: string, score: number) {

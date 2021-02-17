@@ -8,6 +8,10 @@ import axios = require('../../dist/axios/axios');
  */
 class HighScoresWebServiceProvider implements HighScoresProviderInterface {
 
+    get MaxHighScoreCount(): number {
+        return 10;
+    }
+
     constructor() {
     }
 
@@ -23,6 +27,7 @@ class HighScoresWebServiceProvider implements HighScoresProviderInterface {
                 if (response && response.status === 200 && response.data && response.data.length > 0) {
 
                     //TODO: convert JSON to objects
+                    //ref: https://stackoverflow.com/questions/22875636/how-do-i-cast-a-json-object-to-a-typescript-class
                     //highScores = response.data;
                 }
             })

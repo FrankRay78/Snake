@@ -6,6 +6,10 @@ class HighScores {
 
     private highScores: HighScore[];
 
+    get Scores(): HighScore[] {
+        return this.highScores;
+    }
+
     private highScoresProvider: HighScoresProviderInterface;
 
     constructor(highScoresProvider: HighScoresProviderInterface) {
@@ -16,12 +20,17 @@ class HighScores {
         this.highScoresProvider = highScoresProvider;
     }
 
+    public LoadHighScores(): void {
+
+        this.highScores = this.highScoresProvider.GetHighScores();
+    };
+
     public IsHighScore(score: number): boolean {
 
         if (!score || score <= 0)
             return false;
 
-        if (this.highScores.length < 10)
+        if (this.highScores.length < this.highScoresProvider.MaxHighScoreCount)
             return true;
 
         //Check if the high score really does cut it
@@ -65,7 +74,7 @@ class HighScores {
 
         //Fetch the latest set of high scores
 
-        this.highScores = this.highScoresProvider.GetHighScores();
+        this.LoadHighScores();
 
 
         if (this.highScores && this.highScores.length > 0) {

@@ -6,6 +6,7 @@ define(["require", "exports", "./HighScore"], function (require, exports, HighSc
     class HighScoresMemoryProvider {
         constructor() {
             this.scores = [];
+            //TODO: replace the following hardcoded logic with a parameter on the constructor that accepts a default pre-seed of high scores
             //Pre-seeds
             this.scores.push(new HighScore("FDR", 10));
             this.scores.push(new HighScore("HGR", 7));
@@ -18,11 +19,14 @@ define(["require", "exports", "./HighScore"], function (require, exports, HighSc
             //this.scores.push(new HighScore("F", 1));
             //this.scores.push(new HighScore("G", 1));
         }
+        get MaxHighScoreCount() {
+            return 10;
+        }
         GetHighScores() {
             //Return the top 10 scores
             return this.scores.sort((a, b) => {
                 return b.PlayerScore - a.PlayerScore;
-            }).slice(0, 10);
+            }).slice(0, this.MaxHighScoreCount);
         }
         ;
         SaveHighScore(initials, score) {

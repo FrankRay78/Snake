@@ -6,10 +6,17 @@ define(["require", "exports"], function (require, exports) {
                 throw new Error("highScoresProvider cannot be null");
             this.highScoresProvider = highScoresProvider;
         }
+        get Scores() {
+            return this.highScores;
+        }
+        LoadHighScores() {
+            this.highScores = this.highScoresProvider.GetHighScores();
+        }
+        ;
         IsHighScore(score) {
             if (!score || score <= 0)
                 return false;
-            if (this.highScores.length < 10)
+            if (this.highScores.length < this.highScoresProvider.MaxHighScoreCount)
                 return true;
             //Check if the high score really does cut it
             if (score > this.highScores[this.highScores.length - 1].PlayerScore)
@@ -37,7 +44,7 @@ define(["require", "exports"], function (require, exports) {
         ;
         DrawHighScores() {
             //Fetch the latest set of high scores
-            this.highScores = this.highScoresProvider.GetHighScores();
+            this.LoadHighScores();
             if (this.highScores && this.highScores.length > 0) {
                 //Display the existing high scores
                 const htmlRows = this.highScores.map((d) => {
