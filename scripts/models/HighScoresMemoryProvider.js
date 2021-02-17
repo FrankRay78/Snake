@@ -4,23 +4,11 @@ define(["require", "exports", "./HighScore"], function (require, exports, HighSc
      * A dummy implementation of a high scores provider for testing purposes
      */
     class HighScoresMemoryProvider {
-        constructor() {
+        constructor(scores = null) {
             this.scores = [];
-            //TODO: replace the following hardcoded logic with a parameter on the constructor that accepts a default pre-seed of high scores
-            //Pre-seeds
-            this.scores.push(new HighScore("FDR", 10));
-            this.scores.push(new HighScore("HGR", 7));
-            this.scores.push(new HighScore("SRR", 2));
-            //this.scores.push(new HighScore("A", 1));
-            //this.scores.push(new HighScore("B", 1));
-            //this.scores.push(new HighScore("C", 1));
-            //this.scores.push(new HighScore("D", 1));
-            //this.scores.push(new HighScore("E", 1));
-            //this.scores.push(new HighScore("F", 1));
-            //this.scores.push(new HighScore("G", 1));
-        }
-        get MaxHighScoreCount() {
-            return 10;
+            this.MaxHighScoreCount = 10; //default
+            if (scores)
+                scores.forEach(s => this.scores.push(s));
         }
         GetHighScores() {
             //Return the top 10 scores
