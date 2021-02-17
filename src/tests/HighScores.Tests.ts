@@ -52,3 +52,27 @@ test('Save high score using pre-seeded memory provider', () => {
 
     expect(savedHighScore).not.toBeNull();
 });
+
+test('Save lots of increasing high scores but memory provider limits result set to highScoresProvider.MaxHighScoreCount', () => {
+
+    const highScoresProvider: HighScoresProviderInterface = new HighScoresMemoryProvider();
+
+    for (let i = 1; i <= 100; i++) {
+
+        //Save
+        highScoresProvider.SaveHighScore('XYZ', i);
+
+        //Fetch
+        const highScores = highScoresProvider.GetHighScores();
+
+
+        //Assert
+
+        if (i <= highScoresProvider.MaxHighScoreCount)
+            expect(highScores.length).toEqual(i);
+        else
+            expect(highScores.length).toEqual(highScoresProvider.MaxHighScoreCount);
+
+        expect(highScores[0].PlayerScore).toBe(i);
+    }
+});
