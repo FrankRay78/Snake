@@ -55,7 +55,7 @@ a {
     padding-top: 12px;
 }
 
-#board {
+#board, #txtPlayerInitials {
     -webkit-user-select: text; /* Safari */
     -khtml-user-select: text; /* Konqueror HTML */
     -moz-user-select: text; /* Old versions of Firefox */
