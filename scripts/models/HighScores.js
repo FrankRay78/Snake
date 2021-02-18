@@ -5,11 +5,20 @@ define(["require", "exports"], function (require, exports) {
             if (!highScoresProvider)
                 throw new Error("highScoresProvider cannot be null");
             this.highScoresProvider = highScoresProvider;
+            //Initial fetch of the high scores
+            this.LoadHighScores();
         }
+        get Scores() {
+            return this.highScores;
+        }
+        LoadHighScores() {
+            this.highScores = this.highScoresProvider.GetHighScores();
+        }
+        ;
         IsHighScore(score) {
             if (!score || score <= 0)
                 return false;
-            if (this.highScores.length < 10)
+            if (this.highScores.length < this.highScoresProvider.MaxHighScoreCount)
                 return true;
             //Check if the high score really does cut it
             if (score > this.highScores[this.highScores.length - 1].PlayerScore)
@@ -18,7 +27,7 @@ define(["require", "exports"], function (require, exports) {
         }
         ;
         SaveHighScore(initials, score) {
-            if (this.IsHighScore(score)) {
+            if (score && this.IsHighScore(score)) {
                 if (initials && initials.length > 0 && initials.length < 4) {
                     //Initials and score are valid
                     initials = initials.toUpperCase();
@@ -31,13 +40,13 @@ define(["require", "exports"], function (require, exports) {
                         }
                     }
                     this.highScoresProvider.SaveHighScore(initials, score);
+                    //Refresh the cache of high scores by fetching the latest
+                    this.LoadHighScores();
                 }
             }
         }
         ;
         DrawHighScores() {
-            //Fetch the latest set of high scores
-            this.highScores = this.highScoresProvider.GetHighScores();
             if (this.highScores && this.highScores.length > 0) {
                 //Display the existing high scores
                 const htmlRows = this.highScores.map((d) => {

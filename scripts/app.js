@@ -1,8 +1,6 @@
-define(["require", "exports", "./models/Game", "./models/HighScoresMemoryProvider", "./models/HighScores"], function (require, exports, Game, HighScoresMemoryProvider, HighScores) {
+define(["require", "exports", "./models/Game", "./models/HighScoresMemoryProvider", "./models/HighScore", "./models/HighScores"], function (require, exports, Game, HighScoresMemoryProvider, HighScore, HighScores) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    //import jquery = require('../dist/jquery/jquery');
-    //import bootstrap = require('../dist/bootstrap/js/bootstrap.bundle');
     window.onload = () => {
         const canvas = document.getElementById('board');
         const game = new Game(canvas);
@@ -10,7 +8,11 @@ define(["require", "exports", "./models/Game", "./models/HighScoresMemoryProvide
         * Game high scores
         */
         //Load the correct high scores provider here:
-        const highScoresProvider = new HighScoresMemoryProvider();
+        const highScoresProvider = new HighScoresMemoryProvider([
+            new HighScore("FDR", 10),
+            new HighScore("HGR", 7),
+            new HighScore("SRR", 2)
+        ]);
         //const highScoresProvider: HighScoresProviderInterface = new HighScoresWebServiceProvider();
         const highScores = new HighScores(highScoresProvider);
         highScores.DrawHighScores();
@@ -27,6 +29,9 @@ define(["require", "exports", "./models/Game", "./models/HighScoresMemoryProvide
                 OpenModalDialog();
             }
         };
+        document.getElementById('playerInitialsModal').addEventListener('shown.bs.modal', function () {
+            document.getElementById('txtPlayerInitials').focus();
+        });
         document.getElementById("btnSaveHighScore").onclick = () => {
             //Save high score handler
             const initials = document.getElementById('txtPlayerInitials').value;

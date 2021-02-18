@@ -6,6 +6,10 @@ class HighScores {
 
     private highScores: HighScore[];
 
+    get Scores(): HighScore[] {
+        return this.highScores;
+    }
+
     private highScoresProvider: HighScoresProviderInterface;
 
     constructor(highScoresProvider: HighScoresProviderInterface) {
@@ -14,14 +18,24 @@ class HighScores {
             throw new Error("highScoresProvider cannot be null");
 
         this.highScoresProvider = highScoresProvider;
+
+
+        //Initial fetch of the high scores
+
+        this.LoadHighScores();
     }
+
+    private LoadHighScores(): void {
+
+        this.highScores = this.highScoresProvider.GetHighScores();
+    };
 
     public IsHighScore(score: number): boolean {
 
         if (!score || score <= 0)
             return false;
 
-        if (this.highScores.length < 10)
+        if (this.highScores.length < this.highScoresProvider.MaxHighScoreCount)
             return true;
 
         //Check if the high score really does cut it
@@ -33,7 +47,7 @@ class HighScores {
 
     public SaveHighScore(initials: string, score: number) {
 
-        if (this.IsHighScore(score)) {
+        if (score && this.IsHighScore(score)) {
 
             if (initials && initials.length > 0 && initials.length < 4) {
 
@@ -57,16 +71,16 @@ class HighScores {
 
 
                 this.highScoresProvider.SaveHighScore(initials, score);
+
+
+                //Refresh the cache of high scores by fetching the latest
+
+                this.LoadHighScores();
             }
         }
     };
 
     public DrawHighScores(): void {
-
-        //Fetch the latest set of high scores
-
-        this.highScores = this.highScoresProvider.GetHighScores();
-
 
         if (this.highScores && this.highScores.length > 0) {
 

@@ -4,6 +4,9 @@ define(["require", "exports", "../../dist/axios/axios"], function (require, expo
      * A webservice implementation of a high scores provider
      */
     class HighScoresWebServiceProvider {
+        get MaxHighScoreCount() {
+            return 10;
+        }
         constructor() {
         }
         GetHighScores() {
@@ -13,6 +16,7 @@ define(["require", "exports", "../../dist/axios/axios"], function (require, expo
                 // handle success
                 if (response && response.status === 200 && response.data && response.data.length > 0) {
                     //TODO: convert JSON to objects
+                    //ref: https://stackoverflow.com/questions/22875636/how-do-i-cast-a-json-object-to-a-typescript-class
                     //highScores = response.data;
                 }
             });

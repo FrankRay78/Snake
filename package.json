@@ -14,6 +14,7 @@
         "@types/bootstrap": "^5.0.5",
         "axios": "^0.21.1",
         "bootstrap": "^5.0.0-beta1",
+        "jest-editor-support": "^28.1.0",
         "jquery": "^3.5.1",
         "requirejs": "^2.3.6"
     },

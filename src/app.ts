@@ -3,9 +3,8 @@ import Game = require('./models/Game');
 import HighScoresProviderInterface = require('./models/HighScoresProviderInterface');
 import HighScoresMemoryProvider = require('./models/HighScoresMemoryProvider');
 import HighScoresWebServiceProvider = require('./models/HighScoresWebServiceProvider');
+import HighScore = require('./models/HighScore');
 import HighScores = require('./models/HighScores');
-//import jquery = require('../dist/jquery/jquery');
-//import bootstrap = require('../dist/bootstrap/js/bootstrap.bundle');
 
 window.onload = () => {
 
@@ -19,7 +18,13 @@ window.onload = () => {
     */
 
     //Load the correct high scores provider here:
-    const highScoresProvider: HighScoresProviderInterface = new HighScoresMemoryProvider();
+    const highScoresProvider: HighScoresProviderInterface = new HighScoresMemoryProvider(
+        [
+            new HighScore("FDR", 10),
+            new HighScore("HGR", 7),
+            new HighScore("SRR", 2)
+        ]
+        );
     //const highScoresProvider: HighScoresProviderInterface = new HighScoresWebServiceProvider();
 
     const highScores = new HighScores(highScoresProvider);
@@ -44,6 +49,10 @@ window.onload = () => {
             OpenModalDialog();
         }
     };
+
+    document.getElementById('playerInitialsModal').addEventListener('shown.bs.modal', function () {
+        document.getElementById('txtPlayerInitials').focus();
+    })
 
     document.getElementById("btnSaveHighScore").onclick = () => {
 

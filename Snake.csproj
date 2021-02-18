@@ -1,6 +1,10 @@
 ﻿<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props')" />
   <PropertyGroup>
+    <JavaScriptTestRoot>tests\</JavaScriptTestRoot>
+    <JavaScriptTestFramework>Jest</JavaScriptTestFramework>
+  </PropertyGroup>
+  <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>
@@ -195,6 +199,8 @@
     <TypeScriptCompile Include="src\models\HighScoresWebServiceProvider.ts" />
     <TypeScriptCompile Include="src\models\SnakePosition.ts" />
     <TypeScriptCompile Include="src\tests\Apple.Tests.ts" />
+    <TypeScriptCompile Include="src\tests\HighScores.Tests.ts" />
+    <TypeScriptCompile Include="src\tests\HighScoresMemoryProvider.Tests.ts" />
     <TypeScriptCompile Include="src\tests\Snake.Tests.ts" />
     <TypeScriptCompile Include="src\models\Snake.ts" />
     <TypeScriptCompile Include="src\models\SnakeDirection.ts" />
