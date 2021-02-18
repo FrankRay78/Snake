@@ -8,6 +8,9 @@ import axios = require('../../dist/axios/axios');
  */
 class HighScoresWebServiceProvider implements HighScoresProviderInterface {
 
+    private GetHighScoresURL = 'http://localhost/SnakeWebAPI/api/Snake/GetHighScores';
+    private SaveHighScoreURL = 'http://localhost/SnakeWebAPI/api/Snake/SaveHighScore'; //?initials=XYZ&score=12
+
     get MaxHighScoreCount(): number {
         return 10;
     }
@@ -19,18 +22,20 @@ class HighScoresWebServiceProvider implements HighScoresProviderInterface {
 
         let highScores: HighScore[] = [];
 
-        axios.get('http://localhost/SnakeWebAPI/api/Snake/GetHighScores')
+        axios.get(this.GetHighScoresURL)
             .then(function (response) {
 
                 // handle success
 
                 if (response && response.status === 200 && response.data && response.data.length > 0) {
 
-                    //TODO: convert JSON to objects
-                    //ref: https://stackoverflow.com/questions/22875636/how-do-i-cast-a-json-object-to-a-typescript-class
-                    //highScores = response.data;
+                    //TODO: the follow logic is fundamentally wrong and won't work as the axios call above is async, refactor this method/class accordingly
+
+                    highScores = response.data;
                 }
-            })
+            }, function (error) {
+                console.log(error);
+            });
 
         return highScores;
     };
