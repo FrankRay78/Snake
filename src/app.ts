@@ -50,6 +50,10 @@ window.onload = () => {
         }
     };
 
+    document.getElementById('playerInitialsModal').addEventListener('shown.bs.modal', function () {
+        document.getElementById('txtPlayerInitials').focus();
+    })
+
     document.getElementById("btnSaveHighScore").onclick = () => {
 
         //Save high score handler

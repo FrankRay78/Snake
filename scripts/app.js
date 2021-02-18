@@ -29,6 +29,9 @@ define(["require", "exports", "./models/Game", "./models/HighScoresMemoryProvide
                 OpenModalDialog();
             }
         };
+        document.getElementById('playerInitialsModal').addEventListener('shown.bs.modal', function () {
+            document.getElementById('txtPlayerInitials').focus();
+        });
         document.getElementById("btnSaveHighScore").onclick = () => {
             //Save high score handler
             const initials = document.getElementById('txtPlayerInitials').value;

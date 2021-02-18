@@ -4,75 +4,56 @@ import HighScoresMemoryProvider = require('../models/HighScoresMemoryProvider');
 import HighScore = require('../models/HighScore');
 import HighScores = require('../models/HighScores');
 
-
-test('Save high score using empty memory provider', () => {
+test('HighScores.IsHighScore using empty memory provider', () => {
 
     const highScoresProvider: HighScoresProviderInterface = new HighScoresMemoryProvider();
 
-    const initialScores = highScoresProvider.GetHighScores();
+    const highScores = new HighScores(highScoresProvider);
 
-    expect(initialScores.length).toEqual(0);
+    expect(highScores.IsHighScore(1)).toBe(true);
+    expect(highScores.IsHighScore(3)).toBe(true);
+    expect(highScores.IsHighScore(50)).toBe(true);
+    expect(highScores.IsHighScore(150)).toBe(true);
+    expect(highScores.IsHighScore(1000)).toBe(true);
 
-    highScoresProvider.SaveHighScore('XYZ', 20);
+    //Populate the highScores with 101 --> 110 inclusive
+    for (let i = 1; i <= highScoresProvider.MaxHighScoreCount; i++) {
 
-    const updatedScores = highScoresProvider.GetHighScores();
+        //Save
+        highScores.SaveHighScore('XYZ', i + 100);
+    }
 
-    expect(updatedScores.length).toEqual(initialScores.length + 1);
-
-    const savedHighScore = updatedScores.findIndex(x => {
-        x.PlayerInitials === 'XYZ' && x.PlayerScore === 20
-    });
-
-    expect(savedHighScore).not.toBeNull();
+    expect(highScores.IsHighScore(1)).toBe(false);
+    expect(highScores.IsHighScore(3)).toBe(false);
+    expect(highScores.IsHighScore(50)).toBe(false);
+    expect(highScores.IsHighScore(150)).toBe(true);
+    expect(highScores.IsHighScore(1000)).toBe(true);
 });
 
-test('Save high score using pre-seeded memory provider', () => {
+test('HighScores.IsHighScore using pre-seeded memory provider', () => {
 
     const preseededScores = [
-        new HighScore("FDR", 10),
-        new HighScore("HGR", 7),
-        new HighScore("SRR", 2)
+        new HighScore("A", 11),
+        new HighScore("B", 10),
+        new HighScore("C", 9),
+        new HighScore("D", 8),
+        new HighScore("E", 7),
+        new HighScore("F", 6),
+        new HighScore("G", 5),
+        new HighScore("H", 4),
+        new HighScore("I", 3),
+        new HighScore("J", 2),
+        new HighScore("K", 1)
     ]
 
     const highScoresProvider: HighScoresProviderInterface = new HighScoresMemoryProvider(preseededScores);
 
-    const initialScores = highScoresProvider.GetHighScores();
+    const highScores = new HighScores(highScoresProvider);
 
-    expect(initialScores.length).toEqual(preseededScores.length);
-
-    highScoresProvider.SaveHighScore('XYZ', 20);
-
-    const updatedScores = highScoresProvider.GetHighScores();
-
-    expect(updatedScores.length).toEqual(initialScores.length + 1);
-
-    const savedHighScore = updatedScores.findIndex(x => {
-        x.PlayerInitials === 'XYZ' && x.PlayerScore === 20
-    });
-
-    expect(savedHighScore).not.toBeNull();
+    expect(highScores.IsHighScore(1)).toBe(false); //is not greater than the lowest high scores returned by the highScoresProvider
+    expect(highScores.IsHighScore(3)).toBe(true);
+    expect(highScores.IsHighScore(50)).toBe(true);
+    expect(highScores.IsHighScore(150)).toBe(true);
+    expect(highScores.IsHighScore(1000)).toBe(true);
 });
 
-test('Save lots of increasing high scores but memory provider limits result set to highScoresProvider.MaxHighScoreCount', () => {
-
-    const highScoresProvider: HighScoresProviderInterface = new HighScoresMemoryProvider();
-
-    for (let i = 1; i <= 100; i++) {
-
-        //Save
-        highScoresProvider.SaveHighScore('XYZ', i);
-
-        //Fetch
-        const highScores = highScoresProvider.GetHighScores();
-
-
-        //Assert
-
-        if (i <= highScoresProvider.MaxHighScoreCount)
-            expect(highScores.length).toEqual(i);
-        else
-            expect(highScores.length).toEqual(highScoresProvider.MaxHighScoreCount);
-
-        expect(highScores[0].PlayerScore).toBe(i);
-    }
-});

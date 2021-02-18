@@ -28,6 +28,11 @@
 
         gtag('config', 'G-PSHX2DFXEK');
     </script>
+
+    <!-- External scripts to load -->
+    <script src="dist/jquery/jquery.min.js"></script>
+    <script src="dist/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="dist/requirejs/require.js" data-main="scripts/app.js"></script>
 </head>
 <body>
     <div class="container">
@@ -115,14 +120,9 @@
             <!-- BODY END -->
         </main>
     </div>
-
-    <!-- External scripts to load -->
-    <script src="dist/jquery/jquery.min.js"></script>
-    <script src="dist/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="dist/requirejs/require.js" data-main="scripts/app.js"></script>
-
     <script>
-        <!-- ref: https://stackoverflow.com/questions/19508183/how-to-force-input-to-only-allow-alpha-letters -->
+
+        //ref: https://stackoverflow.com/questions/19508183/how-to-force-input-to-only-allow-alpha-letters
         function alphaOnly(event) {
             var key = event.keyCode;
             return ((key >= 65 && key <= 90) || key == 8);

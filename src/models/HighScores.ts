@@ -18,9 +18,14 @@ class HighScores {
             throw new Error("highScoresProvider cannot be null");
 
         this.highScoresProvider = highScoresProvider;
+
+
+        //Initial fetch of the high scores
+
+        this.LoadHighScores();
     }
 
-    public LoadHighScores(): void {
+    private LoadHighScores(): void {
 
         this.highScores = this.highScoresProvider.GetHighScores();
     };
@@ -42,7 +47,7 @@ class HighScores {
 
     public SaveHighScore(initials: string, score: number) {
 
-        if (this.IsHighScore(score)) {
+        if (score && this.IsHighScore(score)) {
 
             if (initials && initials.length > 0 && initials.length < 4) {
 
@@ -66,16 +71,16 @@ class HighScores {
 
 
                 this.highScoresProvider.SaveHighScore(initials, score);
+
+
+                //Refresh the cache of high scores by fetching the latest
+
+                this.LoadHighScores();
             }
         }
     };
 
     public DrawHighScores(): void {
-
-        //Fetch the latest set of high scores
-
-        this.LoadHighScores();
-
 
         if (this.highScores && this.highScores.length > 0) {
 
