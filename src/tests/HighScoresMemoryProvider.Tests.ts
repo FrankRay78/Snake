@@ -6,15 +6,18 @@ import HighScore = require('../models/HighScore');
 
 test('Save high score using empty memory provider', () => {
 
+    let initialScores: HighScore[];
+    let updatedScores: HighScore[];
+
     const highScoresProvider: HighScoresProviderInterface = new HighScoresMemoryProvider();
 
-    const initialScores = highScoresProvider.GetHighScores();
+    highScoresProvider.HighScoresHandler = (highScores: HighScore[]) => { initialScores = highScores; };
+    highScoresProvider.LoadHighScores();
 
     expect(initialScores.length).toEqual(0);
 
+    highScoresProvider.HighScoresHandler = (highScores: HighScore[]) => { updatedScores = highScores; };
     highScoresProvider.SaveHighScore('XYZ', 20);
-
-    const updatedScores = highScoresProvider.GetHighScores();
 
     expect(updatedScores.length).toEqual(initialScores.length + 1);
 
@@ -31,17 +34,20 @@ test('Save high score using pre-seeded memory provider', () => {
         new HighScore("FDR", 10),
         new HighScore("HGR", 7),
         new HighScore("SRR", 2)
-    ]
+    ];
+
+    let initialScores: HighScore[];
+    let updatedScores: HighScore[];
 
     const highScoresProvider: HighScoresProviderInterface = new HighScoresMemoryProvider(preseededScores);
 
-    const initialScores = highScoresProvider.GetHighScores();
+    highScoresProvider.HighScoresHandler = (highScores: HighScore[]) => { initialScores = highScores; };
+    highScoresProvider.LoadHighScores();
 
     expect(initialScores.length).toEqual(preseededScores.length);
 
+    highScoresProvider.HighScoresHandler = (highScores: HighScore[]) => { updatedScores = highScores; };
     highScoresProvider.SaveHighScore('XYZ', 20);
-
-    const updatedScores = highScoresProvider.GetHighScores();
 
     expect(updatedScores.length).toEqual(initialScores.length + 1);
 
@@ -56,24 +62,31 @@ test('Save lots of increasing high scores but memory provider limits result set 
 
     const highScoresProvider: HighScoresProviderInterface = new HighScoresMemoryProvider();
 
+    highScoresProvider.HighScoresHandler = null;
+    
     for (let i = 1; i <= 100; i++) {
 
         //Save
         highScoresProvider.SaveHighScore('XYZ', i);
-
-        //Fetch
-        const highScores = highScoresProvider.GetHighScores();
-
-
-        //Assert
-
-        if (i <= highScoresProvider.MaxHighScoreCount)
-            expect(highScores.length).toEqual(i);
-        else
-            expect(highScores.length).toEqual(highScoresProvider.MaxHighScoreCount);
-
-        expect(highScores[0].PlayerScore).toBe(i);
     }
+
+    highScoresProvider.HighScoresHandler = (highScores: HighScore[]) => {
+        expect(highScores.length).toEqual(highScoresProvider.MaxHighScoreCount);
+
+        expect(highScores[0].PlayerScore).toEqual(100);
+        expect(highScores[1].PlayerScore).toEqual(99);
+        expect(highScores[2].PlayerScore).toEqual(98);
+        expect(highScores[3].PlayerScore).toEqual(97);
+        expect(highScores[4].PlayerScore).toEqual(96);
+        expect(highScores[5].PlayerScore).toEqual(95);
+        expect(highScores[6].PlayerScore).toEqual(94);
+        expect(highScores[7].PlayerScore).toEqual(93);
+        expect(highScores[8].PlayerScore).toEqual(92);
+        expect(highScores[9].PlayerScore).toEqual(91);
+    };
+
+    //Fetch
+    highScoresProvider.LoadHighScores();
 });
 
 

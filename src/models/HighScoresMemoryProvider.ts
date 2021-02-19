@@ -4,12 +4,16 @@ import HighScore = require('./HighScore');
 
 /* 
  * A dummy implementation of a high scores provider for testing purposes
+ * Basically an in-memory database (aka array) stored locally on the client side
  */
 class HighScoresMemoryProvider implements HighScoresProviderInterface {
 
+    //All previously saved scores, from which the top X are returned from
     private scores: HighScore[];
 
     public MaxHighScoreCount: number;
+
+    public HighScoresHandler: (highScores: HighScore[]) => void;
 
     constructor(scores: HighScore[] = null) {
 
@@ -21,15 +25,23 @@ class HighScoresMemoryProvider implements HighScoresProviderInterface {
             scores.forEach(s => this.scores.push(s));
     }
 
-    public GetHighScores(): HighScore[] {
+    private GetHighScores(): HighScore[] {
 
-        //Return the top 10 scores
+        //Selete the top X scores out of the underlying scores array
         return this.scores.sort((a, b): number => {
             return b.PlayerScore - a.PlayerScore
         }).slice(0, this.MaxHighScoreCount);
     };
 
-    SaveHighScore(initials: string, score: number) {
+    public LoadHighScores(): void {
+
+        let highScores = this.GetHighScores();
+
+        if (this.HighScoresHandler)
+            this.HighScoresHandler(highScores);
+    };
+
+    public SaveHighScore(initials: string, score: number) {
 
         if (initials && initials.length > 0 && initials.length < 4) {
 
@@ -55,6 +67,10 @@ class HighScoresMemoryProvider implements HighScoresProviderInterface {
 
 
             this.scores.push(new HighScore(initials, score));
+
+
+            //Prompt listeners to handle an updated high scores list
+            this.LoadHighScores();
         }
     };
 }

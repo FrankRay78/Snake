@@ -3,7 +3,8 @@ import HighScore = require('./HighScore');
 
 interface HighScoresProviderInterface {
     MaxHighScoreCount: number;
-    GetHighScores(): HighScore[];
+    LoadHighScores(): void;
+    HighScoresHandler: (highScores: HighScore[]) => void;
     SaveHighScore(initials: string, score: number): void;
 }
 

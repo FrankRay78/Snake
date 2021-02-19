@@ -4,6 +4,7 @@ import HighScore = require('./HighScore');
 
 class HighScores {
 
+    //Local cache of the most recently fetched high scores
     private highScores: HighScore[];
 
     get Scores(): HighScore[] {
@@ -19,16 +20,18 @@ class HighScores {
 
         this.highScoresProvider = highScoresProvider;
 
+        this.highScoresProvider.HighScoresHandler = (highScores: HighScore[]) => {
+
+            //High scores have been returned from the provider
+
+            this.highScores = highScores;
+
+            this.DrawHighScores();
+        };
 
         //Initial fetch of the high scores
-
-        this.LoadHighScores();
+        this.highScoresProvider.LoadHighScores();
     }
-
-    private LoadHighScores(): void {
-
-        this.highScores = this.highScoresProvider.GetHighScores();
-    };
 
     public IsHighScore(score: number): boolean {
 
@@ -71,35 +74,33 @@ class HighScores {
 
 
                 this.highScoresProvider.SaveHighScore(initials, score);
-
-
-                //Refresh the cache of high scores by fetching the latest
-
-                this.LoadHighScores();
             }
         }
     };
 
     public DrawHighScores(): void {
 
-        if (this.highScores && this.highScores.length > 0) {
+        if (typeof document !== 'undefined' && document !== null) {
 
-            //Display the existing high scores
+            if (this.highScores && this.highScores.length > 0) {
 
-            const htmlRows = this.highScores.map((d) => {
-                return '<tr><td>' + d.PlayerInitials + '</td><td>' + d.PlayerScore + '</td></tr>'
-            });
+                //Display the existing high scores
 
-            //Show the high scores table
-            document.getElementById('NoHighScores').style.display = "none";
-            document.getElementById('HighScores-TableBody').innerHTML = htmlRows.join('');
-            document.getElementById('HighScores-Table').style.display = "table";
-        }
-        else {
+                const htmlRows = this.highScores.map((d) => {
+                    return '<tr><td>' + d.PlayerInitials + '</td><td>' + d.PlayerScore + '</td></tr>'
+                });
 
-            //Hide the high scores table
-            document.getElementById('NoHighScores').style.display = "block";
-            document.getElementById('HighScores-Table').style.display = "none";
+                //Show the high scores table
+                document.getElementById('NoHighScores').style.display = "none";
+                document.getElementById('HighScores-TableBody').innerHTML = htmlRows.join('');
+                document.getElementById('HighScores-Table').style.display = "table";
+            }
+            else {
+
+                //Hide the high scores table
+                document.getElementById('NoHighScores').style.display = "block";
+                document.getElementById('HighScores-Table').style.display = "none";
+            }
         }
     }
 }

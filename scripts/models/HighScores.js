@@ -5,16 +5,17 @@ define(["require", "exports"], function (require, exports) {
             if (!highScoresProvider)
                 throw new Error("highScoresProvider cannot be null");
             this.highScoresProvider = highScoresProvider;
+            this.highScoresProvider.HighScoresHandler = (highScores) => {
+                //High scores have been returned from the provider
+                this.highScores = highScores;
+                this.DrawHighScores();
+            };
             //Initial fetch of the high scores
-            this.LoadHighScores();
+            this.highScoresProvider.LoadHighScores();
         }
         get Scores() {
             return this.highScores;
         }
-        LoadHighScores() {
-            this.highScores = this.highScoresProvider.GetHighScores();
-        }
-        ;
         IsHighScore(score) {
             if (!score || score <= 0)
                 return false;
@@ -40,27 +41,27 @@ define(["require", "exports"], function (require, exports) {
                         }
                     }
                     this.highScoresProvider.SaveHighScore(initials, score);
-                    //Refresh the cache of high scores by fetching the latest
-                    this.LoadHighScores();
                 }
             }
         }
         ;
         DrawHighScores() {
-            if (this.highScores && this.highScores.length > 0) {
-                //Display the existing high scores
-                const htmlRows = this.highScores.map((d) => {
-                    return '<tr><td>' + d.PlayerInitials + '</td><td>' + d.PlayerScore + '</td></tr>';
-                });
-                //Show the high scores table
-                document.getElementById('NoHighScores').style.display = "none";
-                document.getElementById('HighScores-TableBody').innerHTML = htmlRows.join('');
-                document.getElementById('HighScores-Table').style.display = "table";
-            }
-            else {
-                //Hide the high scores table
-                document.getElementById('NoHighScores').style.display = "block";
-                document.getElementById('HighScores-Table').style.display = "none";
+            if (typeof document !== 'undefined' && document !== null) {
+                if (this.highScores && this.highScores.length > 0) {
+                    //Display the existing high scores
+                    const htmlRows = this.highScores.map((d) => {
+                        return '<tr><td>' + d.PlayerInitials + '</td><td>' + d.PlayerScore + '</td></tr>';
+                    });
+                    //Show the high scores table
+                    document.getElementById('NoHighScores').style.display = "none";
+                    document.getElementById('HighScores-TableBody').innerHTML = htmlRows.join('');
+                    document.getElementById('HighScores-Table').style.display = "table";
+                }
+                else {
+                    //Hide the high scores table
+                    document.getElementById('NoHighScores').style.display = "block";
+                    document.getElementById('HighScores-Table').style.display = "none";
+                }
             }
         }
     }

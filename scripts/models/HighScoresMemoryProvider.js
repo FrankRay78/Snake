@@ -2,6 +2,7 @@ define(["require", "exports", "./HighScore"], function (require, exports, HighSc
     "use strict";
     /*
      * A dummy implementation of a high scores provider for testing purposes
+     * Basically an in-memory database (aka array) stored locally on the client side
      */
     class HighScoresMemoryProvider {
         constructor(scores = null) {
@@ -11,10 +12,16 @@ define(["require", "exports", "./HighScore"], function (require, exports, HighSc
                 scores.forEach(s => this.scores.push(s));
         }
         GetHighScores() {
-            //Return the top 10 scores
+            //Selete the top X scores out of the underlying scores array
             return this.scores.sort((a, b) => {
                 return b.PlayerScore - a.PlayerScore;
             }).slice(0, this.MaxHighScoreCount);
+        }
+        ;
+        LoadHighScores() {
+            let highScores = this.GetHighScores();
+            if (this.HighScoresHandler)
+                this.HighScoresHandler(highScores);
         }
         ;
         SaveHighScore(initials, score) {
@@ -31,6 +38,8 @@ define(["require", "exports", "./HighScore"], function (require, exports, HighSc
                     }
                 }
                 this.scores.push(new HighScore(initials, score));
+                //Prompt listeners to handle an updated high scores list
+                this.LoadHighScores();
             }
         }
         ;

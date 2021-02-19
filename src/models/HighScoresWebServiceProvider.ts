@@ -11,36 +11,41 @@ class HighScoresWebServiceProvider implements HighScoresProviderInterface {
     private GetHighScoresURL = 'http://localhost/SnakeWebAPI/api/Snake/GetHighScores';
     private SaveHighScoreURL = 'http://localhost/SnakeWebAPI/api/Snake/SaveHighScore'; //?initials=XYZ&score=12
 
-    get MaxHighScoreCount(): number {
-        return 10;
-    }
+    public MaxHighScoreCount: number;
+
+    public HighScoresHandler: (highScores: HighScore[]) => void;
 
     constructor() {
+
+        this.MaxHighScoreCount = 10; //default, same value also hardcoded in the web api
     }
 
-    public GetHighScores(): HighScore[] {
+    public LoadHighScores(): void {
+    }
 
-        let highScores: HighScore[] = [];
+    //public GetHighScores(): HighScore[] {
 
-        axios.get(this.GetHighScoresURL)
-            .then(function (response) {
+    //    let highScores: HighScore[] = [];
 
-                // handle success
+    //    axios.get(this.GetHighScoresURL)
+    //        .then(function (response) {
 
-                if (response && response.status === 200 && response.data && response.data.length > 0) {
+    //            // handle success
 
-                    //TODO: the follow logic is fundamentally wrong and won't work as the axios call above is async, refactor this method/class accordingly
+    //            if (response && response.status === 200 && response.data && response.data.length > 0) {
 
-                    highScores = response.data;
-                }
-            }, function (error) {
-                console.log(error);
-            });
+    //                //TODO: the follow logic is fundamentally wrong and won't work as the axios call above is async, refactor this method/class accordingly
 
-        return highScores;
-    };
+    //                highScores = response.data;
+    //            }
+    //        }, function (error) {
+    //            console.log(error);
+    //        });
 
-    SaveHighScore(initials: string, score: number) {
+    //    return highScores;
+    //};
+
+    public SaveHighScore(initials: string, score: number) {
         //TODO
     };
 }
