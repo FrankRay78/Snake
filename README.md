@@ -56,6 +56,7 @@ The following resources came in handy when implementing the game:
 ##### TypeScript language & development environment
 * [The TypeScript Handbook](https://www.typescriptlang.org/docs/handbook/intro.html)
 * [Using ESLint with TypeScript in 2019](https://43081j.com/2019/02/using-eslint-with-typescript)
+* [How to upgrade the version of ESLint used in Visual Studio 2019?](https://stackoverflow.com/questions/59422834/how-to-upgrade-the-version-of-eslint-used-in-visual-studio-2019)
 * [Custom error class in TypeScript](https://stackoverflow.com/questions/31626231/custom-error-class-in-typescript)
 * [How do I cast a JSON Object to a TypeScript class?](https://stackoverflow.com/questions/22875636/how-do-i-cast-a-json-object-to-a-typescript-class)
 * [JavaScript Obfuscator Tool](https://obfuscator.io/)

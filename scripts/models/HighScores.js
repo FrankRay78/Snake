@@ -4,6 +4,7 @@ define(["require", "exports"], function (require, exports) {
         constructor(highScoresProvider) {
             if (!highScoresProvider)
                 throw new Error("highScoresProvider cannot be null");
+            this.highScores = [];
             this.highScoresProvider = highScoresProvider;
             this.highScoresProvider.HighScoresHandler = (highScores) => {
                 //High scores have been returned from the provider
@@ -12,9 +13,6 @@ define(["require", "exports"], function (require, exports) {
             };
             //Initial fetch of the high scores
             this.highScoresProvider.LoadHighScores();
-        }
-        get Scores() {
-            return this.highScores;
         }
         IsHighScore(score) {
             if (!score || score <= 0)

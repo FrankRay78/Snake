@@ -7,16 +7,14 @@ class HighScores {
     //Local cache of the most recently fetched high scores
     private highScores: HighScore[];
 
-    get Scores(): HighScore[] {
-        return this.highScores;
-    }
-
     private highScoresProvider: HighScoresProviderInterface;
 
     constructor(highScoresProvider: HighScoresProviderInterface) {
 
         if (!highScoresProvider)
             throw new Error("highScoresProvider cannot be null");
+
+        this.highScores = [];
 
         this.highScoresProvider = highScoresProvider;
 
