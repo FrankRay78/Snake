@@ -8,45 +8,67 @@ import axios = require('../../dist/axios/axios');
  */
 class HighScoresWebServiceProvider implements HighScoresProviderInterface {
 
-    private GetHighScoresURL = 'http://localhost/SnakeWebAPI/api/Snake/GetHighScores';
-    private SaveHighScoreURL = 'http://localhost/SnakeWebAPI/api/Snake/SaveHighScore'; //?initials=XYZ&score=12
-
     public MaxHighScoreCount: number;
 
     public HighScoresHandler: (highScores: HighScore[]) => void;
 
-    constructor() {
+    constructor(public GetHighScoresURL: string, public SaveHighScoreURL: string) {
 
         this.MaxHighScoreCount = 10; //default, same value also hardcoded in the web api
     }
 
     public LoadHighScores(): void {
+
+        //Pass in the HighScoresHandler as required by the JS async / promise nature of the axios call
+        //https://stackoverflow.com/questions/44231366/how-to-set-variable-outside-axios-get
+        //https://stackoverflow.com/questions/14220321/how-do-i-return-the-response-from-an-asynchronous-call
+
+        this.internalLoadHighScores(this.HighScoresHandler);
     }
 
-    //public GetHighScores(): HighScore[] {
+    public internalLoadHighScores(responseHandler: (highScores: HighScore[]) => void): void {
 
-    //    let highScores: HighScore[] = [];
+        axios.get(this.GetHighScoresURL)
+            .then(function (response) {
 
-    //    axios.get(this.GetHighScoresURL)
-    //        .then(function (response) {
+                // handle success
 
-    //            // handle success
+                if (response && response.status === 200 && response.data && response.data.length > 0) {
 
-    //            if (response && response.status === 200 && response.data && response.data.length > 0) {
-
-    //                //TODO: the follow logic is fundamentally wrong and won't work as the axios call above is async, refactor this method/class accordingly
-
-    //                highScores = response.data;
-    //            }
-    //        }, function (error) {
-    //            console.log(error);
-    //        });
-
-    //    return highScores;
-    //};
+                    responseHandler(response.data);
+                }
+            }, function (error) {
+                console.log(error);
+            });
+    }
 
     public SaveHighScore(initials: string, score: number) {
-        //TODO
+
+        if (initials && initials.length > 0 && initials.length < 4 && score > 0) {
+
+            //Initials and score are valid
+
+            initials = initials.toUpperCase();
+
+
+            axios.post(this.SaveHighScoreURL, {
+                initials: initials,
+                score: score
+            })
+                .then(function (response) {
+
+                    // handle success
+
+                    if (response && response.status === 200) {
+
+                        //Fetch the latest high scores and trigger the handler
+                        this.LoadHighScores();
+                    }
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        }
     };
 }
 

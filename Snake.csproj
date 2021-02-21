@@ -143,6 +143,8 @@
     <Content Include="scripts\models\SnakeDirection.js" />
     <Content Include="scripts\models\SnakePosition.js" />
     <Content Include="scripts\tests\Apple.Tests.js" />
+    <Content Include="scripts\tests\HighScores.Tests.js" />
+    <Content Include="scripts\tests\HighScoresMemoryProvider.Tests.js" />
     <Content Include="scripts\tests\Snake.Test.js" />
     <Content Include="scripts\tests\Snake.Tests.js" />
     <Content Include="scripts\tests\SnakeEatsApple.Tests.js" />
@@ -173,6 +175,8 @@
     <Content Include="dist\jquery\jquery.min.map" />
     <Content Include="dist\jquery\jquery.slim.min.map" />
     <Content Include="scripts\models\HighScoresMemoryProvider.js.map" />
+    <Content Include="scripts\tests\HighScores.Tests.js.map" />
+    <Content Include="scripts\tests\HighScoresMemoryProvider.Tests.js.map" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

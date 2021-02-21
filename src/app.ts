@@ -25,7 +25,10 @@ window.onload = () => {
             new HighScore("SRR", 2)
         ]
         );
-    //const highScoresProvider: HighScoresProviderInterface = new HighScoresWebServiceProvider();
+    //const highScoresProvider: HighScoresProviderInterface = new HighScoresWebServiceProvider(
+    //    'http://localhost/SnakeWebAPI/api/Snake/GetHighScores',
+    //    'http://localhost/SnakeWebAPI/api/Snake/SaveHighScore'
+    //);
 
     const highScores = new HighScores(highScoresProvider);
 
