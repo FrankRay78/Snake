@@ -27,18 +27,22 @@ define(["require", "exports", "../../dist/axios/axios"], function (require, expo
             });
         }
         SaveHighScore(initials, score) {
+            this.internalSaveHighScore(initials, score, () => { this.internalLoadHighScores(this.HighScoresHandler); });
+        }
+        ;
+        internalSaveHighScore(initials, score, responseHandler) {
             if (initials && initials.length > 0 && initials.length < 4 && score > 0) {
                 //Initials and score are valid
                 initials = initials.toUpperCase();
                 axios.post(this.SaveHighScoreURL, {
-                    initials: initials,
-                    score: score
+                    PlayerInitials: initials,
+                    PlayerScore: score
                 })
                     .then(function (response) {
                     // handle success
                     if (response && response.status === 200) {
                         //Fetch the latest high scores and trigger the handler
-                        this.LoadHighScores();
+                        responseHandler();
                     }
                 })
                     .catch(function (error) {

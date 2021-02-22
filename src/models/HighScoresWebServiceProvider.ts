@@ -44,6 +44,11 @@ class HighScoresWebServiceProvider implements HighScoresProviderInterface {
 
     public SaveHighScore(initials: string, score: number) {
 
+        this.internalSaveHighScore(initials, score, () => { this.internalLoadHighScores(this.HighScoresHandler) });
+    };
+
+    private internalSaveHighScore(initials: string, score: number, responseHandler: () => void): void {
+
         if (initials && initials.length > 0 && initials.length < 4 && score > 0) {
 
             //Initials and score are valid
@@ -52,8 +57,8 @@ class HighScoresWebServiceProvider implements HighScoresProviderInterface {
 
 
             axios.post(this.SaveHighScoreURL, {
-                initials: initials,
-                score: score
+                PlayerInitials: initials,
+                PlayerScore: score
             })
                 .then(function (response) {
 
@@ -62,7 +67,7 @@ class HighScoresWebServiceProvider implements HighScoresProviderInterface {
                     if (response && response.status === 200) {
 
                         //Fetch the latest high scores and trigger the handler
-                        this.LoadHighScores();
+                        responseHandler();
                     }
                 })
                 .catch(function (error) {
