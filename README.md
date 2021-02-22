@@ -1,7 +1,7 @@
 # Snake
 A browser-based TypeScript implementation of the classic retro game, Snake ([Wikipedia](https://en.wikipedia.org/wiki/Snake_(video_game_genre)))
 
-**[Click here to play the game](https://frankray78.github.io/Snake/)**
+**[Click here to play the game](http://frankray.net/Snake/)**
 
 Game features implemented so far are:
 1. Mobile responsive layout
