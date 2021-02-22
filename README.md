@@ -6,6 +6,7 @@ A browser-based TypeScript implementation of the classic retro game, Snake ([Wik
 Game features implemented so far are:
 1. Mobile responsive layout
 2. Keyboard / mouse / touch controls
+3. Persistent high scores
 
 ### Technical Design
 A non-UML class diagram for the Snake game is as follows:
@@ -22,14 +23,14 @@ A non-UML class diagram for the Snake game is as follows:
 The game was implemented in HTML, CSS and TypeScript using Visual Studio 2019 as the development IDE.  
 
 ### Unit Testing
-A comprehensive suite of unit tests have been written against the Apple and Snake classes to validate a lot of the game logic. Classes have been split out into separate TS files and loaded when needed through the [RequireJS](https://requirejs.org/) framework. The use of separate type files have allowed unit tests to be easily written against individual classes. [Jest](https://jestjs.io/) unit test framework was selected and remains a good choice due to ease of use and breadth of functionality. Both RequireJS and Jest were installed with [NPM (Node Package Manager)](https://docs.npmjs.com/about-npm).
+A comprehensive suite of unit tests have been written against the materially important classes to validate a lot of the game logic. Classes have been split out into separate TS files and loaded when needed through the [RequireJS](https://requirejs.org/) framework. The use of separate type files have allowed unit tests to be easily written against individual classes. [Jest](https://jestjs.io/) unit test framework was selected and remains a good choice due to ease of use and breadth of functionality. Both RequireJS and Jest were installed with [NPM (Node Package Manager)](https://docs.npmjs.com/about-npm).
 
 ### Development Backlog
 1. ~~Make the Snake's length grow upon eating each apple~~ [Done - 21 January 2021]
 2. ~~Collision detection of the snake upon itself~~ [Done - 21 January 2021]
 3. ~~Unit testing (of TypeScript classes)~~ [Done - 20 January 2021]
 4. GitHub post commit hook to execute unit tests
-5. Persist high scores in a database with the help of a ASP.Net Web API service
+5. ~~Persist high scores in a database with the help of a ASP.Net Web API service~~ [Done - 22 February 2021]
 6. Give the snake a timer and make it autonomous; redraw the Html canvas on browser screen refresh event
 7. Implement a proper config file option ([example](https://stackoverflow.com/questions/41467801/how-to-create-an-application-specific-config-file-for-typescript))
 
