@@ -28,9 +28,9 @@ The HighScoresProvider interface has been implemented twice, namely an in-memory
 
 The in-memory provider has been configured as the default provider in the checked-in codebase. This allows the Snake game to be standalone and work 'out of the box' should you build and run a forked / cloned repo. 
 
-The webservice provider is the one actually used by the published game ([located here](http://frankray.net/Snake/)). The webservice has been restricted to 'orgin only' for CORS which means that instances of the game hosted anywhere other than 'frankray.net' will not be able to post to this service. You will need to implement your own webservce implementation (or similar) should you want persistent high scores between games and between users.
+The webservice provider is the one actually used by the published game ([located here](http://frankray.net/Snake/)). The webservice has been restricted to 'origin only' for CORS which means that instances of the game hosted anywhere other than 'frankray.net' will not be able to post to this service. You will need to implement your own webservce implementation (or similar) should you want persistent high scores between games and between users.
 
-Whic specific provider to use is defined in code through a poor man's DI located in the **app.ts** file, namely:
+The specific provider to use is defined in code through a poor man's DI located in the **app.ts** file, namely:
 ```
     //Load the correct high scores provider here:
     const highScoresProvider: HighScoresProviderInterface = new HighScoresMemoryProvider(
