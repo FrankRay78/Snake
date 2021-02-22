@@ -26,19 +26,21 @@ define(["require", "exports"], function (require, exports) {
         }
         ;
         SaveHighScore(initials, score) {
+            //Firstly validate initials and score
             if (score && this.IsHighScore(score)) {
-                if (initials && initials.length > 0 && initials.length < 4) {
-                    //Initials and score are valid
-                    initials = initials.toUpperCase();
-                    //Make sure the initials and score aren't already in the high scores
-                    for (let i = 0; i < this.highScores.length; i++) {
-                        const highScore = this.highScores[i];
-                        if (highScore.PlayerInitials === initials && highScore.PlayerScore === score) {
-                            //Already exists so return
-                            return;
+                if (initials) {
+                    initials = initials.toUpperCase().trim();
+                    if (initials.length > 0 && initials.length < 4) {
+                        //Make sure the initials and score aren't already in the high scores
+                        for (let i = 0; i < this.highScores.length; i++) {
+                            const highScore = this.highScores[i];
+                            if (highScore.PlayerInitials === initials && highScore.PlayerScore === score) {
+                                //Already exists so return
+                                return;
+                            }
                         }
+                        this.highScoresProvider.SaveHighScore(initials, score);
                     }
-                    this.highScoresProvider.SaveHighScore(initials, score);
                 }
             }
         }

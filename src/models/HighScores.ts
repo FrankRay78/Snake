@@ -48,30 +48,32 @@ class HighScores {
 
     public SaveHighScore(initials: string, score: number) {
 
+        //Firstly validate initials and score
+
         if (score && this.IsHighScore(score)) {
 
-            if (initials && initials.length > 0 && initials.length < 4) {
+            if (initials) {
 
-                //Initials and score are valid
+                initials = initials.toUpperCase().trim();
 
-                initials = initials.toUpperCase();
+                if (initials.length > 0 && initials.length < 4) {
 
+                    //Make sure the initials and score aren't already in the high scores
 
-                //Make sure the initials and score aren't already in the high scores
+                    for (let i = 0; i < this.highScores.length; i++) {
 
-                for (let i = 0; i < this.highScores.length; i++) {
+                        const highScore = this.highScores[i];
 
-                    const highScore = this.highScores[i];
+                        if (highScore.PlayerInitials === initials && highScore.PlayerScore === score) {
 
-                    if (highScore.PlayerInitials === initials && highScore.PlayerScore === score) {
-
-                        //Already exists so return
-                        return;
+                            //Already exists so return
+                            return;
+                        }
                     }
+
+
+                    this.highScoresProvider.SaveHighScore(initials, score);
                 }
-
-
-                this.highScoresProvider.SaveHighScore(initials, score);
             }
         }
     };
