@@ -1,7 +1,7 @@
 # Snake
 A browser-based TypeScript implementation of the classic retro game, Snake ([Wikipedia](https://en.wikipedia.org/wiki/Snake_(video_game_genre)))
 
-**[Click here to play the game](https://frankray78.github.io/Snake/)**
+**[Click here to play the game](http://frankray.net/Snake/)**
 
 Game features implemented so far are:
 1. Mobile responsive layout
@@ -17,7 +17,7 @@ A non-UML class diagram for the Snake game is as follows:
 | Apple | Is given a location on the board and remains static until the snake eats it by running into the same square. The user's score is incremented and another apple placed on the board for the snake to eat. |
 | Snake | Moves around the board 'eating' apples. Each apple eaten results in the snake growing in length, making it harder to remain in the game because the snake cannot run across itself or hit the edge of the board. |
 | Game | A container for holding the Apple and Snake objects. Also responsible for handling user events (keyboard / mouse / touch), snake events (snake has eaten an apple, snake has run into itself, snake has fallen off the board) and game events ( game over). |
-| GameRenderer | Responsible for converting the game state at point of redraw into pixel rendering to the Html canvas element.  |
+| GameRenderer | Responsible for rendering the game state at point of redraw. Converts the relative locations of Snake and Apple into pixel coordinates for rendering to an Html canvas element it contains a reference to. |
 
 The game was implemented in HTML, CSS and TypeScript using Visual Studio 2019 as the development IDE.  
 
