@@ -19,9 +19,16 @@ A non-UML class diagram for the Snake game is as follows:
 | Snake | Moves around the board 'eating' apples. Each apple eaten results in the snake growing in length, making it harder to remain in the game because the snake cannot run across itself or hit the edge of the board. |
 | Game | A container for holding the Apple and Snake objects. Also responsible for handling user events (keyboard / mouse / touch), snake events (snake has eaten an apple, snake has run into itself, snake has fallen off the board) and game events (Game Over). |
 | GameRenderer | Responsible for rendering the game state at point of redraw. Converts the relative locations of Snake and Apple into pixel coordinates for rendering to an Html canvas element it contains a reference to. |
-| HighScoresProvider | An interface defining the high scores functionality required by the Game class (primarily concered with getting and saving game high scores). The interface has been implemented in two ways, namely an in-memory (non-persistent) provider and also webservice provider.  |
+| HighScoresProvider | An interface defining the high scores functionality required by the Game class, primarily concerned with getting and saving game scores.  |
 
 The game was implemented in HTML, CSS and TypeScript using Visual Studio 2019 as the development IDE.  
+
+### High Scores
+The HighScoresProvider interface has been implemented twice, namely an in-memory (non-persistent) provider and also a (persistent) webservice provider.
+
+The in-memory provider has been configured as the default provider in the checked-in codebase. This allows the Snake game to be standalone and work 'out of the box' should you build and run a forked / cloned repo. 
+
+The webservice provider is the one actually used by the published game ([located here](http://frankray.net/Snake/)). The webservice has been restricted to 'orgin only' for CORS which means that instances of the game hosted anywhere other than 'frankray.net' will not be able to post to this service. You will need to implement your own webservce implementation (or similar) should you want persistent high scores between games and between users.
 
 ### Unit Testing
 A comprehensive suite of unit tests have been written against the materially important classes to validate a lot of the game logic. Classes have been split out into separate TS files and loaded when needed through the [RequireJS](https://requirejs.org/) framework. The use of separate type files have allowed unit tests to be easily written against individual classes. [Jest](https://jestjs.io/) unit test framework was selected and remains a good choice due to ease of use and breadth of functionality. Both RequireJS and Jest were installed with [NPM (Node Package Manager)](https://docs.npmjs.com/about-npm).
