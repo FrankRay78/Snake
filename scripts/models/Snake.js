@@ -13,7 +13,7 @@ define(["require", "exports", "./SnakeDirection", "./SnakePosition", "./GameOver
         set Direction(newDirection) {
             if (this.Length === 1) {
                 //Always allow the snake to change direction 180 degrees before it's started growing (ie. single cell)
-                this.direction = newDirection;
+                this.directionOnNextUpdate = newDirection;
             }
             else {
                 //Prevent any 180 degree changes if the snake already has a tail
@@ -37,7 +37,7 @@ define(["require", "exports", "./SnakeDirection", "./SnakePosition", "./GameOver
                     default:
                 }
                 //We're still here so all good to update the direction
-                this.direction = newDirection;
+                this.directionOnNextUpdate = newDirection;
             }
         }
         get Length() {
@@ -62,8 +62,11 @@ define(["require", "exports", "./SnakeDirection", "./SnakePosition", "./GameOver
             this.snakeHeadAndBody.push(new SnakePosition(this.startingX, this.startingY));
             //Move right initially
             this.direction = this.startingDirection;
+            this.directionOnNextUpdate = this.startingDirection;
         }
         Update() {
+            //Account for any user requested change of direction before performing the snake update
+            this.direction = this.directionOnNextUpdate;
             //Update the position of the snake
             switch (this.direction) {
                 case SnakeDirection.Up:

@@ -53,8 +53,9 @@ define(["require", "exports", "../models/Snake", "../models/SnakeDirection"], fu
         expect(snake.HeadPosition.currentX).toBe(snakeX + 2);
         expect(snake.HeadPosition.currentY).toBe(snakeY);
         snake.Direction = SnakeDirection.Down;
-        expect(snake.HeadPosition.direction).toBe(SnakeDirection.Down);
+        expect(snake.HeadPosition.direction).toBe(SnakeDirection.Right); //nb. the new direction isn't applied until the next Update()
         snake.Update();
+        expect(snake.HeadPosition.direction).toBe(SnakeDirection.Down);
         snake.Update();
         expect(snake.HeadPosition.currentX).toBe(snakeX + 2);
         expect(snake.HeadPosition.currentY).toBe(snakeY + 2);

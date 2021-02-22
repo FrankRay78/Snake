@@ -10,6 +10,7 @@ class Snake {
     private applesEaten: number;
     private growthRequired: number;
 
+    private directionOnNextUpdate: SnakeDirection; //a user event 
     private direction: SnakeDirection;
 
     set Direction(newDirection: SnakeDirection) {
@@ -17,7 +18,7 @@ class Snake {
         if (this.Length === 1) {
 
             //Always allow the snake to change direction 180 degrees before it's started growing (ie. single cell)
-            this.direction = newDirection;
+            this.directionOnNextUpdate = newDirection;
         }
         else {
 
@@ -44,7 +45,7 @@ class Snake {
             }
 
             //We're still here so all good to update the direction
-            this.direction = newDirection;
+            this.directionOnNextUpdate = newDirection;
         }
     }
 
@@ -90,9 +91,14 @@ class Snake {
 
         //Move right initially
         this.direction = this.startingDirection;
+        this.directionOnNextUpdate = this.startingDirection;
     }
 
     Update(): void {
+
+        //Account for any user requested change of direction before performing the snake update
+        this.direction = this.directionOnNextUpdate;
+
 
         //Update the position of the snake
 

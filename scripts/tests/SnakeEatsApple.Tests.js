@@ -63,8 +63,9 @@ define(["require", "exports", "../models/Apple", "../models/Snake", "../models/S
         expect(snake.HeadPosition.currentX).toBe(snakeX + 1);
         expect(snake.HeadPosition.currentY).toBe(snakeY);
         snake.Direction = SnakeDirection.Left;
-        expect(snake.HeadPosition.direction).toBe(SnakeDirection.Left);
+        expect(snake.HeadPosition.direction).toBe(SnakeDirection.Right);
         snake.Update();
+        expect(snake.HeadPosition.direction).toBe(SnakeDirection.Left);
         expect(snake.HeadPosition.currentX).toBe(snakeX);
         expect(snake.HeadPosition.currentY).toBe(snakeY);
     });
@@ -85,19 +86,36 @@ define(["require", "exports", "../models/Apple", "../models/Snake", "../models/S
         expect(snake.Length).toBe(1);
         //Snake eats the apple here
         snake.Update();
+        expect(snake.HeadPosition.currentX).toBe(snakeX + 1);
+        expect(snake.HeadPosition.currentY).toBe(snakeY);
         expect(appleEatenCallback).toBeCalled();
         snake.Update();
+        expect(snake.HeadPosition.currentX).toBe(snakeX + 2);
+        expect(snake.HeadPosition.currentY).toBe(snakeY);
         expect(snake.Length).toBe(2);
         snake.Direction = SnakeDirection.Left;
         expect(snake.HeadPosition.direction).toBe(SnakeDirection.Right);
         snake.Update();
+        expect(snake.HeadPosition.currentX).toBe(snakeX + 3);
+        expect(snake.HeadPosition.currentY).toBe(snakeY);
         expect(snake.Length).toBe(3);
         snake.Direction = SnakeDirection.Left;
         expect(snake.HeadPosition.direction).toBe(SnakeDirection.Right);
         snake.Update();
+        expect(snake.HeadPosition.currentX).toBe(snakeX + 4);
+        expect(snake.HeadPosition.currentY).toBe(snakeY);
         expect(snake.Length).toBe(3);
         snake.Direction = SnakeDirection.Up;
+        expect(snake.HeadPosition.direction).toBe(SnakeDirection.Right);
+        //Prevent the snake from going back on itself within an update cycle
+        //ie. the going right - up - left bug reported here: https://github.com/FrankRay78/Snake/issues/2
+        snake.Direction = SnakeDirection.Left;
+        expect(snake.HeadPosition.direction).toBe(SnakeDirection.Right);
+        snake.Update();
         expect(snake.HeadPosition.direction).toBe(SnakeDirection.Up);
+        expect(snake.HeadPosition.currentX).toBe(snakeX + 4);
+        expect(snake.HeadPosition.currentY).toBe(snakeY - 1);
+        expect(snake.Length).toBe(3);
     });
 });
 //# sourceMappingURL=SnakeEatsApple.Tests.js.map
