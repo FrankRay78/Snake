@@ -177,6 +177,7 @@
     <Content Include="scripts\models\HighScoresMemoryProvider.js.map" />
     <Content Include="scripts\tests\HighScores.Tests.js.map" />
     <Content Include="scripts\tests\HighScoresMemoryProvider.Tests.js.map" />
+    <None Include="Properties\PublishProfiles\FTPProfile.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
