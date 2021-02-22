@@ -30,6 +30,24 @@ The in-memory provider has been configured as the default provider in the checke
 
 The webservice provider is the one actually used by the published game ([located here](http://frankray.net/Snake/)). The webservice has been restricted to 'orgin only' for CORS which means that instances of the game hosted anywhere other than 'frankray.net' will not be able to post to this service. You will need to implement your own webservce implementation (or similar) should you want persistent high scores between games and between users.
 
+Whic specific provider to use is defined in code through a poor man's DI located in the **app.ts** file, namely:
+```
+    //Load the correct high scores provider here:
+    const highScoresProvider: HighScoresProviderInterface = new HighScoresMemoryProvider(
+        [
+            new HighScore("FDR", 10),
+            new HighScore("HGR", 7),
+            new HighScore("SRR", 2)
+        ]
+        );
+        
+    //const highScoresProvider: HighScoresProviderInterface = new HighScoresWebServiceProvider(
+    //    'http://localhost/SnakeWebAPI/api/Snake/GetHighScores',
+    //    'http://localhost/SnakeWebAPI/api/Snake/SaveHighScore'
+    //);
+```
+
+
 ### Unit Testing
 A comprehensive suite of unit tests have been written against the materially important classes to validate a lot of the game logic. Classes have been split out into separate TS files and loaded when needed through the [RequireJS](https://requirejs.org/) framework. The use of separate type files have allowed unit tests to be easily written against individual classes. [Jest](https://jestjs.io/) unit test framework was selected and remains a good choice due to ease of use and breadth of functionality. Both RequireJS and Jest were installed with [NPM (Node Package Manager)](https://docs.npmjs.com/about-npm).
 
