@@ -17,8 +17,9 @@ A non-UML class diagram for the Snake game is as follows:
 | ----------- | ----------- |
 | Apple | Is given a location on the board and remains static until the snake eats it by running into the same square. The user's score is incremented and another apple placed on the board for the snake to eat. |
 | Snake | Moves around the board 'eating' apples. Each apple eaten results in the snake growing in length, making it harder to remain in the game because the snake cannot run across itself or hit the edge of the board. |
-| Game | A container for holding the Apple and Snake objects. Also responsible for handling user events (keyboard / mouse / touch), snake events (snake has eaten an apple, snake has run into itself, snake has fallen off the board) and game events ( game over). |
+| Game | A container for holding the Apple and Snake objects. Also responsible for handling user events (keyboard / mouse / touch), snake events (snake has eaten an apple, snake has run into itself, snake has fallen off the board) and game events (Game Over). |
 | GameRenderer | Responsible for rendering the game state at point of redraw. Converts the relative locations of Snake and Apple into pixel coordinates for rendering to an Html canvas element it contains a reference to. |
+| HighScoresProvider | An interface defining the high scores functionality required by the Game class (primarily concered with getting and saving game high scores). The interface has been implemented in two ways, namely an in-memory (non-persistent) provider and also webservice provider.  |
 
 The game was implemented in HTML, CSS and TypeScript using Visual Studio 2019 as the development IDE.  
 
